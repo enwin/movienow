@@ -1,0 +1,51 @@
+.screen
+   height: 100vh
+   overflow: hidden
+
+.screen-header
+   color: $light
+   left: 0
+   //padding: 0 rem( 14 )
+   position: fixed
+   top: 0
+   width: 100%
+   z-index: 2
+
+.screen-title
+   //font-size: rem( 14 )
+   font-weight: bold
+   height: rem( 48 )
+   line-height: ( 47/16 )
+   padding-left: rem( 60 )
+   text-transform: uppercase
+   padding-bottom: rem( 1 )
+
+.screen-nav
+   background-color: $dark
+   border-bottom: 1px solid currentColer
+   height: rem( 40 )
+   padding: 0 rem( 7 )
+
+   .nav-list
+      display: flex
+      justify-content: space-between
+      height: 100%
+
+   .nav-list-item
+      flex-grow: 1
+      //text-align: center
+      height: 100%
+      align-items: center
+
+      a
+         display: block
+         height: 100%
+         line-height: ( 40/16 )
+         text-decoration: none
+         padding: 0 rem( 7 )
+
+.screen-content
+   padding: rem( 48 ) rem( 14 ) 0
+   height: 100vh
+   overflow-y: scroll
+   -webkit-overflow-scrolling: touch

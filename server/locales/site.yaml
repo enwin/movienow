@@ -1,0 +1,21 @@
+---
+  title: Showtimes
+  webapp: false
+  msColor: false
+  defaultLang: en_GB
+
+  # sites urls
+  url:
+    css: /css/
+    dyn: /media/dyn/
+    favicon: /media/favicons
+    img: /media/img/
+    js: /
+
+  # metas
+  meta:
+    viewport:
+      - width=device-width
+      - initial-scale=1
+      - maximum-scale=1
+      #- user-scalable=no

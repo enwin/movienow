@@ -1,0 +1,53 @@
+.site-menu
+   display: none
+   height: 100vh
+   position: relative
+   transform: translateX( -100% )
+   transition: transform 0s linear 0.4s, background 0.3s $ease-in-quad 0.1s
+   z-index: 4
+
+   &:not( [aria-hidden=true] )
+      display: block
+      transform: translateX( 0 )
+      transition-timing-function: linear, $ease-out-quad
+      transition-delay: 0s
+
+      .menu-wrapper
+         transform: translateX( 0 )
+         transition-timing-function: $ease-out-quad
+         transition-delay: 0.1s
+
+   .hidden
+      hide()
+
+.menu-wrapper
+   -webkit-overflow-scrolling: touch
+   background-color: $dark
+   height: 100%
+   padding-top: rem( 48 )
+   position: relative
+   transform: translateX( -100% )
+   transition: transform 0.3s $ease-in-quad
+   width: rem( 280 )
+   z-index: 4
+
+.menu-list
+   &:before
+      background-color: $color-divider-light
+      content: ''
+      display: block
+      margin: 0 rem( 14 )
+      height: 1px
+
+   &:first-child
+      &:before
+         content: none
+
+.menu-item
+   a
+      display: block
+      padding: rem( 15 ) rem( 14 )
+      text-decoration: none
+
+   .menu-item-active
+      background-color: rgba( $light, 0.2 )

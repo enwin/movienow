@@ -1,0 +1,35 @@
+block vars
+
+doctype
+html( class="no-js" lang=lang )
+  head
+    meta( charset="utf-8" )
+    meta( http-equiv="X-UA-Compatible" content="IE=edge" )
+
+    title= title
+
+    //- Mobile
+    meta( name="viewport" content=meta.viewport.join() )
+
+    //-include ../modules/icons
+
+    //- Stylesheets
+    link( rel="stylesheet" href="/style.css" )
+
+    //- Modernizr
+    //-script( src="#{url.js}modernizr.js" )
+
+  body( class=pageType )
+    //- div#fb-root
+
+    block header
+      include ../module/header
+
+    //-block navigation
+      include ../modules/navigation
+
+    main#main
+      block content
+
+    block script
+      include ../module/script

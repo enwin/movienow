@@ -1,0 +1,10 @@
+header.screen-header
+  h1.screen-title Theaters
+
+if theaters
+  div.screen-content
+    ul.theater-list
+      each theater in theaters
+        li.theater-item
+            h1.movie-title
+              a( href="/theaters/#{theater.id}" )!= theater.name

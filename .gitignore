@@ -1,0 +1,10 @@
+node_modules/
+*.log
+.monitor
+Makefile
+.DS_Store
+npm-debug.log
+www/**/*.js
+www/**/*.css
+server/ssl/*
+db/
