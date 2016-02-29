@@ -1,5 +1,7 @@
 'use strict';
 
+var moment = require( 'moment' );
+
 var Showtimes = require( 'showtimes' ),
     _clone = require( 'lodash/cloneDeep' ),
 //import artwork from 'movie-art';
@@ -18,6 +20,14 @@ var Showtimes = require( 'showtimes' ),
     } );
 
 class api {
+
+  constructor (){
+    this.day = moment().format( 'd' );
+    this.store = {
+      movies: [],
+      moviesDay: null
+    };
+  }
 
   getTheaterPlannig ( tid ){
     var api = this,
@@ -64,15 +74,23 @@ class api {
   }
 
   getMovies () {
+    var it = this;
     return new Promise( (resolve, reject) => {
-      showTimes.getMovies( ( err, result ) => {
-        if( err ){
-          reject( err );
-          return;
-        }
-
-        resolve( result );
-      } );
+      // decide if we use cache or refresh
+      if( null === it.store.moviesDay || ( it.store.moviesDay && it.day === 3 )  ){
+        showTimes.getMovies( ( err, result ) => {
+          if( err ){
+            reject( err );
+            return;
+          }
+          it.store.movies = result;
+          it.store.moviesDay = it.day;
+          resolve( result );
+        } );
+      }
+      else{
+        resolve( it.store.movies );
+      }
     } );
   }
 
