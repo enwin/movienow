@@ -25,7 +25,9 @@ class api {
     this.day = moment().format( 'd' );
     this.store = {
       movies: [],
-      moviesDay: null
+      moviesDay: null,
+      theaters: [],
+      theatersDay: null
     };
   }
 
@@ -109,14 +111,25 @@ class api {
   }
 
   getTheaters () {
+    var it = this;
     return new Promise( (resolve, reject) => {
-      showTimes.getTheaters( ( err, result ) => {
-        if( err ){
-          reject( err );
-          return;
-        }
-        resolve( result );
-      } );
+      // fetch new info once a day
+      if( null === it.store.theatersDay || it.store.theatersDay + 1 === it.day ){
+        showTimes.getTheaters( ( err, result ) => {
+          if( err ){
+            reject( err );
+            return;
+          }
+
+          it.store.theaters = result;
+          it.store.theatersDay = it.day;
+
+          resolve( result );
+        } );
+      }
+      else{
+        resolve( it.store.theaters );
+      }
     } );
   }
 };
