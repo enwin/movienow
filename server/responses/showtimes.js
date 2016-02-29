@@ -43,7 +43,6 @@ class api {
 
       api.getTheater( tid, showTimes )
         .then( result => {
-          console.log( result.id )
           theater = _clone( result );
           delete theater.movies;
           theater.movies = [ result.movies ];
@@ -63,8 +62,12 @@ class api {
   }
 
   getMovie ( mid ) {
+    var api = new Showtimes( '48.8698768,2.3469172', {
+      lang: 'en',
+      date: 0
+    } );
     return new Promise( (resolve, reject) => {
-      showTimes.getMovie( mid, ( err, result ) => {
+      api.getMovie( mid, ( err, result ) => {
         if( err ){
           reject( err );
           return;
