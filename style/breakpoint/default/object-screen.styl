@@ -49,3 +49,42 @@
    height: 100vh
    overflow-y: scroll
    -webkit-overflow-scrolling: touch
+
+
+
+.screen-list
+   .screen-content
+      padding-top: rem( 88 )
+
+   .screen-nav
+      padding: rem( 3 )
+      position: relative
+
+      label
+         position: absolute
+         left: 0
+         padding: 0 rem( 14 )
+         top: 0
+         width: 100%
+         z-index: 0
+         line-height: ( 40/16 )
+
+      input
+         position: relative
+         z-index: 1
+         border: 3px solid $light
+         background: none
+         display: block
+         width: 100%
+         height: 100%
+         padding: 0 rem( 8 )
+         outline: none
+
+         &:valid
+            + label
+               visibility: hidden
+
+   .item-title
+      padding: rem( 11 ) 0
+      display: block
+      color: $text-secondary-dark

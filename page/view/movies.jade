@@ -1,0 +1,9 @@
+header.screen-header
+  h1.screen-title Movies
+
+  form#theaterFilter.screen-nav
+    input#movieBlob( type="search" pattern=".*" required )
+    label( for="movieBlob" ) Filter movies
+
+div.screen-content
+  include movies-list.jade

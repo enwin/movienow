@@ -2,15 +2,17 @@
 
 import bind from '../helper/bind';
 import Screen from './screen';
-import view from '../../page/view/theaters.jade';
-import domList from '../../page/view/theaters-list.jade';
+import view from '../../page/view/movies.jade';
+import domList from '../../page/view/movies-list.jade';
+
+import _sortBy from 'lodash/sortBy';
 
 class Home extends Screen {
 
   dom() {
     return {
       tagName: 'section',
-      className: 'screen screen-theaters screen-list'
+      className: 'screen screen-movies screen-list'
     };
   }
 
@@ -21,17 +23,17 @@ class Home extends Screen {
   handleFilter ( e ){
     var filterValue;
 
-    if( !this.datas.allTheaters ){
+    if( !this.datas.allMovies ){
       return;
     }
 
      filterValue = e.currentTarget.value.trim().toLowerCase();
 
     if( filterValue.length ){
-      this.datas.theaters = this.datas.allTheaters.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 );
+      this.datas.movies = this.datas.allMovies.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 );
     }
     else{
-      this.datas.theaters = this.datas.allTheaters;
+      this.datas.movies = this.datas.allMovies;
     }
 
     this.renderList();
@@ -45,15 +47,17 @@ class Home extends Screen {
   }
 
   getData (){
-    this.sync( '/api/theaters' )
+    this.sync( '/api/movies' )
       .then( () => this.ready() )
       .catch( e => console.log( e ) );
   }
 
   parse (datas){
+    datas = _sortBy( datas, (movie) => movie.name.toLowerCase() );
+
     return this.datas = {
-      allTheaters: datas,
-      theaters: datas
+      allMovies: datas,
+      movies: datas
     };
   }
 

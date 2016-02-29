@@ -1,0 +1,48 @@
+header.screen-header
+  h1.screen-title!= name
+
+  //- nav.screen-nav.nav-days
+  //-   ul.nav-list
+  //-     each day, index in [ 'today', 'tomorrow', nextDay ]
+  //-       li.nav-list-item
+  //-         a( href="#theater-#{index}" )!= day
+
+if theaters
+  div.screen-content
+    ul.theater-movies-list
+      each theater in theaters
+        li.theater-movies-item
+          article.movie
+            h1.movie-title
+              a( href="/movies/#{theater.id}" )!= theater.name
+
+            if theater.infos
+              ul.movie-infos-list
+                each info, key in theater.infos
+                  if key === 'nextShowTime'
+                    li.movie-infos-item( class="movie-#{key}" ) (next screening #{info.formated})
+                  else
+                    li.movie-infos-item( class="movie-#{key}" )!= info
+
+            if theater.showtimes[0].info !== 'all'
+              ul
+                each showType in theater.showtimes
+                  li.movie-times
+                    span.movie-times-info!= showType.info
+                    ul.movie-times-list
+                      each time in showType.times
+                        li.movie-times-item
+                          if time.disabled
+                            s
+                              time( datetime="#{time.value}" )!= time.formated
+                          else
+                            time( datetime="#{time.value}" )!= time.formated
+            else
+              ul.movie-times-list.movie-times
+                each time in theater.showtimes[0].times
+                  li.movie-times-item
+                    if time.disabled
+                      s
+                        time( datetime="#{time.value}" )!= time.formated
+                    else
+                      time( datetime="#{time.value}" )!= time.formated
