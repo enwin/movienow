@@ -15,7 +15,6 @@
   "author": "enwin <tifftafftoff@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "babel-preset-es2015": "^6.5.0",
     "browser-sync": "^2.11.1",
     "connect-browser-sync": "^2.0.1",
     "connect-mongo": "^1.1.0",
