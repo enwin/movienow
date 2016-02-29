@@ -1,7 +1,9 @@
 'use-strict'
 
+import bind from '../helper/bind';
 import Screen from './screen';
 import view from '../../page/view/theaters.jade';
+import domList from '../../page/view/theaters-list.jade';
 
 class Home extends Screen {
 
@@ -12,7 +14,31 @@ class Home extends Screen {
     };
   }
 
+  bind (){
+    bind( this.el, 'input', 'input[type=search]', this.handleFilter.bind( this ) );
+  }
+
+  handleFilter ( e ){
+    var filterValue;
+
+    if( !this.datas.allTheaters ){
+      return;
+    }
+
+     filterValue = e.currentTarget.value.trim().toLowerCase();
+
+    if( filterValue.length ){
+      this.datas.theaters = this.datas.allTheaters.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 );
+    }
+    else{
+      this.datas.theaters = this.datas.allTheaters;
+    }
+
+    this.renderList();
+  }
+
   initialize (){
+    this.bind();
     this.getData();
 
     this.render();
@@ -26,6 +52,7 @@ class Home extends Screen {
 
   parse (datas){
     return this.datas = {
+      allTheaters: datas,
       theaters: datas
     };
   }
@@ -36,6 +63,13 @@ class Home extends Screen {
 
   render (){
     this.el.innerHTML = view( this.datas );
+    this.els = {
+      list: this.el.querySelector( '.screen-content' )
+    };
+  }
+
+  renderList (){
+    this.els.list.innerHTML = domList( this.datas );
   }
 }
 

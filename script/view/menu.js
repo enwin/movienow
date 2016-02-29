@@ -10,6 +10,10 @@ var datas = {
     'theaters': {
       link: '/theaters',
       name: 'Theaters'
+    },
+    'movies': {
+      'link': '/movies',
+      'name': 'Movies'
     }
   }
 };
