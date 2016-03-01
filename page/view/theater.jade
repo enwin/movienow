@@ -3,10 +3,9 @@ header.screen-header
 
   nav.screen-nav.nav-days
     ul.nav-list
-      if nextDay
-        each day, index in [ 'today', 'tomorrow', nextDay ]
-          li.nav-list-item
-            a( href="#theater-#{index}" )!= day
+      each day, index in [ 'today', 'tomorrow', nextDay ]
+        li.nav-list-item
+            a( href="#theater-#{index}" )!= nextDay ? day : ''
 
 if movies
   div.screen-content

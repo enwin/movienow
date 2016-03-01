@@ -17,3 +17,14 @@ $color-divider-dark = #e5e5e5
 
 
 $font-types = woff woff2
+
+
+empty( $color = $light )
+   &:empty
+      &:before
+         background-color: $color
+         content: ''
+         display: inline-block
+         height: 2px
+         vertical-align: baseline
+         width: 60%

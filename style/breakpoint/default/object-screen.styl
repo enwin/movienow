@@ -12,6 +12,7 @@
    z-index: 2
 
 .screen-title
+   empty();
    //font-size: rem( 14 )
    font-weight: bold
    height: rem( 48 )
@@ -42,11 +43,20 @@
       align-items: center
 
       a
+         empty();
          display: block
          height: 100%
          line-height: ( 40/16 )
          text-decoration: none
          padding: 0 rem( 7 )
+
+      &+ .nav-list-item
+         a:before
+            width: 70%
+
+      &:last-child
+         a:before
+            width: 80%
 
 .screen-content
    padding: rem( 48 ) rem( 14 ) 0
