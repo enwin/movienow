@@ -22,8 +22,8 @@ class Theater extends Screen {
 
   getData (){
     this.sync( '/api/movies/'+this.datas.id )
-      .then( () => this.ready() )
-      //.catch( e => console.log( e ) );
+      .catch( e => console.log( e ) )
+      .then( () => this.ready() );
   }
 
   parse ( data ){
