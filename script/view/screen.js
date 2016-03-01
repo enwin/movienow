@@ -6,6 +6,11 @@ class Screen {
 
     this.datas = args || {};
 
+    // fix for browsersync using window.name
+    if( !this.datas.name ){
+      this.datas.name = '';
+    }
+
     if( this.initialize ){
       this.initialize();
     }
