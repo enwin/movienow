@@ -12,5 +12,5 @@ import router from './module/router';
 
 bind( document.body, 'click', 'a[href^="/"]', ( e ) => {
   e.preventDefault();
-  router.navigate( {}, document.title, e.currentTarget.getAttribute( 'href' ) );
+  router.navigate( {}, '', e.currentTarget.getAttribute( 'href' ) );
 } );

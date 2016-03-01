@@ -9,10 +9,11 @@ class Home extends Screen {
     return {
       tagName: 'section',
       className: 'screen screen-home'
-    }
+    };
   }
 
   initialize (){
+    this.setTitle( '' );
     this.render();
   }
 

@@ -40,9 +40,18 @@ class Screen {
     }
   }
 
+  setTitle ( title ){
+    this._screenTitle = title;
+    document.title = title.length ? [ title, 'Movie now!' ].join(' | ') : 'Movie now!';
+  }
+
   show (){
     if( !main.contains( this.el ) ){
       main.appendChild( this.el );
+    }
+    // if the screen has a title stored, set it
+    if( this._screenTitle ){
+      this.setTitle( this._screenTitle );
     }
   }
 

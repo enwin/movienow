@@ -69,6 +69,7 @@ class Theater extends Screen {
   }
 
   ready (){
+    this.setTitle( this.datas.name );
     this.render();
   }
 

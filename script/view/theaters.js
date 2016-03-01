@@ -40,7 +40,7 @@ class Home extends Screen {
   initialize (){
     this.bind();
     this.getData();
-
+    this.setTitle( 'Theaters' );
     this.render();
   }
 

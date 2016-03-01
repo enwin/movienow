@@ -77,6 +77,7 @@ class Theater extends Screen {
 
   ready (){
     this.getDays();
+    this.setTitle( this.datas.name );
     this.render();
   }
 

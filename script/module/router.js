@@ -59,7 +59,6 @@ class Router {
 
   navigate ( state, title, url, replace ){
     window.history[ replace ? 'replaceState' : 'pushState' ]( state, title, url );
-    document.title = title ? [ title, 'Showtimes' ].join( ' | ' ) : 'Showtimes';
     this._handleRoute();
   }
 }
