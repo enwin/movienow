@@ -33,15 +33,16 @@ class api {
 
   getTheaterPlannig ( tid ){
     var api = this,
+        theatersTime,
         theater;
 
     return new Promise( ( resolve, reject ) => {
-      showTimes = new Showtimes( '48.8698768,2.3469172', {
+      theatersTime = new Showtimes( '48.8698768,2.3469172', {
         lang: 'en',
         date: 0
       } );
 
-      api.getTheater( tid, showTimes )
+      api.getTheater( tid, theatersTime )
         .then( result => {
           theater = _clone( result );
           delete theater.movies;
@@ -62,12 +63,12 @@ class api {
   }
 
   getMovie ( mid ) {
-    var api = new Showtimes( '48.8698768,2.3469172', {
+    var movieTIme = new Showtimes( '48.8698768,2.3469172', {
       lang: 'en',
       date: 0
     } );
     return new Promise( (resolve, reject) => {
-      api.getMovie( mid, ( err, result ) => {
+      movieTIme.getMovie( mid, ( err, result ) => {
         if( err ){
           reject( err );
           return;
@@ -81,8 +82,8 @@ class api {
   getMovies () {
     var it = this;
     return new Promise( (resolve, reject) => {
-      // decide if we use cache or refresh
-      if( null === it.store.moviesDay || ( it.store.moviesDay && it.day === 3 )  ){
+      // fetch new info once a day
+      if( it.store.moviesDay !== it.day  ){
         showTimes.getMovies( ( err, result ) => {
           if( err ){
             reject( err );
@@ -117,7 +118,7 @@ class api {
     var it = this;
     return new Promise( (resolve, reject) => {
       // fetch new info once a day
-      if( null === it.store.theatersDay || it.store.theatersDay + 1 === it.day ){
+      if( it.store.theatersDay !== it.day ){
         showTimes.getTheaters( ( err, result ) => {
           if( err ){
             reject( err );
@@ -135,6 +136,6 @@ class api {
       }
     } );
   }
-};
+}
 
 module.exports = new api();
