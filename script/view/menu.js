@@ -15,6 +15,16 @@ var datas = {
       'link': '/movies',
       'name': 'Movies'
     }
+  },
+  favorites: {
+    'ad3f3f5dcb802009': {
+      link: '/theaters/ad3f3f5dcb802009',
+      name: 'Le Louxor'
+    },
+    '37d0682253c6f94d': {
+      link: '/theaters/37d0682253c6f94d',
+      name: 'UGC Ciné-Cité Bercy'
+    }
   }
 };
 
@@ -52,8 +62,14 @@ class Menu {
     this.datas.renderClose = true;
   }
 
-  setCurrent ( current ){
-    this.datas.current = current;
+  setCurrent ( current, params ){
+    // search for current theater in the favorite list and fallback otherwise
+    if( this.datas.favorites && params && params.id && this.datas.favorites[ params.id ] ){
+      this.datas.current = params.id;
+    }
+    else{
+      this.datas.current = current;
+    }
     this.render();
 
     if( this.datas.renderClose ){
@@ -72,7 +88,7 @@ class Menu {
         this.el[ isOpen ? 'setAttribute' : 'removeAttribute' ]( 'aria-hidden', isOpen );
       } );
 
-    }, 16 )
+    }, 16 );
   }
 }
 

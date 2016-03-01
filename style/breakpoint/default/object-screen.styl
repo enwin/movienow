@@ -28,8 +28,11 @@
 .screen-nav
    background-color: $dark
    border-bottom: 1px solid currentColer
-   height: rem( 40 )
+   height: rem( 42 )
    padding: 0 rem( 7 )
+
+   &.screen-form
+      padding: rem( 1 ) rem( 3 ) rem( 3 )
 
    .nav-list
       display: flex
@@ -64,39 +67,36 @@
    overflow-y: scroll
    -webkit-overflow-scrolling: touch
 
+.screen-section
+   margin: rem( 20 ) 0 rem( 30 )
 
+.screen-content-title
+   color: $text-primary-dark
+   font-size: rem( 22 )
+   margin: rem( 20 ) 0 rem( 14 )
+   position: relative
+   text-align: center
+   text-transform: uppercase
+
+   &:before
+      background-color: currentColor
+      content: ''
+      height: 2px
+      left: 0
+      position: absolute
+      top: 50%
+      transform: translateY( -50% )
+      width: 100%
+
+   span
+      background-color: $light
+      padding: 0 em( 6/16 )
+      position: relative
+      z-index: 1
 
 .screen-list
    .screen-content
       padding-top: rem( 88 )
-
-   .screen-nav
-      padding: rem( 3 )
-      position: relative
-
-      label
-         position: absolute
-         left: 0
-         padding: 0 rem( 14 )
-         top: 0
-         width: 100%
-         z-index: 0
-         line-height: ( 40/16 )
-
-      input
-         position: relative
-         z-index: 1
-         border: 3px solid $light
-         background: none
-         display: block
-         width: 100%
-         height: 100%
-         padding: 0 rem( 8 )
-         outline: none
-
-         &:valid
-            + label
-               visibility: hidden
 
    .item-title
       padding: rem( 11 ) 0

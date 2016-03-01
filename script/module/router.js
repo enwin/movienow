@@ -21,7 +21,6 @@ class Router {
     }
 
     this._handleRoute();
-
   }
 
   _handleRoute ( e ){
@@ -29,13 +28,14 @@ class Router {
         matched;
 
     if( e && e.target.location.pathname === this.currentPathname ){
+      console.log( 'return' );
       return;
     }
 
     this.currentPathname = window.location.pathname;
 
     matched = this._routes.some( route => {
-      match = route[0].match( window.location.pathname );
+      match = route[0].match( window.location.pathname+window.location.search );
       if( match ){
         route[ 1 ].call( this, match );
         return true;
@@ -80,14 +80,14 @@ class Routes extends Router  {
   }
 
   theaters ( params ){
-    menu.setCurrent( 'theaters' );
+    menu.setCurrent( 'theaters', params );
 
     params.id = params.id || '/';
 
     // store the new screen in the screen object
     if( !this.screens.theaters[ params.id ] ){
       if( params.id === '/' ){
-        this.screens.theaters[ params.id ] = new Theaters();
+        this.screens.theaters[ params.id ] = new Theaters( params );
       }
       else{
         this.screens.theaters[ params.id ] = new Theater( params );
@@ -100,24 +100,24 @@ class Routes extends Router  {
       if( this.screens.current ){
         this.screens.current.remove();
       }
-
-      // show the next screen
-      this.screens.theaters[ params.id ].show();
       // set the next screen as current
       this.screens.current = this.screens.theaters[ params.id ];
     }
 
+    // show the next screen
+    this.screens.theaters[ params.id ].show( params );
+
   }
 
   movies ( params ){
-    menu.setCurrent( 'movies' );
+    menu.setCurrent( 'movies', params );
 
     params.id = params.id || '/';
 
     // store the new screen in the screen object
     if( !this.screens.movies[ params.id ] ){
       if( params.id === '/' ){
-        this.screens.movies[ params.id ] = new Movies();
+        this.screens.movies[ params.id ] = new Movies( params );
       }
       else{
         this.screens.movies[ params.id ] = new Movie( params );
@@ -130,12 +130,12 @@ class Routes extends Router  {
       if( this.screens.current ){
         this.screens.current.remove();
       }
-
-      // show the next screen
-      this.screens.movies[ params.id ].show();
       // set the next screen as current
       this.screens.current = this.screens.movies[ params.id ];
     }
+
+    // show the next screen
+    this.screens.movies[ params.id ].show( params );
 
   }
 
@@ -152,7 +152,7 @@ class Routes extends Router  {
       }
 
       // show the next screen
-      this.screens.home.show();
+      this.screens.home.show( params );
       // set the next screen as current
       this.screens.current = this.screens.home;
     }
@@ -161,8 +161,8 @@ class Routes extends Router  {
 
 export default new Routes( {
   routes: {
-    '/theaters(/:id)': 'theaters',
-    '/movies(/:id)': 'movies',
+    '/theaters(/:id)(?filter=:filter)': 'theaters',
+    '/movies(/:id)(?filter=:filter)': 'movies',
     '/': 'home'
   }
 } );

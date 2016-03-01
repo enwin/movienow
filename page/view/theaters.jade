@@ -1,9 +1,10 @@
 header.screen-header
   h1.screen-title Theaters
 
-  form#theaterFilter.screen-nav
-    input#theaterBlob( type="search" pattern=".*" required )
-    label( for="theaterBlob" ) Filter theaters
+  form#theaterFilter.screen-nav.screen-form
+    span.input-floating
+      input#theaterBlob( type="search" pattern=".*" required value="#{screenParams.filter || ''}" )
+      label( for="theaterBlob" ) Filter theaters
 
 div.screen-content
   include theaters-list.jade

@@ -4,10 +4,27 @@ import bind from '../helper/bind';
 import Screen from './screen';
 import view from '../../page/view/movies.jade';
 import domList from '../../page/view/movies-list.jade';
+import router from '../module/router';
 
 import _sortBy from 'lodash/sortBy';
+import _extend from 'lodash/extend';
 
-class Home extends Screen {
+class Movies extends Screen {
+
+  bind (){
+    bind( this.el, 'input', 'input[type=search]', this.handleTyping.bind( this ) );
+  }
+
+  displayed ( params ){
+    if(params.filter !== this.datas.screenParams.filter ){
+      // update the current screenParam filter to either the value of filter or empty if undefined
+      this.datas.screenParams.filter = params.filter ? params.filter : '';
+      // update the input
+      this.els.filter.value = this.datas.screenParams.filter;
+      // filter
+      this.handleFilter();
+    }
+  }
 
   dom() {
     return {
@@ -16,18 +33,14 @@ class Home extends Screen {
     };
   }
 
-  bind (){
-    bind( this.el, 'input', 'input[type=search]', this.handleFilter.bind( this ) );
-  }
-
-  handleFilter ( e ){
+  handleFilter (){
     var filterValue;
 
     if( !this.datas.allMovies ){
       return;
     }
 
-     filterValue = e.currentTarget.value.trim().toLowerCase();
+     filterValue = this.els.filter.value.trim().toLowerCase();
 
     if( filterValue.length ){
       this.datas.movies = this.datas.allMovies.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 );
@@ -39,6 +52,17 @@ class Home extends Screen {
     this.renderList();
   }
 
+  handleTyping ( e ){
+    var filter = e.currentTarget.value.trim(),
+        url = [ '/movies' ];
+
+    if( filter.length ){
+      url.push( `filter=${filter.toLowerCase()}` );
+    }
+
+    router.navigate( {}, '', url.join('?'), true );
+  }
+
   initialize (){
     this.bind();
     this.getData();
@@ -48,27 +72,29 @@ class Home extends Screen {
 
   getData (){
     this.sync( '/api/movies' )
-      .then( () => this.ready() )
-      .catch( e => console.log( e ) );
+      .catch( e => console.log( e ) )
+      .then( () => this.ready() );
   }
 
   parse (datas){
     datas = _sortBy( datas, (movie) => movie.name.toLowerCase() );
 
-    return this.datas = {
+    return _extend( this.datas, {
       allMovies: datas,
       movies: datas
-    };
+    } );
   }
 
   ready (){
+    this.handleFilter();
     this.render();
   }
 
   render (){
     this.el.innerHTML = view( this.datas );
     this.els = {
-      list: this.el.querySelector( '.screen-content' )
+      list: this.el.querySelector( '.screen-content' ),
+      filter: this.el.querySelector( '.screen-form input' )
     };
   }
 
@@ -77,8 +103,6 @@ class Home extends Screen {
   }
 }
 
-
-
-export default ( ...args ) => {
-  return new Home( args );
+export default ( args ) => {
+  return new Movies( args );
 };

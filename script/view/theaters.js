@@ -4,8 +4,15 @@ import bind from '../helper/bind';
 import Screen from './screen';
 import view from '../../page/view/theaters.jade';
 import domList from '../../page/view/theaters-list.jade';
+import router from '../module/router';
 
-class Home extends Screen {
+import _extend from 'lodash/extend';
+
+class Theaters extends Screen {
+
+  bind (){
+    bind( this.el, 'input', 'input[type=search]', this.handleTyping.bind( this ) );
+  }
 
   dom() {
     return {
@@ -14,18 +21,25 @@ class Home extends Screen {
     };
   }
 
-  bind (){
-    bind( this.el, 'input', 'input[type=search]', this.handleFilter.bind( this ) );
+  displayed ( params ){
+    if( params.filter !== this.datas.screenParams.filter ){
+      // update the current screenParam filter to either the value of filter or empty if undefined
+      this.datas.screenParams.filter = params.filter ? params.filter : '';
+      // update the input
+      this.els.filter.value = this.datas.screenParams.filter;
+      // filter
+      this.handleFilter();
+    }
   }
 
-  handleFilter ( e ){
+  handleFilter (){
     var filterValue;
 
     if( !this.datas.allTheaters ){
       return;
     }
 
-     filterValue = e.currentTarget.value.trim().toLowerCase();
+     filterValue = this.els.filter.value.trim().toLowerCase();
 
     if( filterValue.length ){
       this.datas.theaters = this.datas.allTheaters.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 );
@@ -37,6 +51,17 @@ class Home extends Screen {
     this.renderList();
   }
 
+  handleTyping ( e ){
+    var filter = e.currentTarget.value.trim(),
+        url = [ '/theaters' ];
+
+    if( filter.length ){
+      url.push( `filter=${filter.toLowerCase()}` );
+    }
+
+    router.navigate( {}, '', url.join('?'), true );
+  }
+
   initialize (){
     this.bind();
     this.getData();
@@ -46,25 +71,28 @@ class Home extends Screen {
 
   getData (){
     this.sync( '/api/theaters' )
-      .then( () => this.ready() )
-      .catch( e => console.log( e ) );
+      .catch( e => console.log( e ) )
+      .then( () => this.ready() );
   }
 
   parse (datas){
-    return this.datas = {
+    return _extend( this.datas, {
       allTheaters: datas,
       theaters: datas
-    };
+    } );
   }
 
   ready (){
+    this.handleFilter();
     this.render();
   }
 
   render (){
+    console.log( 'render' );
     this.el.innerHTML = view( this.datas );
     this.els = {
-      list: this.el.querySelector( '.screen-content' )
+      list: this.el.querySelector( '.screen-content' ),
+      filter: this.el.querySelector( '.screen-form input' )
     };
   }
 
@@ -75,6 +103,6 @@ class Home extends Screen {
 
 
 
-export default ( ...args ) => {
-  return new Home( args );
+export default ( args ) => {
+  return new Theaters( args );
 };

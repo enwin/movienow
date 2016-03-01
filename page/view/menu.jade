@@ -2,5 +2,9 @@ ul.menu-list.menu-screens
   each menu, key in screens
     li.menu-item
       a( href=menu.link class=( key === current ? 'menu-item-active' : null ) )!= menu.name
-  //-li.menu-item
-    a( href="/theaters" ) Theaters
+
+if favorites
+  ul.menu-list.menu-favorites
+    each menu, key in favorites
+      li.menu-item
+        a( href=menu.link class=( key === current ? 'menu-item-active' : null ) )!= menu.name

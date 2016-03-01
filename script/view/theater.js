@@ -4,6 +4,7 @@ import Screen from './screen';
 import moment from 'moment';
 import view from '../../page/view/theater.jade';
 import _sort from 'lodash/sortBy';
+import _extend from 'lodash/extend';
 
 class Theater extends Screen {
 
@@ -22,7 +23,7 @@ class Theater extends Screen {
   }
 
   getData (){
-    this.sync( '/api/theaters/'+this.datas.id )
+    this.sync( '/api/theaters/'+this.datas.screenParams.id )
       .then( () => this.ready() )
       .catch( e => console.log( e ) );
   }
@@ -70,8 +71,7 @@ class Theater extends Screen {
       return movie.infos.nextShowTime ? movie.infos.nextShowTime.value : Infinity;
     } );
 
-    this.datas = data;
-    return data;
+    return _extend( this.datas, data );
 
   }
 

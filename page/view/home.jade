@@ -1,11 +1,37 @@
 header.screen-header
   h1.screen-title Movie now!
+  form#userLocation.screen-nav.screen-form
+    span.input-floating
+      input#locationField( name="near" type="text" pattern=".*" required value="looking in Paris" )
+      label( for="locationField" ) Set your location
 
 div.screen-content
-  ul
-    li
-      a( href="/theaters" ) Theaters
-    li
-      a( href="/theaters/ad3f3f5dcb802009" ) Le Louxor
-    li
-      a( href="/theaters/4f451a87a71bfa51" ) UGC Les Halles
+
+  section.screen-section.home-actions
+    h1.screen-content-title
+      span Now
+
+    button.button.button-action( type="button" aria-label="Find theaters around me" ) Around me
+
+    form#findMovie.form-quicksearch( action="/movies" )
+      span.input-floating
+        input#movieName( name="movieName" type="text" required )
+        label( for="movieName" ) Find a movie
+        button( type="submit" ) search
+
+    form#findTheater.form-quicksearch( action="/theaters" )
+      span.input-floating
+        input#theaterName( name="theaterName" type="text" required )
+        label( for="theaterName" ) Find a theater
+        button( type="submit" ) search
+
+  unless favorites
+    section.home-favorites.screen-list
+      h1.screen-content-title
+        span Favorite theaters
+
+      ul.theater-list
+        li.theater-item
+          a.item-title( href="/theaters/ad3f3f5dcb802009" ) Le Louxor
+        li.theater-item
+          a.item-title( href="/theaters/37d0682253c6f94d" ) UGC Ciné-Cité Bercy
