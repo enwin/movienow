@@ -38,7 +38,7 @@ class Router {
       match = route[0].match( window.location.pathname+window.location.search );
       if( match ){
         if( this.routeMatched ){
-          this.routeMatched( route[1].name, match );
+          this.routeMatched( route[2], match );
         }
         route[ 1 ].call( this, match );
         return true;
@@ -56,7 +56,7 @@ class Router {
         continue;
       }
 
-      this._routes.push( [ new Route( route ), callback ] );
+      this._routes.push( [ new Route( route ), callback, routes[ route ] ] );
     }
   }
 
@@ -83,7 +83,7 @@ class Routes extends Router  {
   }
 
   routeMatched ( routeName, params ){
-    body.handleSiteHeader( 'home' !== routeName && routeName.length > 0 );
+    body.handleSiteHeader( 'home' !== routeName );
   }
 
   theaters ( params ){
