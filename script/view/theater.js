@@ -29,7 +29,7 @@ class Theater extends Screen {
   }
 
   getDays (){
-    this.datas.nextDay = moment().add( 2, 'd' ).format( 'dddd' ).toLowerCase();
+    this.datas.nextDay = moment().add( 2, 'd' ).format( 'dddd' );
   }
 
   parse ( data ){

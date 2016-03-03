@@ -42,6 +42,11 @@ class Screen {
     if( this.el.parentNode === main ){
       main.removeChild( this.el );
     }
+
+    if( this.hidden ){
+      this.hidden();
+    }
+
   }
 
   setTitle ( title ){

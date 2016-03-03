@@ -9,7 +9,6 @@ moment.relativeTimeThreshold('m', 59);
 
 import router from './module/router';
 
-
 bind( document.body, 'click', 'a[href^="/"]', ( e ) => {
   e.preventDefault();
   router.navigate( {}, '', e.currentTarget.getAttribute( 'href' ) );

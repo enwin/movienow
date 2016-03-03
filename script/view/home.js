@@ -14,7 +14,7 @@ class Home extends Screen {
 
   dom (){
     return {
-      tagName: 'section',
+      tagName: 'div',
       className: 'screen screen-home'
     };
   }

@@ -1,60 +1,101 @@
 .screen-theater
    .screen-content
-      padding: 0
-      overflow: hidden
+      padding-top: rem( 104 )
+
+.theater-movies-list
+   padding-top: rem( 4 )
+   padding-bottom: rem( 10 )
 
 .theater-movies-item
-   margin: rem( 20 ) 0
+   margin: rem( 24 ) 0
 
-.theater-movies
-   height: 100%
-   padding: rem( 88 ) rem( 14 ) 0
-   overflow-y: scroll
-   -webkit-overflow-scrolling: touch
+   .dash
+      display: block
+      height: rem( 4 )
+      width: 100%
 
+      pattern
+         stroke: rgba( $color-primary-light, 0.4 )
+         stroke-width: 2px
 
-.movie-title
-   color: $text-secondary-dark
-   a
-      text-decoration: none
-
-.movie-infos-item
-   font-size: rem( 14 )
-   margin: rem( 4 ) 0
-
-.movie-times
-   //border-top: 1px solid #cacaca
-   margin: rem( 5 ) 0
-   padding-top: rem( 5 )
 
    &:first-child
-   &.movie-times-list
-      //border: 0
-      padding-top: 0
+      .dash
+         display: none
+
+.theater-movies
+   &[aria-hidden=true]
+      display: none
+
+
+.movie
+   padding-top: rem( 22 )
+   position: relative
+   font-size: 0
+
+.movie-artwork
+   display: inline-block
+   font-size: 1rem
+   padding-right: pc( 18/320 )
+   position: relative
+   vertical-align: top
+   width: pc( 84/320 )
+
+   span
+      display: block
+      overflow: hidden
+      padding-top: ( 4%/3*100 )
+      background-color: $color-primary-light
+
+   img
+      display: block
+      height: 100%
+      position: absolute
+
+   & + .movie-infos
+      width: pc( 236/320 )
+
+.movie-title
+   margin-top: rem( -2 )
+
+.movie-infos
+   display: inline-block
+   font-size: 1rem
+   vertical-align: top
+
+.movie-infos-item
+   font-size: rem( 11 )
+   margin: rem( 2 ) 0
+
+.movie-times
+   margin-top: rem( 10 )
+
+.movie-times-info
+   font-size: rem( 12 )
+   margin: rem( 5 ) 0 0
+   display: block
 
 .movie-times-list
    color: $text-primary-dark
    font-size: 0
-   margin-left: rem( -10 )
-   width: 'calc( 100% + %s )' % ( rem( 20 ) )
+   margin-left: rem( -9 )
+   width: 'calc( 100% + %s )' % ( rem( 18 ) )
 
 .movie-times-item
-   font-size: 1rem
+   font-size: rem( 14 )
    display: inline-block
-   padding: 0 rem( 10 )
+   padding: 0 rem( 9 )
 
    s
       position: relative
-      color: rgba( $text-primary-dark, 0.5 )
+      color: $text-primary
       text-decoration: none
 
       &:after
          content: ''
          position: absolute
-         width: 110%
+         width: 100%
          height: 1px
-         background-color: rgba( $text-primary-dark, 0.5 )
-         transform: rotate( -14deg ) translate( -50%, -50% )
-         left: 50%
-         top: 50%
-         transform-origin: 0 50%
+         background-color: $text-primary
+         left: 0
+         bottom: em( 6/14 )

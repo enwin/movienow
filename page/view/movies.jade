@@ -3,6 +3,7 @@ header.screen-header
 
   form#theaterFilter.screen-nav.screen-form
     span.input-floating
+      include ../../_source/svg/icon_search.svg
       input#movieBlob( type="search" pattern=".*" required value="#{screenParams.filter || ''}" )
       label( for="movieBlob" ) Filter movies
 

@@ -1,14 +1,41 @@
 .site-menu-button
-   height: rem( 48 )
-   width: rem( 50 )
-   position: fixed
+   font-size: 0
+   height: rem( 54 )
    left: 0
-   top: 0
-   z-index: 5
    outline: none
+   position: fixed
+   top: 0
+   width: rem( 60 )
+   z-index: 5
 
    svg
       fill: currentColor
 
    span
       hide()
+
+.button
+   text-align: center
+   text-transform: uppercase
+
+.button-action
+   background-color: $light
+   color: $dark
+   display: block
+   height: rem( 44 )
+   margin: rem( 15 ) auto
+   width: rem( 228 )
+   border-radius: rem( 22 )
+   line-height: ( 44/14 )
+   font-size: rem( 14 )
+
+.button-reverse
+   border-radius: rem( 22 )
+   border: 2px solid $light
+   color: $light
+   display: block
+   font-size: rem( 14 )
+   height: rem( 44 )
+   line-height: ( 40/14 )
+   margin: rem( 15 ) auto
+   width: rem( 228 )

@@ -1,70 +1,69 @@
 .screen
    height: 100vh
-   overflow: hidden
 
 .screen-header
    color: $light
    left: 0
-   background-color: $dark
    position: fixed
    top: 0
    width: 100%
    z-index: 2
+   background: $color-seconday-dark url( '/media/dyn/city/paris.jpg' ) no-repeat 50% 0
+   background-size: cover
 
 .screen-title
    empty();
-   //font-size: rem( 14 )
+   font-size: rem( 17 )
    font-weight: bold
-   height: rem( 48 )
-   line-height: ( 47/16 )
+   height: rem( 54 )
+   letter-spacing: em( 1/17 )
+   line-height: ( 54/17 )
    overflow: hidden
-   padding-bottom: rem( 1 )
-   padding-left: rem( 60 )
-   padding-right: rem( 17 )
+   padding: 0 rem( 60 )
+   text-align: center
    text-overflow: ellipsis
    text-transform: uppercase
    white-space: nowrap
 
 .screen-nav
-   background-color: $dark
-   border-bottom: 1px solid currentColer
-   height: rem( 42 )
-   padding: 0 rem( 7 )
-
-   &.screen-form
-      padding: rem( 1 ) rem( 3 ) rem( 3 )
 
    .nav-list
-      display: flex
-      justify-content: space-between
       height: 100%
+      font-size: 0
 
    .nav-list-item
-      flex-grow: 1
-      //text-align: center
-      height: 100%
-      align-items: center
+      empty();
+      font-size: 1rem
+      display: inline-block
+      width: ( 100%/3 )
+      text-align: center
+      line-height: ( 48/16 )
+      padding: 0 rem( 7 )
+      position: relative
 
-      a
-         empty();
-         display: block
-         height: 100%
-         line-height: ( 40/16 )
-         text-decoration: none
-         padding: 0 rem( 7 )
+      &[aria-selected=true]:not( :empty ):after
+         content: ''
+         position: absolute
+         bottom: 0
+         left: 0
+         width: 100%
+         height: rem( 4 )
+         background-color: $light
 
-      &+ .nav-list-item
-         a:before
-            width: 70%
+      &+ .nav-list-item:before
+         width: 70%
 
-      &:last-child
-         a:before
-            width: 80%
+      &:last-child:before
+         width: 80%
+
+.screen-form
+   padding: 0 rem( 15 )
 
 .screen-content
-   padding: rem( 48 ) rem( 14 ) 0
-   height: 100vh
-   overflow-y: scroll
+   padding: rem( 48 ) rem( 20 ) 0
+   //height: 100vh
+   background-color: $light
+   min-height: 100%
    -webkit-overflow-scrolling: touch
 
 .screen-section
@@ -96,9 +95,10 @@
 
 .screen-list
    .screen-content
-      padding-top: rem( 88 )
+      padding-top: rem( 102 )
 
    .item-title
-      padding: rem( 11 ) 0
+      font-size: rem( 17 )
+      padding: rem( 15 ) 0
       display: block
       color: $text-secondary-dark

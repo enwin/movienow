@@ -1,17 +1,12 @@
-header.screen-header
-  h1.screen-title Movie now!
-  form#userLocation.screen-nav.screen-form
-    span.input-floating
-      input#locationField( name="near" type="text" pattern=".*" required value="looking in Paris" )
-      label( for="locationField" ) Set your location
-
+span.home-poster( aria-hidden="true" style="background-image: url(/media/dyn/home/batmanvsuperman.jpg);" )
 div.screen-content
 
-  section.screen-section.home-actions
-    h1.screen-content-title
-      span Now
+  button.button.button-action( type="button" aria-label="Find theaters around me" ) Around me
 
-    button.button.button-action( type="button" aria-label="Find theaters around me" ) Around me
+  a.button.button-reverse My favorite theaters
+
+  section.home-find
+    h1.hidden Find a theater or movie
 
     form#findMovie.form-quicksearch( action="/movies" )
       span.input-floating
@@ -24,14 +19,3 @@ div.screen-content
         input#theaterName( name="theaterName" type="text" required )
         label( for="theaterName" ) Find a theater
         button( type="submit" ) search
-
-  unless favorites
-    section.home-favorites.screen-list
-      h1.screen-content-title
-        span Favorite theaters
-
-      ul.theater-list
-        li.theater-item
-          a.item-title( href="/theaters/ad3f3f5dcb802009" ) Le Louxor
-        li.theater-item
-          a.item-title( href="/theaters/37d0682253c6f94d" ) UGC Ciné-Cité Bercy

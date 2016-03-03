@@ -88,7 +88,6 @@ class Theaters extends Screen {
   }
 
   render (){
-    console.log( 'render' );
     this.el.innerHTML = view( this.datas );
     this.els = {
       list: this.el.querySelector( '.screen-content' ),

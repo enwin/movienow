@@ -6,6 +6,7 @@ import Movies from '../view/movies';
 import Movie from '../view/movie';
 import Home from '../view/home';
 import menu from '../view/menu';
+import body from '../view/body';
 
 class Router {
   constructor ( args ){
@@ -28,7 +29,6 @@ class Router {
         matched;
 
     if( e && e.target.location.pathname === this.currentPathname ){
-      console.log( 'return' );
       return;
     }
 
@@ -37,6 +37,9 @@ class Router {
     matched = this._routes.some( route => {
       match = route[0].match( window.location.pathname+window.location.search );
       if( match ){
+        if( this.routeMatched ){
+          this.routeMatched( route[1].name, match );
+        }
         route[ 1 ].call( this, match );
         return true;
       }
@@ -77,6 +80,10 @@ class Routes extends Router  {
       current: null
     };
 
+  }
+
+  routeMatched ( routeName, params ){
+    body.handleSiteHeader( 'home' !== routeName );
   }
 
   theaters ( params ){

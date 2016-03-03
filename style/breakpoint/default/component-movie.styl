@@ -3,47 +3,10 @@
       margin: rem( 20 ) 0
 
 .movie-title
-   color: $text-secondary-dark
+   color: $color-primary-dark
    a
       text-decoration: none
 
 .movie-infos-item
    font-size: rem( 14 )
    margin: rem( 4 ) 0
-
-.movie-times
-   //border-top: 1px solid #cacaca
-   margin: rem( 5 ) 0
-   padding-top: rem( 5 )
-
-   &:first-child
-   &.movie-times-list
-      //border: 0
-      padding-top: 0
-
-.movie-times-list
-   color: $text-primary-dark
-   font-size: 0
-   margin-left: rem( -10 )
-   width: 'calc( 100% + %s )' % ( rem( 20 ) )
-
-.movie-times-item
-   font-size: 1rem
-   display: inline-block
-   padding: 0 rem( 10 )
-
-   s
-      position: relative
-      color: rgba( $text-primary-dark, 0.5 )
-      text-decoration: none
-
-      &:after
-         content: ''
-         position: absolute
-         width: 110%
-         height: 1px
-         background-color: rgba( $text-primary-dark, 0.5 )
-         transform: rotate( -14deg ) translate( -50%, -50% )
-         left: 50%
-         top: 50%
-         transform-origin: 0 50%

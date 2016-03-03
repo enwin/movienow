@@ -1,6 +1,19 @@
 .site-header
    position: absolute
-   background-color: $dark
    color: $light
-   height: rem( 48 )
+   height: rem( 54 )
    width: 100%
+
+   &.header-small
+      .site-logo
+         hide()
+
+.site-logo
+   width: rem( 70 )
+   height: rem( 32 )
+   margin: rem( 15 ) auto
+
+   svg
+      width: 100%
+      height: 100%
+      fill: $light

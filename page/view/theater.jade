@@ -2,49 +2,53 @@ header.screen-header
   h1( title=name ).screen-title!= name
 
   nav.screen-nav.nav-days
-    ul.nav-list
-      each day, index in [ 'today', 'tomorrow', nextDay ]
-        li.nav-list-item
-            a( href="#theater-#{index}" )!= nextDay ? day : ''
+    ul.nav-list( role="tablist" )
+      each day, index in [ 'Today', 'Tomorrow', nextDay ]
+        li.nav-list-item( role="tab" aria-selected=!index ? 'true' : 'false' aria-controls="#theater-#{index}" )!= nextDay ? day : ''
 
 if movies
   div.screen-content
     each day, index in movies
-      div.theater-movies( id="theater-#{index}" )
+      div.theater-movies( role="tabpanel" id="theater-#{index}" aria-hidden=!index ? 'false' : 'true' )
         ul.theater-movies-list
           each movie in day
             li.theater-movies-item
+              include ../../_source/svg/pattern.svg
+
               article.movie
-                h1.movie-title
-                  a( href="/movies/#{movie.id}" )!= movie.name
+                figure.movie-artwork
+                  span.movie-artwork-wrapper
+                div.movie-infos
+                  h1.movie-title
+                    a( href="/movies/#{movie.id}" )!= movie.name
 
-                if movie.infos
-                  ul.movie-infos-list
-                    each info, key in movie.infos
-                      if key === 'nextShowTime'
-                        li.movie-infos-item( class="movie-#{key}" ) (next screening #{info.formated})
-                      else
-                        li.movie-infos-item( class="movie-#{key}" )!= info
-
-                if movie.showtimes[0].info !== 'all'
-                  ul
-                    each showType in movie.showtimes
-                      li.movie-times
-                        span.movie-times-info!= showType.info
-                        ul.movie-times-list
-                          each time in showType.times
-                            li.movie-times-item
-                              if time.disabled
-                                s
-                                  time( datetime="#{time.value}" )!= time.formated
-                              else
-                                time( datetime="#{time.value}" )!= time.formated
-                else
-                  ul.movie-times-list.movie-times
-                    each time in movie.showtimes[0].times
-                      li.movie-times-item
-                        if time.disabled
-                          s
-                            time( datetime="#{time.value}" )!= time.formated
+                  if movie.infos
+                    ul.movie-infos-list
+                      each info, key in movie.infos
+                        if key === 'nextShowTime'
+                          li.movie-infos-item( class="movie-#{key}" ) (next screening #{info.formated})
                         else
-                          time( datetime="#{time.value}" )!= time.formated
+                          li.movie-infos-item( class="movie-#{key}" )!= info
+
+                  if movie.showtimes[0].info !== 'all'
+                    ul
+                      each showType in movie.showtimes
+                        li.movie-times
+                          span.movie-times-info!= showType.info
+                          ul.movie-times-list
+                            each time in showType.times
+                              li.movie-times-item
+                                if time.disabled
+                                  s
+                                    time( datetime="#{time.value}" )!= time.formated
+                                else
+                                  time( datetime="#{time.value}" )!= time.formated
+                  else
+                    ul.movie-times-list.movie-times
+                      each time in movie.showtimes[0].times
+                        li.movie-times-item
+                          if time.disabled
+                            s
+                              time( datetime="#{time.value}" )!= time.formated
+                          else
+                            time( datetime="#{time.value}" )!= time.formated
