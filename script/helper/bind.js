@@ -1,4 +1,4 @@
-function delegate( root, event, selector, callback ){
+function delegate( root, event, selector, callback, capture ){
 
   function Event( src ){
 
@@ -86,6 +86,7 @@ function delegate( root, event, selector, callback ){
 
   (function( root, event, selector, callback, capture ){
     var delegate;
+
     if( 'string' === typeof selector ){
       delegate = true;
     }
@@ -114,7 +115,7 @@ function delegate( root, event, selector, callback ){
       }
 
     }, capture );
-  })( root, event, selector, callback );
+  })( root, event, selector, callback, capture );
 }
 
 export default delegate;
