@@ -83,7 +83,7 @@ class Routes extends Router  {
   }
 
   routeMatched ( routeName, params ){
-    body.handleSiteHeader( 'home' !== routeName );
+    body.handleSiteHeader( 'home' !== routeName && routeName.length > 0 );
   }
 
   theaters ( params ){
