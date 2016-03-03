@@ -5,8 +5,19 @@ import moment from 'moment';
 import view from '../../page/view/theater.jade';
 import _sort from 'lodash/sortBy';
 import _extend from 'lodash/extend';
+import bind from '../helper/bind';
+import Tablist from '../helper/accedeweb-tablist';
 
 class Theater extends Screen {
+
+  bind (){
+
+    bind( this.el, 'click', '[role=tab]', this.tabs.tabAction );
+    bind( this.el, 'focus', '[role=tab]', this.tabs.tabFocus, true );
+    bind( this.el, 'keydown', '[role=tab]', this.tabs.tabKey );
+    bind( this.el, 'focus', '[role=tabpanel]', this.tabs.panelFocus, true );
+    bind( this.el, 'keydown', '[role=tabpanel]', this.tabs.panelKey );
+  }
 
   dom() {
     return {
@@ -79,6 +90,11 @@ class Theater extends Screen {
     this.getDays();
     this.setTitle( this.datas.name );
     this.render();
+
+    if( !this.tabs ){
+      this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
+      this.bind();
+    }
   }
 
   render (){

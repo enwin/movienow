@@ -4,7 +4,7 @@ header.screen-header
   nav.screen-nav.nav-days
     ul.nav-list( role="tablist" )
       each day, index in [ 'Today', 'Tomorrow', nextDay ]
-        li.nav-list-item( role="tab" aria-selected=!index ? 'true' : 'false' aria-controls="#theater-#{index}" )!= nextDay ? day : ''
+        li.nav-list-item( role="tab" aria-controls="theater-#{index}" )!= nextDay ? day : ''
 
 if movies
   div.screen-content

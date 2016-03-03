@@ -41,14 +41,22 @@
       padding: 0 rem( 7 )
       position: relative
 
-      &[aria-selected=true]:not( :empty ):after
-         content: ''
-         position: absolute
-         bottom: 0
-         left: 0
-         width: 100%
-         height: rem( 4 )
-         background-color: $light
+      &[aria-selected=true]:not( :empty )
+         &:after
+            content: ''
+            position: absolute
+            bottom: 0
+            left: 0
+            width: 100%
+            height: rem( 4 )
+            background-color: $light
+            transition: height 0.2s
+
+         &:focus
+            outline: none
+
+            &:after
+               height: rem( 6 )
 
       &+ .nav-list-item:before
          width: 70%
