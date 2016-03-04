@@ -41,6 +41,9 @@
       padding: 0 rem( 7 )
       position: relative
 
+      &:empty:before
+         width: 70%
+
       &[aria-selected=true]:not( :empty )
          &:after
             content: ''
@@ -57,12 +60,6 @@
 
             &:after
                height: rem( 6 )
-
-      &+ .nav-list-item:before
-         width: 70%
-
-      &:last-child:before
-         width: 80%
 
 .screen-form
    padding: 0 rem( 15 )
