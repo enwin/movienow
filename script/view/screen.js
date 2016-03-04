@@ -1,3 +1,4 @@
+import loader from '../module/loader';
 import _extend from 'lodash/extend';
 
 var main = document.getElementById( 'main' );
@@ -78,8 +79,10 @@ class Screen {
   }
 
   sync ( url, params ){
+    loader.show();
     return window.fetch( url, params || {} ).then( r => r.json() )
-        .then( data => this.parse( data ) );
+      .then( data => this.parse( data ) )
+      .then( () => loader.hide() );
 
   }
 }

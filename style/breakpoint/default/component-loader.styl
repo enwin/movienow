@@ -1,0 +1,38 @@
+.screen-loader
+   height: 100vh
+   left: 0
+   position: fixed
+   top: 0
+   width: 100%
+   z-index: 10
+
+.loader-wrapper
+   left: 50%
+   opacity: 0
+   position: absolute
+   top: 50%
+   transform: translate( -50%, -50% )
+   transition: opacity 0.2s $ease-out-quad
+   height: rem( 58 )
+   width: rem( 30 )
+
+
+   svg
+      height: 100%
+      width: 100%
+      transform: translateY( rem( 10 ) )
+      transition: transform 0.3s $ease-out-quad
+.play
+   .loader-wrapper
+      opacity: 1
+
+      svg
+         transform: none
+
+      .big-wheel
+         transform-origin: 47.5px 48px
+         animation: spin 0.5s linear infinite
+
+      .small-wheel
+         transform-origin: 62.7px 168.1px
+         animation: spin 0.4s linear infinite
