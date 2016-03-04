@@ -9,7 +9,7 @@
     "sw": "browserify ./script/sw.js -o ./www/sw.js",
     "watch:sw": "onchange 'script/sw.js' -- npm run sw",
     "watch:js": "onchange 'script/app.js' -- npm run js",
-    "svg": "svgo -f ./_source/svg --pretty",
+    "svg": "svgo -f ./_source/svg --pretty --config=svgo.yml",
     "start": "npm run serve"
   },
   "author": "enwin <tifftafftoff@gmail.com>",

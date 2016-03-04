@@ -1,0 +1,8 @@
+plugins:
+  - removeAttrs:
+      attrs:
+        - path:fill
+        - fill-rule
+        - clip-rule
+  - collapseGroups
+  - removeNonInheritableGroupAttrs

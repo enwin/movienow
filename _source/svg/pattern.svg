@@ -1,6 +1,6 @@
 <svg class="dash" xmlns="http://www.w3.org/2000/svg">
-    <pattern id="pattern-dots" x="0" y="0" width="6" height="2" patternUnits="userSpaceOnUse">
-      <line stroke-linecap="round" x1="1" y1="1" x2="4" y2="1"/>
+    <pattern id="a" width="6" height="2" patternUnits="userSpaceOnUse">
+        <path stroke-linecap="round" d="M1 1h3"/>
     </pattern>
-    <rect fill="url(#pattern-dots)" x="0" y="0" width="100%" height="2" />
+    <rect fill="url(#a)" width="100%" height="2"/>
 </svg>
