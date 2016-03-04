@@ -5,7 +5,7 @@ header.screen-header
     span.input-floating
       include ../../_source/svg/icon_search.svg
       input#movieBlob( type="search" pattern=".*" required value="#{screenParams.filter || ''}" )
-      label( for="movieBlob" ) Filter movies
+      label( for="movieBlob" ) Search movies
 
 div.screen-content
   include movies-list.jade

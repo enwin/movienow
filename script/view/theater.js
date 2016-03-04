@@ -1,5 +1,7 @@
 'use-strict'
 
+import favList from '../data/favorites';
+
 import Screen from './screen';
 import moment from 'moment';
 import view from '../../page/view/theater.jade';
@@ -17,6 +19,8 @@ class Theater extends Screen {
     bind( this.el, 'keydown', '[role=tab]', this.tabs.tabKey );
     bind( this.el, 'focus', '[role=tabpanel]', this.tabs.panelFocus, true );
     bind( this.el, 'keydown', '[role=tabpanel]', this.tabs.panelKey );
+
+    bind( this.el, 'click', '.button-favorite', e => this.handleFavorite( e ) );
   }
 
   dom() {
@@ -27,6 +31,26 @@ class Theater extends Screen {
     };
   }
 
+  displayed (){
+    var favStatus = favList.is( this.datas.screenParams.id );
+
+    if( favStatus !== this.datas.favorited ){
+      this.datas.favorited = favStatus;
+      this.els.favorites.classList.toggle( 'favorited', this.datas.favorited );
+    }
+  }
+
+  handleFavorite (){
+    this.datas.favorited = !this.datas.favorited;
+
+    favList[ this.datas.favorited ? 'add' : 'remove' ]( {
+      id: this.datas.screenParams.id,
+      name: this.datas.name
+    } );
+
+    this.els.favorites.classList.toggle( 'favorited', this.datas.favorited );
+  }
+
   initialize (){
     this.getData();
 
@@ -34,6 +58,9 @@ class Theater extends Screen {
   }
 
   getData (){
+
+    this.datas.favorited = favList.is( this.datas.screenParams.id );
+
     this.sync( '/api/theaters/'+this.datas.screenParams.id )
       .then( () => this.ready() )
       .catch( e => console.log( e ) );
@@ -90,15 +117,18 @@ class Theater extends Screen {
     this.getDays();
     this.setTitle( this.datas.name );
     this.render();
-
-    if( !this.tabs ){
-      this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
-      this.bind();
-    }
   }
 
   render (){
     this.el.innerHTML = view( this.datas );
+    this.els = {
+      favorites: this.el.querySelector( '.screen-header .theater-favorite' )
+    };
+
+    if( this.datas.movies ){
+      this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
+      this.bind();
+    }
   }
 }
 

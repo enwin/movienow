@@ -78,3 +78,7 @@ module.exports.theaters = function( req, res ){
 module.exports.movies = function( req, res ){
   res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
 };
+
+module.exports.favorites = function( req, res ){
+  res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
+};

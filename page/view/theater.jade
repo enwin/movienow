@@ -1,6 +1,15 @@
 header.screen-header
   h1( title=name ).screen-title!= name
 
+  div.theater-favorite( class=favorited ? 'favorited' : null )
+    button.button.button-favorite( type="button" )
+      include ../../_source/svg/icon_favorites.svg
+      span Add #{name} to favorites
+
+    button.button.button-favorite.button-favorited( type="button" )
+      include ../../_source/svg/icon_favorited.svg
+      span Remove #{name} from favorites
+
   nav.screen-nav.nav-days
     ul.nav-list( role="tablist" )
       each day, index in [ 'Today', 'Tomorrow', nextDay ]

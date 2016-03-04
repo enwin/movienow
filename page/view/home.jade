@@ -3,7 +3,7 @@ div.screen-content
 
   button.button.button-action( type="button" aria-label="Find theaters around me" ) Around me
 
-  a.button.button-reverse My favorite theaters
+  a.button.button-reverse( href="/favorites" ) My favorite theaters
 
   section.home-find
     h1.hidden Find a theater or movie
@@ -11,11 +11,11 @@ div.screen-content
     form#findMovie.form-quicksearch( action="/movies" )
       span.input-floating
         input#movieName( name="movieName" type="text" required )
-        label( for="movieName" ) Find a movie
+        label( for="movieName" ) Search a movie
         button( type="submit" ) search
 
     form#findTheater.form-quicksearch( action="/theaters" )
       span.input-floating
         input#theaterName( name="theaterName" type="text" required )
-        label( for="theaterName" ) Find a theater
+        label( for="theaterName" ) Search a theater
         button( type="submit" ) search

@@ -8,6 +8,7 @@ module.exports = function( app ){
 
   // home
   app.get( '/', response.home );
+  app.get( '/favorites', response.favorites );
   app.get( '/theaters(/:id)?', response.theaters );
   app.get( '/movies(/:id)?', response.movies );
 
