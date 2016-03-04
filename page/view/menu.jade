@@ -3,8 +3,13 @@ ul.menu-list.menu-screens
     li.menu-item
       a( href=menu.link class=( key === current ? 'menu-item-active' : null ) )!= menu.name
 
-if favorites
-  ul.menu-list.menu-favorites
-    each menu, key in favorites
-      li.menu-item
-        a( href=menu.link class=( key === current ? 'menu-item-active' : null ) )!= menu.name
+span.dash-wrapper( aria-hidden="true" )
+  include ../../_source/svg/pattern.svg
+section.menu-item.menu-favorites
+  a( href="/favorites" class=( key === current ? 'menu-item-active' : null ) )
+    include ../../_source/svg/icon_favorites.svg
+    span Favorites
+
+button.button.button-close( type="button" aria-controls="menu" aria-expanded="true" )
+  include ../../_source/svg/icon_close.svg
+  span Close menu

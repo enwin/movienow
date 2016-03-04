@@ -1,53 +1,89 @@
 .site-menu
+   background-color: rgba( $dark, 0 )
    display: none
    height: 100vh
    position: fixed
-   transform: translateX( -100% )
-   transition: transform 0s linear 0.4s, background 0.3s $ease-in-quad 0.1s
-   z-index: 4
+   transform: translateY( -100% )
+   transition: transform 0s $ease-in-quad  0.4s, background 0.3s linear 0.1s
+   width: 100%
+   z-index: 5
+   top: 0
 
    &:not( [aria-hidden=true] )
       display: block
-      transform: translateX( 0 )
-      transition-timing-function: linear, $ease-out-quad
+      transform: translateY( 0 )
+      transition-timing-function: $ease-out-quad , linear
       transition-delay: 0s
+      background-color: rgba( $dark, 0.7 )
 
       .menu-wrapper
-         transform: translateX( 0 )
+         transform: translateY( 0 )
          transition-timing-function: $ease-out-quad
          transition-delay: 0.1s
+
+         .button-close
+            transition-timing-function: $ease-out-quad
+            transition-delay: 0.2s
+            opacity: 1
+            transform: translateY( 0 )
 
    .hidden
       hide()
 
 .menu-wrapper
    -webkit-overflow-scrolling: touch
-   background-color: $dark
-   height: 100%
-   padding-top: rem( 48 )
+   background-color: $light
+   padding-top: rem( 20 )
    position: relative
-   transform: translateX( -100% )
+   transform: translateY( -100% )
    transition: transform 0.3s $ease-in-quad
-   width: rem( 280 )
+   width: 100%
    z-index: 4
 
-.menu-list
-   &:before
-      background-color: $color-divider-light
-      content: ''
+   .dash-wrapper
       display: block
-      margin: 0 rem( 14 )
-      height: 1px
+      padding: 0 rem( 20 )
 
-   &:first-child
-      &:before
-         content: none
+   .button-close
+      margin-top: rem( 13 )
+      opacity: 0
+      position: absolute
+      transform: translateY( -100% )
+      transition: transform 0.2s $ease-in-quad, opacity 0.2s $ease-in-quad
+      width: 100%
+
+      svg
+         fill: $light
+         height: rem( 48 )
+         width: rem( 48 )
+
+      span
+         hide()
 
 .menu-item
+   text-transform: uppercase
+
    a
+      color: $dark
       display: block
-      padding: rem( 15 ) rem( 14 )
+      padding: rem( 20 )
       text-decoration: none
+      text-align: center
 
    .menu-item-active
       background-color: rgba( $light, 0.2 )
+
+.menu-favorites
+   a
+      padding: rem( 15 ) rem( 20 )
+
+   svg
+   a span
+      line-height: ( 18/16 )
+      vertical-align: middle
+
+   svg
+      fill: $color-primary-light
+      height: rem( 28 )
+      margin-right: rem( -6 )
+      width: rem( 28 )

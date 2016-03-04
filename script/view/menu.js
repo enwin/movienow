@@ -7,13 +7,13 @@ var datas = {
       link: '/',
       name: 'Home'
     },
-    'theaters': {
-      link: '/theaters',
-      name: 'Theaters'
-    },
     'movies': {
       'link': '/movies',
       'name': 'Movies'
+    },
+    'theaters': {
+      link: '/theaters',
+      name: 'Theaters'
     }
   },
   favorites: {
@@ -33,7 +33,7 @@ class Menu {
     this.el = document.querySelector( '.site-menu' );
 
     this.els = {
-      button: document.querySelector( '.site-menu-button' ),
+      buttons: Array.prototype.slice.call( document.querySelectorAll( '[aria-controls="menu"]' ) ),
       list: this.el.querySelector( '.menu-wrapper' )
     };
 
@@ -47,7 +47,7 @@ class Menu {
   bind (){
     bind( this.el, 'click', 'a[href^="/"]', (e) => this.setClose(e) );
     bind( this.el, 'transitionend', (e) => this.handleAnimation(e) );
-    bind( this.els.button, 'click', (e) => this.toggle(e) );
+    bind( document.body, 'click', '[aria-controls="menu"]', (e) => this.toggle(e) );
   }
 
   handleAnimation (){
@@ -87,8 +87,11 @@ class Menu {
       window.requestAnimationFrame( () => {
         this.el[ isOpen ? 'setAttribute' : 'removeAttribute' ]( 'aria-hidden', isOpen );
       } );
-
     }, 16 );
+
+    this.els.buttons.forEach( button => {
+      button.setAttribute( 'aria-expanded', !isOpen );
+    } );
   }
 }
 
