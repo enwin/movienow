@@ -15,8 +15,8 @@ header.screen-header
       each day, index in [ 'Today', 'Tomorrow', nextDay ]
         li.nav-list-item( role="tab" aria-controls="theater-#{index}" )!= nextDay ? day : ''
 
-if movies
-  div.screen-content
+div.screen-content
+  if movies
     each day, index in movies
       div.theater-movies( role="tabpanel" id="theater-#{index}" aria-hidden=!index ? 'false' : 'true' )
         ul.theater-movies-list

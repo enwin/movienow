@@ -7,8 +7,8 @@ header.screen-header
   //-       li.nav-list-item
   //-         a( href="#theater-#{index}" )!= day
 
-if theaters
-  div.screen-content
+div.screen-content
+  if theaters
     ul.theater-movies-list
       each theater in theaters
         li.theater-movies-item
