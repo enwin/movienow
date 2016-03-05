@@ -5,9 +5,10 @@ ul.menu-list.menu-screens
 
 span.dash-wrapper( aria-hidden="true" )
   include ../../_source/svg/pattern.svg
-section.menu-item.menu-favorites
+section.menu-item.menu-favorites( class=!asFavorites ? 'empty' : '' )
   a( href="/favorites" class=( key === current ? 'menu-item-active' : null ) )
     include ../../_source/svg/icon_favorites.svg
+    include ../../_source/svg/icon_favorited.svg
     span Favorites
 
 button.button.button-close( type="button" aria-controls="menu" aria-expanded="true" )

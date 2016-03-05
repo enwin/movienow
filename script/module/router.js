@@ -1,11 +1,15 @@
 import Route from 'route-parser';
 
+// data
+import '../data/favorites';
+
+// view
+import Favorites from '../view/favorites';
 import Theaters from '../view/theaters';
 import Theater from '../view/theater';
 import Movies from '../view/movies';
 import Movie from '../view/movie';
 import Home from '../view/home';
-import Favorites from '../view/favorites';
 import menu from '../view/menu';
 import body from '../view/body';
 
@@ -89,7 +93,7 @@ class Routes extends Router  {
   }
 
   theaters ( params ){
-    menu.setCurrent( 'theaters', params );
+    //menu.setCurrent( 'theaters', params );
 
     params.id = params.id || '/';
 
@@ -119,7 +123,7 @@ class Routes extends Router  {
   }
 
   movies ( params ){
-    menu.setCurrent( 'movies', params );
+    //menu.setCurrent( 'movies', params );
 
     params.id = params.id || '/';
 
@@ -149,7 +153,7 @@ class Routes extends Router  {
   }
 
   home (params){
-    menu.setCurrent( 'home' );
+    //menu.setCurrent( 'home' );
 
     if( !this.screens.home ){
       this.screens.home = new Home( params );
@@ -168,7 +172,7 @@ class Routes extends Router  {
   }
 
   favorites (params){
-    menu.setCurrent( 'favorites' );
+    //menu.setCurrent( 'favorites' );
 
     if( !this.screens.favorites ){
       this.screens.favorites = new Favorites( params );

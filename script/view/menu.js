@@ -1,5 +1,6 @@
 import dom from '../../page/view/menu.jade';
 import bind from '../helper/bind';
+import favList from '../data/favorites';
 
 var datas = {
   screens: {
@@ -14,16 +15,6 @@ var datas = {
     'theaters': {
       link: '/theaters',
       name: 'Theaters'
-    }
-  },
-  favorites: {
-    'ad3f3f5dcb802009': {
-      link: '/theaters/ad3f3f5dcb802009',
-      name: 'Le Louxor'
-    },
-    '37d0682253c6f94d': {
-      link: '/theaters/37d0682253c6f94d',
-      name: 'UGC Ciné-Cité Bercy'
     }
   }
 };
@@ -41,6 +32,8 @@ class Menu {
 
     this.bind();
 
+    this.getFavs();
+
     this.render();
   }
 
@@ -50,38 +43,49 @@ class Menu {
     bind( document.body, 'click', '[aria-controls="menu"]', (e) => this.toggle(e) );
   }
 
+  getFavs (){
+    this.datas.asFavorites = !!favList.list().length;
+  }
+
   handleAnimation (){
     this.el.style.display = '';
   }
 
   render (){
     this.els.list.innerHTML = dom( this.datas );
+    this.els.favorites = this.el.querySelector( '.menu-favorites' );
   }
 
   setClose (){
-    this.datas.renderClose = true;
+    //this.datas.renderClose = true;
+    this.toggle();
   }
 
-  setCurrent ( current, params ){
-    // search for current theater in the favorite list and fallback otherwise
-    if( this.datas.favorites && params && params.id && this.datas.favorites[ params.id ] ){
-      this.datas.current = params.id;
-    }
-    else{
-      this.datas.current = current;
-    }
-    this.render();
+  // setCurrent ( current, params ){
+  //   // search for current theater in the favorite list and fallback otherwise
+  //   if( this.datas.favorites && params && params.id && this.datas.favorites[ params.id ] ){
+  //     this.datas.current = params.id;
+  //   }
+  //   else{
+  //     this.datas.current = current;
+  //   }
 
-    if( this.datas.renderClose ){
-      this.datas.renderClose = false;
-      this.toggle();
-    }
-  }
+  //   this.render();
+
+  //   if( this.datas.renderClose ){
+  //     this.datas.renderClose = false;
+  //     this.toggle();
+  //   }
+  // }
 
   toggle (){
     var isOpen = !this.el.attributes[ 'aria-hidden' ];
 
     this.el.style.display = 'block';
+
+    if( !isOpen ){
+      this.updateFavIcon();
+    }
 
     window.setTimeout( () => {
       window.requestAnimationFrame( () => {
@@ -92,6 +96,11 @@ class Menu {
     this.els.buttons.forEach( button => {
       button.setAttribute( 'aria-expanded', !isOpen );
     } );
+  }
+
+  updateFavIcon (){
+    this.getFavs();
+    this.els.favorites.classList.toggle( 'empty', !this.datas.asFavorites );
   }
 }
 

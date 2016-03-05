@@ -79,7 +79,6 @@
 
    svg
    a span
-      line-height: ( 18/16 )
       vertical-align: middle
 
    svg
@@ -87,3 +86,15 @@
       height: rem( 28 )
       margin-right: rem( -6 )
       width: rem( 28 )
+
+   .icon-favorite
+      display: none
+   .icon-favorited
+      display: inline-block
+
+   &.empty
+      .icon-favorite
+         display: inline-block
+      .icon-favorited
+         display: none
+
