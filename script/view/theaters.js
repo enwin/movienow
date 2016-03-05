@@ -6,6 +6,7 @@ import view from '../../page/view/theaters.jade';
 import domList from '../../page/view/theaters-list.jade';
 import router from '../module/router';
 
+import _sortBy from 'lodash/sortBy';
 import _extend from 'lodash/extend';
 
 class Theaters extends Screen {
@@ -39,10 +40,11 @@ class Theaters extends Screen {
       return;
     }
 
-     filterValue = this.els.filter.value.trim().toLowerCase();
+    filterValue = this.els.filter.value.trim().toLowerCase();
 
     if( filterValue.length ){
-      this.datas.theaters = this.datas.allTheaters.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 );
+      // sort theater by name only when filtering
+      this.datas.theaters = _sortBy( this.datas.allTheaters.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 ), theater => theater.name.toLowerCase() );
     }
     else{
       this.datas.theaters = this.datas.allTheaters;
