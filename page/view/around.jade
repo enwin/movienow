@@ -1,0 +1,20 @@
+header.screen-header
+  h1.screen-title Around me
+
+  button.button.button-location( type="button" )
+    include ../../_source/svg/icon_geolocation.svg
+    span Use geolocation
+
+  form#locationForm.screen-nav.screen-form
+    span.input-floating
+      include ../../_source/svg/icon_search.svg
+      input#locationSearch( type="search" pattern=".*" required )
+      label( for="locationSearch" ) Enter a location
+
+  nav.screen-nav.nav-days
+    ul.nav-list( role="tablist" )
+      each type, index in [ 'Theaters', 'Movies' ]
+        li.nav-list-item( role="tab" aria-controls="around-#{index}" )!= type
+
+div.screen-content
+  include around-list.jade

@@ -30,16 +30,18 @@
    .nav-list
       height: 100%
       font-size: 0
+      display: flex
 
    .nav-list-item
       empty();
+      flex-grow: 1
       font-size: 1rem
       display: inline-block
-      width: ( 100%/3 )
       text-align: center
       line-height: ( 48/16 )
       padding: 0 rem( 7 )
       position: relative
+      width: 50%
 
       &:empty:before
          width: 70%
@@ -98,11 +100,15 @@
       position: relative
       z-index: 1
 
+.screen-panel
+   &[aria-hidden=true]
+      display: none
+
 .screen-list
    .screen-content
       padding-top: rem( 102 )
 
-      > ul
+      .item-list
          padding-bottom: rem( 16 )
          padding-top: rem( 10 )
 
@@ -112,3 +118,7 @@
       padding: rem( 16 ) 0 rem( 14 )
       display: block
       color: $text-secondary-dark
+
+// .screen-around
+//    .screen-content
+//       padding-top: rem( 150 )

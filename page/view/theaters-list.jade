@@ -1,5 +1,5 @@
 if theaters
-  ul.theater-list
+  ul.item-list
     each theater in theaters
       li.theater-item
         a.item-title( href="/theaters/#{theater.id}" )!= theater.name

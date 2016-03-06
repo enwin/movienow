@@ -1,47 +1,26 @@
-var api = require( './showtimes' );
+var api = require( './showtimes' ),
+    _flatten = require( 'lodash/flatten' ),
+    _uniqBy = require( 'lodash/uniqBy' ),
+    _sortBy = require( 'lodash/sortBy' );
 
-// function getAllDays( tid ){
-//   return new Promise( function( resolve, reject ){
-//     [ api, apiDate1, apiDate2 ].forEach( call => call.getTheater( tid ) )
-//   } );
-// }
+function parseAround( data ){
+  var movies = [];
 
-function getArtwork( response ) {
-
-  return new Promise( function( resolve, reject ){
-
-    if( response.forEach ){
-      var moviesLength = response.length - 1;
-      response.forEach( ( movie, index ) => {
-        //setTimeout( () => {
-          artwork( movie.name, ( err, url ) => {
-            if( err ){
-              reject( err );
-            }
-            response[ index ].artwork = url;
-
-            if( index === moviesLength ){
-              resolve( response );
-            }
-          } );
-        //}, 1000 *index );
-      } );
-    }
-    else{
-      artwork( response.name, ( err, url ) => {
-        if( err ){
-          reject( err );
-        }
-        response.artwork = url;
-        resolve( response );
-      } );
-
-    }
+  data.forEach( theater => {
+    movies.push( theater.movies.slice() );
+    delete theater.movies;
   } );
+
+  return {
+    theaters: data,
+    movies: _sortBy( _uniqBy( _flatten( movies ), 'id' ), 'name' )
+  };
+
 }
 
 function send500( e ){
-  this.status( 500 ).send( { error:e } ) };
+  this.status( 500 ).send( { error:e } );
+}
 
 module.exports.theaters = function( req, res ){
 
@@ -88,4 +67,14 @@ module.exports.movies = function( req, res ){
       .then( data => res.send( data ) )
       .catch( send500.bind( res ) );
   }
+};
+
+module.exports.around = ( req, res ) => {
+  api.getTheaterAround( JSON.parse( req.headers[ 'x-movienow-location' ] ) )
+    .then( parseAround )
+    .then( data => {
+      res.setHeader( 'Cache-Control', 'no-cache, no-store, must-revalidate' );
+      res.send( data );
+    } )
+    .catch( send500.bind( res ) );
 };

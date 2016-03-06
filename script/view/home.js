@@ -20,7 +20,7 @@ class Home extends Screen {
 
   bind (){
     bind( this.el, 'submit', 'form', this.handleSearch.bind( this ) );
-    bind( this.el, 'click', '.button-around', this.handleLocation.bind( this ) );
+    //bind( this.el, 'click', '.button-around', this.handleLocation.bind( this ) );
   }
 
   dom (){

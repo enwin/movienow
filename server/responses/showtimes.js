@@ -136,6 +136,27 @@ class api {
       }
     } );
   }
+
+  getTheaterAround ( location ){
+
+    var around = new Showtimes( location.join(), {
+      pageLimit: 2,
+      date: 0,
+      lang: 'en'
+    } );
+    return new Promise( ( resolve, reject ) => {
+      around.getTheaters( ( err, result ) => {
+        if( err ){
+          reject( err );
+          return;
+        }
+
+        resolve( result );
+
+      } )
+    } );
+
+  }
 }
 
 module.exports = new api();

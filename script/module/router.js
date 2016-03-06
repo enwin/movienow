@@ -8,6 +8,7 @@ import Favorites from '../view/favorites';
 import Theaters from '../view/theaters';
 import Theater from '../view/theater';
 import Movies from '../view/movies';
+import Around from '../view/around';
 import Movie from '../view/movie';
 import Home from '../view/home';
 import menu from '../view/menu';
@@ -171,6 +172,25 @@ class Routes extends Router  {
     }
   }
 
+  around (params){
+    //menu.setCurrent( 'around' );
+
+    if( !this.screens.around ){
+      this.screens.around = new Around( params );
+    }
+    if( this.screens.current !== this.screens.around ){
+      // remove the current screen
+      if( this.screens.current ){
+        this.screens.current.remove();
+      }
+
+      // show the next screen
+      this.screens.around.show( params );
+      // set the next screen as current
+      this.screens.current = this.screens.around;
+    }
+  }
+
   favorites (params){
     //menu.setCurrent( 'favorites' );
 
@@ -196,6 +216,7 @@ export default new Routes( {
     '/theaters(/:id)(?filter=:filter)': 'theaters',
     '/movies(/:id)(?filter=:filter)': 'movies',
     '/favorites(?filter=:filter)': 'favorites',
+    '/around': 'around',
     '/': 'home'
   }
 } );

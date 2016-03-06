@@ -18,7 +18,7 @@ header.screen-header
 div.screen-content
   if movies
     each day, index in movies
-      div.theater-movies( role="tabpanel" id="theater-#{index}" aria-hidden=!index ? 'false' : 'true' )
+      div.theater-movies.screen-panel( role="tabpanel" id="theater-#{index}" aria-hidden=!index ? 'false' : 'true' )
         ul.theater-movies-list
           each movie in day
             li.theater-movies-item
