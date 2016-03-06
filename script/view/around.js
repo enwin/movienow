@@ -12,8 +12,14 @@ class Around extends Screen {
 
   bind (){
 
-    bind( this.el, 'click', '[role=tab]', e => this.tabs && this.tabs.tabAction( e ) );
-    bind( this.el, 'focus', '[role=tab]', e => this.tabs && this.tabs.tabFocus( e ), true );
+    bind( this.el, 'click', '[role=tab]', e => {
+      this.tabs && this.tabs.tabAction( e );
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    } );
+    bind( this.el, 'focus', '[role=tab]', e => {
+      this.tabs && this.tabs.tabFocus( e );
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    }, true );
     bind( this.el, 'keydown', '[role=tab]', e => this.tabs && this.tabs.tabKey( e ) );
     bind( this.el, 'focus', '[role=tabpanel]', e => this.tabs && this.tabs.panelFocus( e ), true );
     bind( this.el, 'keydown', '[role=tabpanel]', e => this.tabs && this.tabs.panelKey( e ) );

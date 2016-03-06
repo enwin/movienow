@@ -14,8 +14,14 @@ class Theater extends Screen {
 
   bind (){
 
-    bind( this.el, 'click', '[role=tab]', this.tabs.tabAction );
-    bind( this.el, 'focus', '[role=tab]', this.tabs.tabFocus, true );
+    bind( this.el, 'click', '[role=tab]', e => {
+      this.tabs.tabAction( e );
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    } );
+    bind( this.el, 'focus', '[role=tab]', e => {
+      this.tabs.tabFocus( e );
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    }, true );
     bind( this.el, 'keydown', '[role=tab]', this.tabs.tabKey );
     bind( this.el, 'focus', '[role=tabpanel]', this.tabs.panelFocus, true );
     bind( this.el, 'keydown', '[role=tabpanel]', this.tabs.panelKey );
@@ -122,6 +128,7 @@ class Theater extends Screen {
   render (){
     this.el.innerHTML = view( this.datas );
     this.els = {
+      content: this.el.querySelector( '.screen-content' ),
       favorites: this.el.querySelector( '.screen-header .theater-favorite' )
     };
 
