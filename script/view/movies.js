@@ -77,7 +77,7 @@ class Movies extends Screen {
   }
 
   parse (datas){
-    datas = _sortBy( datas, (movie) => movie.name.toLowerCase() );
+    datas = _sortBy( datas, 'name' );
 
     return _extend( this.datas, {
       allMovies: datas,

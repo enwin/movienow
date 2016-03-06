@@ -78,6 +78,8 @@ class Theaters extends Screen {
   }
 
   parse (datas){
+    datas = _sortBy( datas, 'name' );
+
     return _extend( this.datas, {
       allTheaters: datas,
       theaters: datas

@@ -6,15 +6,15 @@ var Showtimes = require( 'showtimes' ),
     _clone = require( 'lodash/cloneDeep' ),
 //import artwork from 'movie-art';
 
-    showTimes = new Showtimes( '48.8698768,2.3469172', {
+    showTimes = new Showtimes( 'Paris', {
       lang: 'en',
       date: 0
     } ),
-    showTimesDate1 = new Showtimes( '48.8698768,2.3469172', {
+    showTimesDate1 = new Showtimes( 'Paris', {
       lang: 'en',
       date: 1
     } ),
-    showTimesDate2 = new Showtimes( '48.8698768,2.3469172', {
+    showTimesDate2 = new Showtimes( 'Paris', {
       lang: 'en',
       date: 2
     } );
@@ -153,7 +153,7 @@ class api {
 
         resolve( result );
 
-      } )
+      } );
     } );
 
   }
