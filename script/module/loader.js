@@ -1,5 +1,4 @@
 import view from '../../page/module/loader.jade';
-import bind from '../helper/bind';
 
 class Loader{
   constructor (){
@@ -9,19 +8,10 @@ class Loader{
 
     this.el.innerHTML = view();
 
-    this.bind();
-  }
-
-  bind (){
-    //bind( this.el, 'transitionend', this.handleTransition );
   }
 
   display (){
     this.el.classList.add( 'play' );
-  }
-
-  handleTransition ( e ){
-    console.log( 'in', e );
   }
 
   hide (){
