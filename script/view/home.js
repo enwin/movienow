@@ -7,7 +7,6 @@ import router from '../module/router';
 import preload from '../helper/preload';
 
 import _shuffle from 'lodash/shuffle';
-import _remove from 'lodash/remove';
 
 var posters = [
   '/media/dyn/home/batmanvsuperman.jpg',
@@ -31,21 +30,20 @@ class Home extends Screen {
     };
   }
 
-  displayed (){
+  hidden (){
     // only switch posters when the posters are loaded
-    if( !this.datas.posters.length ){
-      return;
-    }
-    // get the next poster by removing it from the posters array
-    var nextPoster = this.datas.posters.splice( 0, 1 )[ 0 ];
+    if( this.datas.posters.length ){
+      // get the next poster by removing it from the posters array
+      var nextPoster = this.datas.posters.splice( 0, 1 )[ 0 ];
 
-    // refill the poster array if empty
-    if( !this.datas.posters.length ){
-      // shuffle it first
-      this.datas.posters = _shuffle( posters );
+      // refill the poster array if empty
+      if( !this.datas.posters.length ){
+        // shuffle it first
+        this.datas.posters = _shuffle( this.datas.loadedPosters );
+      }
+      // display poster
+      this.setPoster( nextPoster );
     }
-    // display poster
-    this.setPoster( nextPoster );
   }
 
   handleLocation (){
@@ -72,38 +70,27 @@ class Home extends Screen {
   }
 
   loadPoster (){
-    var posterPromises = preload( posters )
+    var posterPromises = preload( posters );
 
     this.datas.posters = [];
+    this.datas.loadedPosters = [];
 
-    // posterPromises.forEach( poster => {
-    //   poster
-    //     .then( url => {
-    //       this.datas.posters.push( url );
-    //     } )
-    //     .catch( e => {} );
-    // } );
-
-    // use race to display the first poster loaded
-    Promise.race( posterPromises )
-      .then( this.setPoster.bind( this ) );
-
-    // once all poster loaded
-    Promise.all( posterPromises )
-      .then( this.posterLoaded.bind( this ) )
-      .catch( e => console.log( e, this.datas.posters ) );
+    posterPromises.forEach( poster => {
+      poster
+        .then( this.posterLoaded.bind( this ) );
+    } );
   }
 
-  posterLoaded ( loadedPosters ){
-    // once posters are loaded
-    this.datas.posters = _shuffle( loadedPosters );
-    // remove the current poster from the array
-    if( this.datas.currentPoster ){
-      _remove( this.datas.posters, poster => poster === this.datas.currentPoster );
+  posterLoaded ( poster ){
+
+    if( this.datas.currentPoster && this.datas.currentPoster !== poster ){
+      this.datas.posters.push( poster );
     }
-    // if no posters are loaded
-    else{
-      this.displayed();
+
+    this.datas.loadedPosters.push( poster );
+
+    if( !this.datas.currentPoster ){
+      this.setPoster(poster);
     }
   }
 
@@ -117,7 +104,8 @@ class Home extends Screen {
   setPoster ( url ){
     this.datas.currentPoster = url;
 
-    this.els.poster.style.backgroundImage = `url( ${url} )`;
+    //this.els.poster.style.backgroundImage = `url( ${url} )`;
+    this.els.poster.innerHTML = `<img src="${url}" alt="" >`;
 
     if( this.els.poster.classList.contains( 'show' ) ){
       return;

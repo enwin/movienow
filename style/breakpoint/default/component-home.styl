@@ -14,14 +14,22 @@
       height: auto
 
 .home-poster
-   background: no-repeat 50% 50%
-   background-size: cover
    display: block
    height: 100vh
    opacity: 0
    transition: opacity 0.3s $ease-out-quad;
    width: 100%
    will-change: opacity
+   overflow: hidden
+   position: relative
+
+   img
+      display: block
+      left: 50%
+      position: absolute
+      top: 50%
+      transform: translate( -50%, -50% )
+      width: 100%
 
    &.show
       opacity: 1
