@@ -1,4 +1,5 @@
 var api = require( './showtimes' ),
+    geocoder = require( 'geocoder' ),
     _flatten = require( 'lodash/flatten' ),
     _uniqBy = require( 'lodash/uniqBy' ),
     _sortBy = require( 'lodash/sortBy' );
@@ -24,31 +25,14 @@ function send500( e ){
 
 module.exports.theaters = function( req, res ){
 
-
-  // function result( error, response ){
-  //   if( !error ){
-  //     res.send( response );
-  //   }
-  //   else{
-  //     send500( error );
-  //   }
-  // }
-
   if( req.params.id ){
-    // getAllDays( req.params.id )
-    //   .then( result )
-    //   .catch( send500 );
-    // api.getTheater( req.params.id )
-    //   .then( data => res.send( data ) )
-    //   .catch( send500.bind( res ) );
-
-    api.getTheaterPlannig( req.params.id )
+    api.getTheaterPlannig( req.session.city, req.params.id )
       .then( data => res.send( data ) )
       .catch( send500.bind( res ) );
   }
   else{
     //api.getTheaters( result );
-    api.getTheaters()
+    api.getTheaters( req.session.city )
     .then( data => res.send( data ) )
     .catch( send500.bind( res ) );
   }
@@ -58,21 +42,44 @@ module.exports.theaters = function( req, res ){
 module.exports.movies = function( req, res ){
 
   if( req.params.id ){
-    api.getMovie( req.params.id )
+    api.getMovie( req.session.city, req.params.id )
       .then( data => res.send( data ) )
       .catch( send500.bind( res ) );
   }
   else{
-    api.getMovies()
+    api.getMovies( req.session.city )
       .then( data => res.send( data ) )
       .catch( send500.bind( res ) );
   }
 };
 
 module.exports.around = ( req, res ) => {
-  api.getTheaterAround( JSON.parse( req.headers[ 'x-movienow-location' ] ) )
-    .then( parseAround )
-    .then( data => {
+  var coords = JSON.parse( req.headers[ 'x-movienow-location' ] ),
+      theaters,
+      geocode;
+
+  theaters = api.getTheaterAround( coords )
+    .then( parseAround );
+
+  geocode = new Promise( ( resolve, reject ) => {
+    geocoder.reverseGeocode( coords[ 0 ], coords[ 1 ], ( err, data ) => {
+      if( err ){
+        reject( err );
+        return;
+      }
+      //console.log( data );
+      resolve( data.results[ 0 ].address_components[ 3 ].long_name );
+    } );
+  } );
+
+  Promise.all( [ theaters, geocode ] )
+    .then( datas => {
+      var data = {
+        movies: datas[0].movies,
+        theaters: datas[0].theaters,
+        city: datas[ 1 ]
+      };
+
       res.setHeader( 'Cache-Control', 'no-cache, no-store, must-revalidate' );
       res.send( data );
     } )

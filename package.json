@@ -43,6 +43,7 @@
     "connect-expires": "0.0.2",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "geocoder": "^0.2.2",
     "jade": "^1.11.0",
     "jadeify": "^4.6.0",
     "js-yaml": "^3.5.3",

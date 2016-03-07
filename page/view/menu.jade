@@ -11,11 +11,12 @@ div.menu-item.menu-favorites( class=!asFavorites ? 'empty' : '' )
     include ../../_source/svg/icon_favorited.svg
     span Favorites
 
-span.dash-wrapper( aria-hidden="true" )
-  include ../../_source/svg/pattern.svg
-div.menu-item.menu-location( class=!asFavorites ? 'empty' : '' )
-  a( class=( key === current ? 'menu-item-active' : null ) )
-    span Change location (Paris)
+if city
+  span.dash-wrapper( aria-hidden="true" )
+    include ../../_source/svg/pattern.svg
+  div.menu-item.menu-location( class=!asFavorites ? 'empty' : '' )
+    a( class=( key === current ? 'menu-item-active' : null ) )
+      span Change location (#[span.menu-location-city!=city])
 
 button.button.button-close( type="button" aria-controls="menu" aria-expanded="false" )
   include ../../_source/svg/icon_close.svg

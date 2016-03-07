@@ -1,5 +1,6 @@
 import loader from '../module/loader';
 import _extend from 'lodash/extend';
+import moment from 'moment';
 
 var main = document.getElementById( 'main' );
 
@@ -82,7 +83,16 @@ class Screen {
 
   sync ( url, params ){
     loader.show();
-    return window.fetch( url, params || {} ).then( r => r.json() )
+
+    params = params || {};
+
+    var dayOfYear = moment().format( 'DDD' );
+
+    url += `?day=${dayOfYear}`;
+
+    params.credentials = 'same-origin';
+
+    return window.fetch( url, params ).then( r => r.json() )
       .then( data => this.parse( data ) )
       .then( () => loader.hide() );
 

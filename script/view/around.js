@@ -1,5 +1,6 @@
 'use-strict'
 
+import user from '../data/user';
 
 import Screen from './screen';
 import view from '../../page/view/around.jade';
@@ -53,13 +54,6 @@ class Around extends Screen {
     loader.hide();
   }
 
-  getData (){
-
-    this.sync( '/api/theaters/'+this.datas.screenParams.id )
-      .then( () => this.ready() )
-      .catch( e => console.log( e ) );
-  }
-
   getLocation (){
 
     this.updateSearchForm( 'Getting your location' );
@@ -93,6 +87,9 @@ class Around extends Screen {
   }
 
   ready (){
+
+    user.location = this.datas.city;
+
     this.renderLists();
 
     this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );

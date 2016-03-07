@@ -3,7 +3,6 @@
 var compress = require( 'compression' ),
     logger = require( 'morgan' ),
     bodyParser = require( 'body-parser' ),
-    //cookieParser = require( 'cookie-parser' ),
     files = require( 'serve-static' ),
     session = require( 'express-session' ),
     MongoStore = require('connect-mongo')(session),
@@ -21,6 +20,15 @@ module.exports = function( app, config ){
   app.disable( 'x-powered-by' );
 
   app.set( 'showStackError', config.dev ? false : true );
+
+  app.use( session( {
+    resave: true,
+    saveUninitialized: true,
+    secret: config.secret,
+    store: new MongoStore( {
+      url: config.db
+    } )
+  } ) );
 
   // should be placed before express.static
   app.use( compress( {
@@ -48,17 +56,6 @@ module.exports = function( app, config ){
 
   // parse application/json
   app.use( bodyParser.json() );
-
-  //app.use( cookieParser( config.secret ) );
-
-  app.use( session( {
-    resave: true,
-    saveUninitialized: true,
-    secret: config.secret,
-    store: new MongoStore( {
-      url: config.db
-    } )
-  } ) );
 
   //stylus
   app.use( stylus.middleware( {

@@ -5,21 +5,7 @@ var moment = require( 'moment' );
 var movieDB = require( '../db/movies' );
 
 var Showtimes = require( 'showtimes' ),
-    _clone = require( 'lodash/cloneDeep' ),
-//import artwork from 'movie-art';
-
-    showTimes = new Showtimes( 'Paris', {
-      lang: 'fr',
-      date: 0
-    } ),
-    showTimesDate1 = new Showtimes( 'Paris', {
-      lang: 'fr',
-      date: 1
-    } ),
-    showTimesDate2 = new Showtimes( 'Paris', {
-      lang: 'fr',
-      date: 2
-    } );
+    _clone = require( 'lodash/cloneDeep' );
 
 /**
  * save movies to the database
@@ -34,53 +20,47 @@ class api {
 
   constructor (){
     this.day = moment().format( 'd' );
-    this.store = {
-      movies: [],
-      moviesDay: null,
-      theaters: [],
-      theatersDay: null
-    };
+    this.store = {};
   }
 
-  getTheaterPlannig ( tid ){
+  getTheaterPlannig ( where, tid ){
     var api = this,
-        theatersTime,
+        days = [],
+        index = 0,
+        p,
         theater;
 
-    return new Promise( ( resolve, reject ) => {
-      theatersTime = new Showtimes( '48.8698768,2.3469172', {
-        lang: 'fr',
-        date: 0
+    while( index < 3 ){
+      p = api.getTheater( where, tid, { lang: 'fr', date: index } );
+      days.push( p );
+      index++;
+    }
+
+    return Promise.all( days )
+      .then( results => {
+        results.forEach( ( result, index ) => {
+          if( !index ){
+            theater = _clone( result );
+            delete theater.movies;
+            theater.movies = [ result.movies ];
+          }
+          else{
+            theater.movies.push( result.movies );
+          }
+        } );
+
+        return theater;
       } );
-
-      api.getTheater( tid, theatersTime )
-        .then( result => {
-          theater = _clone( result );
-          delete theater.movies;
-          theater.movies = [ result.movies ];
-          return api.getTheater( tid, showTimesDate1 );
-        })
-        .then( result => {
-          theater.movies.push( result.movies );
-
-          return api.getTheater( tid, showTimesDate2 );
-        })
-        .then( result => {
-          theater.movies.push( result.movies );
-          resolve( theater );
-        })
-        .catch( e => reject( e, theater ) );
-    } );
   }
 
-  getMovie ( mid ) {
-    var movieTIme = new Showtimes( 'Paris', {
+  getMovie ( where, mid ) {
+    var showtimes = new Showtimes( where, {
       lang: 'fr',
       date: 0
     } );
 
     return new Promise( (resolve, reject) => {
-      movieTIme.getMovie( mid, ( err, result ) => {
+      showtimes.getMovie( mid, ( err, result ) => {
         if( err ){
           reject( err );
           return;
@@ -91,35 +71,58 @@ class api {
     } );
   }
 
-  getMovies () {
+  getMovies ( where ) {
     var it = this;
     return new Promise( (resolve, reject) => {
+
+      var showtimes = new Showtimes( where, {
+        lang: 'fr',
+        date: 0
+      } );
+
       // fetch new info once a day
-      if( it.store.moviesDay !== it.day  ){
-        showTimes.getMovies( ( err, result ) => {
+      if( !it.store[ where ] || it.store[ where ].moviesDay !== it.day  ){
+        showtimes.getMovies( ( err, result ) => {
           if( err ){
             reject( err );
             return;
           }
-          it.store.movies = result;
-          it.store.moviesDay = it.day;
+
+          if( !it.store[ where ] ){
+            it.store[ where ] = {
+              movies: [],
+              moviesDay: null,
+              theaters: [],
+              theatersDay: null
+            };
+          }
+
+          it.store[ where ].movies = result;
+          it.store[ where ].moviesDay = it.day;
+
           resolve( result );
         } );
       }
       else{
-        resolve( it.store.movies );
+        resolve( it.store[ where ].movies );
       }
     } );
   }
 
-  getTheater ( tid, api ) {
-    api = api || showTimes;
+  getTheater ( where, tid, params ) {
     return new Promise( (resolve, reject) => {
-      api.getTheater( tid, ( err, result ) => {
+
+      var showtimes = new Showtimes( where, params || {
+        lang: 'fr',
+        date: 0
+      } );
+
+      showtimes.getTheater( tid, ( err, result ) => {
         if( err ){
           reject( err );
           return;
         }
+
         saveMovies( result.movies );
 
         resolve( result );
@@ -127,25 +130,41 @@ class api {
     } );
   }
 
-  getTheaters () {
+  getTheaters ( where ) {
     var it = this;
+
     return new Promise( (resolve, reject) => {
       // fetch new info once a day
-      if( it.store.theatersDay !== it.day ){
-        showTimes.getTheaters( ( err, result ) => {
+      if( !it.store[ where ] || it.store[ where ].theatersDay !== it.day ){
+
+        var showtimes = new Showtimes( where, {
+          lang: 'fr',
+          date: 0
+        } );
+
+        showtimes.getTheaters( ( err, result ) => {
           if( err ){
             reject( err );
             return;
           }
 
-          it.store.theaters = result;
-          it.store.theatersDay = it.day;
+          if( !it.store[ where ] ){
+            it.store[ where ] = {
+              movies: [],
+              moviesDay: null,
+              theaters: [],
+              theatersDay: null
+            };
+          }
+
+          it.store[ where].theaters = result;
+          it.store[ where].theatersDay = it.day;
 
           resolve( result );
         } );
       }
       else{
-        resolve( it.store.theaters );
+        resolve( it.store[ where ].theaters );
       }
     } );
   }
@@ -163,12 +182,9 @@ class api {
           reject( err );
           return;
         }
-
         resolve( result );
-
       } );
     } );
-
   }
 }
 

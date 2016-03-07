@@ -19,4 +19,6 @@ module.exports = function( app ){
   app.get( '/api/aroundme', showtimes.around );
 
   app.get( '/media/posters/:id', media.poster );
+
+  app.post( '/user', response.user );
 };

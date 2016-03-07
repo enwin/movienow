@@ -55,15 +55,11 @@ function setLang( req ){
 }
 
 module.exports.home = function( req, res ){
-  //console.log( req.session.jadeConf );
-  //projects.format( {}, function( projects ){
   res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
-  //} );
-
 };
 
 module.exports.lang = function( req, res, next ){
-  //console.log( req.session.lang );
+  console.log( req.sessionID );
   if( !req.session.lang || !req.app.locals.langs ){
     getLang( req );
     setLang( req );
@@ -85,4 +81,10 @@ module.exports.favorites = function( req, res ){
 
 module.exports.around = function( req, res ){
   res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
+};
+
+// store user city in the session
+module.exports.user = function( req, res ){
+  req.session.city = req.body.city;
+  res.end();
 };

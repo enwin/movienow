@@ -1,6 +1,8 @@
+import user from '../data/user';
+import favList from '../data/favorites';
+
 import dom from '../../page/view/menu.jade';
 import bind from '../helper/bind';
-import favList from '../data/favorites';
 
 var datas = {
   screens: {
@@ -29,6 +31,8 @@ class Menu {
 
     this.datas = datas;
 
+    this.datas.city = user.location;
+
     this.bind();
 
     this.getFavs();
@@ -55,6 +59,7 @@ class Menu {
 
     this.els.buttons = Array.prototype.slice.call( document.querySelectorAll( '[aria-controls="menu"]' ) );
     this.els.favorites = this.el.querySelector( '.menu-favorites' );
+    this.els.location = this.el.querySelector( '.menu-location-city' );
 
   }
 
@@ -87,6 +92,7 @@ class Menu {
 
     if( !isOpen ){
       this.updateFavIcon();
+      this.updateLocation();
     }
 
     window.setTimeout( () => {
@@ -103,6 +109,10 @@ class Menu {
   updateFavIcon (){
     this.getFavs();
     this.els.favorites.classList.toggle( 'empty', !this.datas.asFavorites );
+  }
+
+  updateLocation (){
+    this.els.location.innerHTML = user.location;
   }
 }
 

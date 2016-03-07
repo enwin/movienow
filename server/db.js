@@ -5,7 +5,7 @@ var mongoose = require( 'mongoose' ),
 
 require( './db/movies' );
 
-module.exports = function(){
+module.exports = function( callback ){
 
   // Bootstrap db connection
   // Connect to mongodb
@@ -15,6 +15,10 @@ module.exports = function(){
   mongoose.connect( config.db, options, function( err ){
     if( err ){
       console.log( err );
+      return;
+    }
+    if( callback ){
+      callback();
     }
   } );
 
