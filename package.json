@@ -41,6 +41,7 @@
     "browserify-middleware": "^7.0.0",
     "chouchenn": "^1.0.1",
     "compression": "^1.6.1",
+    "connect-expires": "0.0.2",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "jade": "^1.11.0",

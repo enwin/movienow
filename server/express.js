@@ -7,7 +7,7 @@ var compress = require( 'compression' ),
     files = require( 'serve-static' ),
     session = require( 'express-session' ),
     MongoStore = require('connect-mongo')(session),
-    //flash = require( 'connect-flash' ),
+    expires = require( 'connect-expires' ),
     stylus = require( 'stylus' ),
     chouchenn = require( 'chouchenn' ),
     autoprefixer = require( 'autoprefixer-stylus' ),
@@ -34,6 +34,11 @@ module.exports = function( app, config ){
       return compress.filter(req, res);
     },
     level: 9
+  } ) );
+
+  app.use( expires( {
+    pattern: /png|media/,
+    duration: 1000 * 60 * 60 * 24 * 183
   } ) );
 
   //app.use( favicon( 'www/medias/icons/favicon.ico' ) );
