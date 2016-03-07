@@ -59,7 +59,6 @@ module.exports.home = function( req, res ){
 };
 
 module.exports.lang = function( req, res, next ){
-  console.log( req.sessionID );
   if( !req.session.lang || !req.app.locals.langs ){
     getLang( req );
     setLang( req );
