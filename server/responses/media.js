@@ -10,10 +10,13 @@ var handleMovieDb = function( data ){
 
     imdbId( data.name )
       .then( imdb => {
-        console.log( imdb.poster );
-        movies.update( data.id, {
-          poster: imdb.poster ? imdb.poster : '/media/posters/default.png'
-        } )
+        imdb = {
+          imdb: imdb.id,
+          poster: imdb.poster ? imdb.poster : '/media/posters/default.png',
+          defaultPoster: !imdb.poster
+        };
+
+        movies.update( data.id, imdb )
           .then( () => {
             resolve( imdb );
           } );
@@ -24,9 +27,17 @@ var handleMovieDb = function( data ){
 };
 
 module.exports.poster = function( req, res ){
-  movies.get( {id: req.params.id } )
+  movies.get( { id: req.params.id } )
     .then( handleMovieDb )
     .then( data => {
-      res.redirect( data.poster );
+      if( !data.defaultPoster ){
+        var img = new Buffer( data.poster, 'base64' );
+        res.setHeader( 'Content-Type', 'image/jpeg');
+        res.setHeader( 'Content-Length', img.length );
+        res.end( img );
+      }
+      else{
+        res.redirect( data.poster );
+      }
     } );
 };

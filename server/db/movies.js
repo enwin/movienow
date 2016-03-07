@@ -6,7 +6,8 @@ var moviesSchema = new Schema( {
   id: { type: String, index: { unique: true, dropDups: true } },
   name: String,
   imdb: String,
-  poster: String
+  poster: String,
+  defaultPoster: { type: Boolean, default: false }
 } );
 
 mongoose.model( 'Movies', moviesSchema );
