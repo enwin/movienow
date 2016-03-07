@@ -7,4 +7,4 @@ npm-debug.log
 www/**/*.js
 www/**/*.css
 server/ssl/*
-db/
+/db/
