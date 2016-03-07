@@ -1,5 +1,5 @@
 if favorites
-  ul.theater-list
+  ul.item-list
     each theater in favorites
       li.theater-item
         a.item-title( href="/theaters/#{theater.id}" )!= theater.name
