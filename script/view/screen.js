@@ -24,6 +24,8 @@ class Screen {
   _el ( params ){
     var el = document.createElement( params.tagName || 'div' );
 
+    el.setAttribute( 'tabindex', -1 );
+
     if( params.className ){
       el.setAttribute( 'class', params.className );
     }
