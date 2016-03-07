@@ -1,5 +1,6 @@
 var response = require( './responses/base' ),
-    showtimes = require( './responses/api' );
+    showtimes = require( './responses/api' ),
+    media = require( './responses/media' );
 
 module.exports = function( app ){
 
@@ -13,9 +14,9 @@ module.exports = function( app ){
   app.get( '/movies(/:id)?', response.movies );
   app.get( '/around', response.around );
 
-
   app.get( '/api/theaters(/:id)?', showtimes.theaters );
   app.get( '/api/movies(/:id)?', showtimes.movies );
   app.get( '/api/aroundme', showtimes.around );
 
+  app.get( '/media/posters/:id', media.poster );
 };

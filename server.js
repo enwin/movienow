@@ -14,6 +14,9 @@
 
   app.locals.config = config;
 
+  // database
+  require( './server/db' )();
+
   // server handling
   require( './server/express' )( app, config );
 

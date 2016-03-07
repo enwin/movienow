@@ -46,6 +46,7 @@
     "jade": "^1.11.0",
     "jadeify": "^4.6.0",
     "js-yaml": "^3.5.3",
+    "mongoose": "^4.4.6",
     "serve-static": "^1.10.2",
     "showtimes": "enwin/showtimes",
     "stylus": "^0.53.0"

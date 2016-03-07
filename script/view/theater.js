@@ -27,6 +27,8 @@ class Theater extends Screen {
     bind( this.el, 'keydown', '[role=tabpanel]', this.tabs.panelKey );
 
     bind( this.el, 'click', '.button-favorite', e => this.handleFavorite( e ) );
+
+    bind( this.el, 'load', 'img', this.handlePoster.bind( this ), true );
   }
 
   dom() {
@@ -55,6 +57,10 @@ class Theater extends Screen {
     } );
 
     this.els.favorites.classList.toggle( 'favorited', this.datas.favorited );
+  }
+
+  handlePoster ( e ){
+    e.currentTarget.classList.add( 'show' );
   }
 
   initialize (){

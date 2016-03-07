@@ -2,22 +2,33 @@
 
 var moment = require( 'moment' );
 
+var movieDB = require( '../db/movies' );
+
 var Showtimes = require( 'showtimes' ),
     _clone = require( 'lodash/cloneDeep' ),
 //import artwork from 'movie-art';
 
     showTimes = new Showtimes( 'Paris', {
-      lang: 'en',
+      lang: 'fr',
       date: 0
     } ),
     showTimesDate1 = new Showtimes( 'Paris', {
-      lang: 'en',
+      lang: 'fr',
       date: 1
     } ),
     showTimesDate2 = new Showtimes( 'Paris', {
-      lang: 'en',
+      lang: 'fr',
       date: 2
     } );
+
+/**
+ * save movies to the database
+ * @param  {array} movies array of movies to save
+ */
+var saveMovies = function( movies ){
+
+  return Promise.all( movies.map( movie => movieDB.add( movie ) ) );
+};
 
 class api {
 
@@ -38,7 +49,7 @@ class api {
 
     return new Promise( ( resolve, reject ) => {
       theatersTime = new Showtimes( '48.8698768,2.3469172', {
-        lang: 'en',
+        lang: 'fr',
         date: 0
       } );
 
@@ -63,10 +74,11 @@ class api {
   }
 
   getMovie ( mid ) {
-    var movieTIme = new Showtimes( '48.8698768,2.3469172', {
-      lang: 'en',
+    var movieTIme = new Showtimes( 'Paris', {
+      lang: 'fr',
       date: 0
     } );
+
     return new Promise( (resolve, reject) => {
       movieTIme.getMovie( mid, ( err, result ) => {
         if( err ){
@@ -108,6 +120,7 @@ class api {
           reject( err );
           return;
         }
+        saveMovies( result.movies );
 
         resolve( result );
       } );
@@ -142,7 +155,7 @@ class api {
     var around = new Showtimes( location.join(), {
       pageLimit: 2,
       date: 0,
-      lang: 'en'
+      lang: 'fr'
     } );
     return new Promise( ( resolve, reject ) => {
       around.getTheaters( ( err, result ) => {
