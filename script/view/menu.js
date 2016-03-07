@@ -24,7 +24,6 @@ class Menu {
     this.el = document.querySelector( '.site-menu' );
 
     this.els = {
-      buttons: Array.prototype.slice.call( document.querySelectorAll( '[aria-controls="menu"]' ) ),
       list: this.el.querySelector( '.menu-wrapper' )
     };
 
@@ -53,7 +52,10 @@ class Menu {
 
   render (){
     this.els.list.innerHTML = dom( this.datas );
+
+    this.els.buttons = Array.prototype.slice.call( document.querySelectorAll( '[aria-controls="menu"]' ) );
     this.els.favorites = this.el.querySelector( '.menu-favorites' );
+
   }
 
   setClose (){
