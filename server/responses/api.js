@@ -24,15 +24,14 @@ function send500( e ){
 }
 
 module.exports.theaters = function( req, res ){
-
   if( req.params.id ){
-    api.getTheaterPlannig( req.session.city, req.params.id )
+    api.getTheaterPlannig( req.params.city, req.params.id )
       .then( data => res.send( data ) )
       .catch( send500.bind( res ) );
   }
   else{
     //api.getTheaters( result );
-    api.getTheaters( req.session.city )
+    api.getTheaters( req.params.city )
     .then( data => res.send( data ) )
     .catch( send500.bind( res ) );
   }
@@ -42,12 +41,12 @@ module.exports.theaters = function( req, res ){
 module.exports.movies = function( req, res ){
 
   if( req.params.id ){
-    api.getMovie( req.session.city, req.params.id )
+    api.getMovie( req.params.city, req.params.id )
       .then( data => res.send( data ) )
       .catch( send500.bind( res ) );
   }
   else{
-    api.getMovies( req.session.city )
+    api.getMovies( req.params.city )
       .then( data => res.send( data ) )
       .catch( send500.bind( res ) );
   }

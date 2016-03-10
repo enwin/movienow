@@ -9,6 +9,8 @@ import router from '../module/router';
 import _sortBy from 'lodash/sortBy';
 import _extend from 'lodash/extend';
 
+import user from '../data/user';
+
 class Movies extends Screen {
 
   bind (){
@@ -23,6 +25,12 @@ class Movies extends Screen {
       this.els.filter.value = this.datas.screenParams.filter;
       // filter
       this.handleFilter();
+    }
+
+    if( this.datas.location !== user.location ){
+      this.datas.location = user.location;
+      this.els.list.innerHTML = '';
+      this.getData();
     }
   }
 
@@ -64,6 +72,8 @@ class Movies extends Screen {
   }
 
   initialize (){
+    this.datas.location = user.location;
+
     this.bind();
     this.getData();
     this.setTitle( 'Movies' );
@@ -71,7 +81,7 @@ class Movies extends Screen {
   }
 
   getData (){
-    this.sync( '/api/movies' )
+    this.sync( [ '/api/movies', this.datas.location.toLowerCase() ].join('/') )
       .catch( e => console.log( e ) )
       .then( () => this.ready() );
   }

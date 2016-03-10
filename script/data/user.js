@@ -6,7 +6,7 @@ class User {
   }
 
   get location (){
-    return this.datas.location || 'Nantes';
+    return this.datas.location;
   }
 
   set location ( city ){

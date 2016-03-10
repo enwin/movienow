@@ -6,7 +6,17 @@ import view from '../../page/view/movie.jade';
 import _sort from 'lodash/sortBy';
 import _extend from 'lodash/extend';
 
+import user from '../data/user';
+
 class Theater extends Screen {
+
+  displayed (){
+    if( this.datas.location !== user.location ){
+      this.datas.location = user.location;
+      this.els.list.innerHTML = '';
+      this.getData();
+    }
+  }
 
   dom() {
     return {
@@ -16,13 +26,15 @@ class Theater extends Screen {
   }
 
   initialize (){
+    this.datas.location = user.location;
+
     this.getData();
 
     this.render();
   }
 
   getData (){
-    this.sync( '/api/movies/'+this.datas.screenParams.id )
+    this.sync( [ '/api/movies', this.datas.location.toLowerCase(), this.datas.screenParams.id ].join('/') )
       .catch( e => console.log( e ) )
       .then( () => this.ready() );
   }

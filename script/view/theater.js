@@ -10,6 +10,8 @@ import _extend from 'lodash/extend';
 import bind from '../helper/bind';
 import Tablist from '../helper/accedeweb-tablist';
 
+import user from '../data/user';
+
 class Theater extends Screen {
 
   bind (){
@@ -29,6 +31,14 @@ class Theater extends Screen {
     bind( this.el, 'click', '.button-favorite', e => this.handleFavorite( e ) );
 
     bind( this.el, 'load', 'img', this.handlePoster.bind( this ), true );
+  }
+
+  displayed (){
+    if( this.datas.location !== user.location ){
+      this.datas.location = user.location;
+      this.els.list.innerHTML = '';
+      this.getData();
+    }
   }
 
   dom() {
@@ -64,6 +74,8 @@ class Theater extends Screen {
   }
 
   initialize (){
+    this.datas.location = user.location;
+
     this.getData();
 
     this.render();
@@ -73,7 +85,7 @@ class Theater extends Screen {
 
     this.datas.favorited = favList.is( this.datas.screenParams.id );
 
-    this.sync( '/api/theaters/'+this.datas.screenParams.id )
+    this.sync( [ '/api/theaters', this.datas.location.toLowerCase(), this.datas.screenParams.id ].join('/') )
       .then( () => this.ready() )
       .catch( e => console.log( e ) );
   }
