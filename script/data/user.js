@@ -1,6 +1,6 @@
 class User {
   constructor (){
-    this.datas = JSON.parse( window.localStorage.getItem( 'user' ) ) || { location: 'Nantes' };
+    this.datas = JSON.parse( window.localStorage.getItem( 'user' ) ) || { location: 'Paris' };
 
     this.setSession();
   }
