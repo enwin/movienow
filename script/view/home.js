@@ -9,6 +9,7 @@ import preload from '../helper/preload';
 import _shuffle from 'lodash/shuffle';
 
 var posters = [
+  '/media/dyn/home/kubo.jpg',
   '/media/dyn/home/starwars.jpg',
   '/media/dyn/home/zootopia.jpg',
   '/media/dyn/home/josephine.jpg',
