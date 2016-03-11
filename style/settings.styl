@@ -22,14 +22,15 @@ $color-divider-dark = #e5e5e5
 $font-types = woff woff2
 
 
-empty( $color = $light )
+empty()
    &:empty
       &:before
-         background-color: $color
+         background-color: currentColor
          content: ''
          display: inline-block
          height: 2px
          vertical-align: baseline
          width: 60%
+
 pc( $width )
    ( $width*100% )
