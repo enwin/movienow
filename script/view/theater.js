@@ -33,14 +33,6 @@ class Theater extends Screen {
     bind( this.el, 'load', 'img', this.handlePoster.bind( this ), true );
   }
 
-  displayed (){
-    if( this.datas.location !== user.location ){
-      this.datas.location = user.location;
-      this.els.list.innerHTML = '';
-      this.getData();
-    }
-  }
-
   dom() {
     return {
       tagName: 'section',
@@ -55,6 +47,12 @@ class Theater extends Screen {
     if( favStatus !== this.datas.favorited ){
       this.datas.favorited = favStatus;
       this.els.favorites.classList.toggle( 'favorited', this.datas.favorited );
+    }
+
+    if( this.datas.location !== user.location ){
+      this.datas.location = user.location;
+      this.els.list.innerHTML = '';
+      this.getData();
     }
   }
 
