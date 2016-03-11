@@ -1,3 +1,17 @@
+.screen-movie
+   .screen-content
+      padding-top: rem( 102 )
+
+   .screen-panel
+      min-height: 100%
+
+      .movie-artwork
+         float: right
+         padding-top: rem( 18 )
+         padding-right: 0
+         padding-bottom: rem( 12 )
+         width: rem( 94 )
+
 .movie-title
    color: $color-primary-dark
    a
@@ -6,3 +20,60 @@
 .movie-infos-item
    font-size: rem( 14 )
    margin: rem( 4 ) 0
+
+.movie-desc
+   margin: 0
+   padding: rem( 15 ) 0
+
+   dt
+      font-size: rem( 14 )
+
+   dd
+      empty()
+      margin: 0 0 rem( 15 )
+      color: $color-primary-dark
+
+      &:empty
+         &:before
+            vertical-align: middle
+
+      &.movie-runtime:before
+         width: rem( 60 )
+
+      &.movie-rating:before
+         width: rem( 40 )
+
+      &.movie-director:before
+         width: rem( 120 )
+
+      &.movie-cast:before
+         width: 88%
+
+      &.movie-synopsis
+         &:before
+            width: 80%
+         &:empty:after
+            background-color: currentColor
+            content: ''
+            display: inline-block
+            height: 2px
+            vertical-align: middle
+            width: 60%
+
+   .movie-synopsis-title
+      clear: right
+
+.movie-trailer
+   margin-top: rem( 3 )
+
+   div
+      position: relative
+      padding-top: ( 180/320*100% )
+
+   iframe
+      position: absolute
+      left: 0
+      top: 0
+      width: 100%
+      height: 100%
+
