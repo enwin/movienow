@@ -37,7 +37,9 @@ class Around extends Screen {
       this.setTabs();
     }
     else if( !this.datas.movies ){
-      this.getLocation();
+      this.getLocation()
+        .then( this.fetchTheaters.bind( this ) )
+        .catch( this.geoError.bind( this ) );
     }
   }
 
@@ -51,38 +53,32 @@ class Around extends Screen {
 
   fetchTheaters ( e ){
 
-    this.sync( '/api/aroundme', {
+    return this.sync( '/api/aroundme', {
       headers: {
         'x-movienow-coords': JSON.stringify( [ e.coords.latitude, e.coords.longitude ] )
       }
     } )
       .then( this.ready.bind( this ) )
-      .then( () => {
-        if( this.locationCallback ){
-          this.locationCallback();
-          delete this.locationCallback;
-        }
-      } )
-      .catch( e => console.log( e ) );
+      .catch( console.log );
   }
 
   geoError ( e ){
-    console.log( e );
     loader.hide();
   }
 
-  getLocation ( callback ){
-
-    this.locationCallback = callback;
-
+  getLocation (){
+    // display loader
+    // loader will be hidden by the sync resolution
     loader.show();
 
-    navigator.geolocation.getCurrentPosition( this.fetchTheaters.bind( this ), this.geoError.bind( this ), {
-      // test
-      enableHighAccuracy: true,
-      timeout: 10000,
-      // 5 minutes
-      maximumAge: ( 60000 * 5 )
+    return new Promise( ( resolve, reject ) => {
+      navigator.geolocation.getCurrentPosition( resolve, reject, {
+        // test
+        enableHighAccuracy: true,
+        timeout: 10000,
+        // 5 minutes
+        maximumAge: ( 60000 * 5 )
+      } );
     } );
   }
 
@@ -90,7 +86,9 @@ class Around extends Screen {
 
     this.els.list.innerHTML = '';
 
-    this.getLocation();
+    this.getLocation()
+      .then( this.fetchTheaters.bind( this ) )
+      .catch( this.geoError.bind( this ) );
   }
 
   handleLocationLayer ( e ){
@@ -105,12 +103,14 @@ class Around extends Screen {
       } )
         .then( this.ready.bind( this ) )
         .then( () => layer.show( 'menu' ) )
-        .catch( e => console.log( e ) );
+        .catch( console.log );
     }
     else{
-      this.getLocation( function(){
-        layer.show( 'menu' );
-      } );
+      this.getLocation()
+        .then( e => {
+          this.fetchTheaters( e )
+            .then( () => layer.show( 'menu' ) );
+        } );
     }
   }
 
