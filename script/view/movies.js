@@ -18,13 +18,18 @@ class Movies extends Screen {
   }
 
   displayed ( params ){
-    if(params.filter !== this.datas.screenParams.filter ){
+    if( params.filter !== this.datas.screenParams.filter ){
       // update the current screenParam filter to either the value of filter or empty if undefined
       this.datas.screenParams.filter = params.filter ? params.filter : '';
       // update the input
       this.els.filter.value = this.datas.screenParams.filter;
       // filter
       this.handleFilter();
+    }
+
+    if( params.search && 'true' === params.search ){
+      router.navigate( {}, '', '/movies', true );
+      this.els.filter.focus();
     }
 
     if( this.datas.location !== user.location ){
@@ -48,7 +53,7 @@ class Movies extends Screen {
       return;
     }
 
-     filterValue = this.els.filter.value.trim().toLowerCase();
+    filterValue = this.els.filter.value.trim().toLowerCase();
 
     if( filterValue.length ){
       this.datas.movies = this.datas.allMovies.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 );
@@ -97,7 +102,7 @@ class Movies extends Screen {
 
   ready (){
     this.handleFilter();
-    this.render();
+    this.renderList();
   }
 
   render (){

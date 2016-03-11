@@ -26,8 +26,6 @@ class Router {
     if( this.initialize ){
       this.initialize();
     }
-
-    this._handleRoute();
   }
 
   _handleRoute ( e ){
@@ -68,6 +66,10 @@ class Router {
 
   navigate ( state, title, url, replace ){
     window.history[ replace ? 'replaceState' : 'pushState' ]( state, title, url );
+    this._handleRoute();
+  }
+
+  start (){
     this._handleRoute();
   }
 }
@@ -213,8 +215,8 @@ class Routes extends Router  {
 
 export default new Routes( {
   routes: {
-    '/theaters(/:id)(?filter=:filter)': 'theaters',
-    '/movies(/:id)(?filter=:filter)': 'movies',
+    '/theaters(/:id)(?filter=:filter)(?search=:search)': 'theaters',
+    '/movies(/:id)(?filter=:filter)(?search=:search)': 'movies',
     '/favorites(?filter=:filter)': 'favorites',
     '/around': 'around',
     '/': 'home'

@@ -49,41 +49,16 @@
       top: rem( 15 )
       transform: translateX( -50% )
 
-.form-quicksearch
+.find-item
    color: $light
    display: inline-block
    font-size: rem( 12 )
-   margin: rem( 15 ) 0
+   margin: rem( 5 ) 0
    vertical-align: top
    width: 50%
 
-   .input-floating
-      height: rem( 26 )
-
-      input
-         border-width: 0
-
-      input:focus + label
-         visibility: hidden
-
-      input:focus ~ button
-      input:valid ~ button
-         display: block
-
-      button
-         display: none
-         border-left: 0
-         height: 100%
-         padding: 0 rem( 8 )
-         position: absolute
-         right: 0
-         top: 0
-         z-index: 1
-
-      [type=submit]
-         &:focus
-            display: block
-
-      label
-         text-align: center
-         line-height: ( 26/12 )
+.find-link
+   line-height: ( 16/12 )
+   padding: em( 15/12 ) em( 10/12 )
+   display: block
+   text-align: center

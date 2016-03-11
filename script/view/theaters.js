@@ -34,6 +34,11 @@ class Theaters extends Screen {
       this.handleFilter();
     }
 
+    if( params.search && 'true' === params.search ){
+      router.navigate( {}, '', '/theaters', true );
+      this.els.filter.focus();
+    }
+
     if( this.datas.location !== user.location ){
       this.datas.location = user.location;
       this.els.list.innerHTML = '';
@@ -98,7 +103,7 @@ class Theaters extends Screen {
 
   ready (){
     this.handleFilter();
-    this.render();
+    this.renderList();
   }
 
   render (){
