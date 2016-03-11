@@ -14,18 +14,25 @@ class Around extends Screen {
   bind (){
 
     bind( this.el, 'click', '[role=tab]', e => {
-      this.tabs && this.tabs.tabAction( e );
+      this.tabs.tabAction( e );
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     } );
     bind( this.el, 'focus', '[role=tab]', e => {
-      this.tabs && this.tabs.tabFocus( e );
+      this.tabs.tabFocus( e );
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     }, true );
     bind( this.el, 'keydown', '[role=tab]', e => this.tabs && this.tabs.tabKey( e ) );
     bind( this.el, 'focus', '[role=tabpanel]', e => this.tabs && this.tabs.panelFocus( e ), true );
     bind( this.el, 'keydown', '[role=tabpanel]', e => this.tabs && this.tabs.panelKey( e ) );
 
-    bind( this.el, 'click', '.button-location', this.handleLocation.bind( this ) );
+    bind( document.body, 'click', '.button-location', this.handleLocation.bind( this ) );
+    bind( document.body, 'submit', '.layer-location form', this.handleLocationForm.bind( this ) );
+  }
+
+  displayed (){
+    if( this.datas.movies && !this.tabs ){
+      this.setTabs();
+    }
   }
 
   dom() {
@@ -42,7 +49,7 @@ class Around extends Screen {
 
     this.sync( '/api/aroundme', {
       headers: {
-        'x-movienow-location': JSON.stringify( [ e.coords.latitude, e.coords.longitude ] )
+        'x-movienow-coords': JSON.stringify( [ e.coords.latitude, e.coords.longitude ] )
       }
     } )
       .then( this.ready.bind( this ) )
@@ -76,13 +83,26 @@ class Around extends Screen {
     this.getLocation();
   }
 
+  handleLocationForm ( e ){
+    e.preventDefault();
+    var form = e.currentTarget;
+
+    this.sync( '/api/aroundme', {
+      headers: {
+        'x-movienow-location': form.location.value.trim()
+      }
+    } )
+      .then( this.ready.bind( this ) )
+      .catch( e => console.log( e ) );
+  }
+
   initialize (){
     this.setTitle( 'Around me' );
     this.bind();
 
     this.render();
 
-    this.getLocation();
+    //this.getLocation();
 
   }
 
@@ -92,7 +112,9 @@ class Around extends Screen {
 
     this.renderLists();
 
-    this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
+    if( this.datas.screenParams.visible ){
+      this.setTabs();
+    }
   }
 
   render (){
@@ -106,6 +128,10 @@ class Around extends Screen {
 
   renderLists (){
     this.els.list.innerHTML = domList( this.datas );
+  }
+
+  setTabs (){
+    this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
   }
 
   updateSearchForm ( string ){

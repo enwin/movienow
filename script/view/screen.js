@@ -8,6 +8,9 @@ class Screen {
   constructor ( args ){
     this.el = this._el( this.dom() );
 
+    args = args || {};
+    args.visible = false;
+
     this.datas = {
       screenParams: args
     };
@@ -47,6 +50,8 @@ class Screen {
       main.removeChild( this.el );
     }
 
+    this.datas.screenParams.visible = false;
+
     if( this.hidden ){
       this.hidden();
     }
@@ -75,6 +80,8 @@ class Screen {
     if( this._screenTitle ){
       this.setTitle( this._screenTitle );
     }
+
+    this.datas.screenParams.visible = true;
 
     if( this.displayed ){
       this.displayed( params );

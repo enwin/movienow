@@ -89,6 +89,7 @@ class Routes extends Router  {
       favorites: null
     };
 
+    this.screens.around = new Around();
   }
 
   routeMatched ( routeName, params ){

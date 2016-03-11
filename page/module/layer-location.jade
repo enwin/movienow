@@ -1,0 +1,20 @@
+section#locationDialog.layer.layer-location( role="dialog" aria-labelledby="dialogLocationTitle" aria-hidden="true" )
+  div.layer-wrapper
+    h1#dialogLocationTitle.layer-title Change location
+
+    span.dash-wrapper( aria-hidden="true" )
+      include ../../_source/svg/pattern.svg
+
+    button.button.button-location( type="button" )
+      include ../../_source/svg/icon_geolocation.svg
+      span Use geolocation
+
+    form#userLocation
+      span.input-floating
+        input#locationSearch( name="location" type="search" pattern=".*" required )
+        label( for="locationSearch" ) Enter a location
+
+
+    button.button.button-close( type="button" aria-controls="locationDialog" aria-expanded="false" )
+      include ../../_source/svg/icon_close.svg
+      span Close

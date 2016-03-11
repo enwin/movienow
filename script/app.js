@@ -7,6 +7,8 @@ import bind from './helper/bind';
 moment.relativeTimeThreshold('s', 59);
 moment.relativeTimeThreshold('m', 59);
 
+import './view/layer';
+
 import router from './module/router';
 
 bind( document.body, 'click', 'a[href^="/"]', ( e ) => {

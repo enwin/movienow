@@ -23,10 +23,10 @@ var datas = {
 
 class Menu {
   constructor (){
-    this.el = document.querySelector( '.site-menu' );
+    this.el = document.getElementById( 'menu' );
 
     this.els = {
-      list: this.el.querySelector( '.menu-wrapper' )
+      list: this.el.querySelector( '.layer-wrapper' )
     };
 
     this.datas = datas;
@@ -41,8 +41,6 @@ class Menu {
   }
 
   bind (){
-    bind( this.el, 'click', 'a[href^="/"]', (e) => this.setClose(e) );
-    bind( this.el, 'transitionend', (e) => this.handleAnimation(e) );
     bind( document.body, 'click', '[aria-controls="menu"]', (e) => this.toggle(e) );
   }
 
@@ -63,47 +61,13 @@ class Menu {
 
   }
 
-  setClose (){
-    //this.datas.renderClose = true;
-    this.toggle();
-  }
-
-  // setCurrent ( current, params ){
-  //   // search for current theater in the favorite list and fallback otherwise
-  //   if( this.datas.favorites && params && params.id && this.datas.favorites[ params.id ] ){
-  //     this.datas.current = params.id;
-  //   }
-  //   else{
-  //     this.datas.current = current;
-  //   }
-
-  //   this.render();
-
-  //   if( this.datas.renderClose ){
-  //     this.datas.renderClose = false;
-  //     this.toggle();
-  //   }
-  // }
-
   toggle (){
-    var isOpen = !this.el.attributes[ 'aria-hidden' ];
+    var open = this.el.hasAttribute( 'aria-hidden' );
 
-    this.el.style.display = 'block';
-
-    if( !isOpen ){
+    if( open ){
       this.updateFavIcon();
       this.updateLocation();
     }
-
-    window.setTimeout( () => {
-      window.requestAnimationFrame( () => {
-        this.el[ isOpen ? 'setAttribute' : 'removeAttribute' ]( 'aria-hidden', isOpen );
-      } );
-    }, 16 );
-
-    this.els.buttons.forEach( button => {
-      button.setAttribute( 'aria-expanded', !isOpen );
-    } );
   }
 
   updateFavIcon (){

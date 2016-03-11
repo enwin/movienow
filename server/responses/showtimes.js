@@ -171,7 +171,7 @@ class api {
 
   getTheaterAround ( location ){
 
-    var around = new Showtimes( location.join(), {
+    var around = new Showtimes( location, {
       pageLimit: 2,
       date: 0,
       lang: 'fr'

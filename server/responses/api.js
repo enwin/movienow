@@ -53,30 +53,33 @@ module.exports.movies = function( req, res ){
 };
 
 module.exports.around = ( req, res ) => {
-  var coords = JSON.parse( req.headers[ 'x-movienow-location' ] ),
+  var coords = req.headers[ 'x-movienow-coords' ] ? JSON.parse( req.headers[ 'x-movienow-coords' ] ) : null,
+      location = req.headers[ 'x-movienow-location' ],
       theaters,
       geocode;
 
-  theaters = api.getTheaterAround( coords )
+  theaters = api.getTheaterAround( coords ? coords.join() : location )
     .then( parseAround );
 
-  geocode = new Promise( ( resolve, reject ) => {
-    geocoder.reverseGeocode( coords[ 0 ], coords[ 1 ], ( err, data ) => {
-      if( err ){
-        reject( err );
-        return;
-      }
-      //console.log( data );
-      resolve( data.results[ 0 ].address_components[ 3 ].long_name );
+  if( coords ){
+    geocode = new Promise( ( resolve, reject ) => {
+      geocoder.reverseGeocode( coords[ 0 ], coords[ 1 ], ( err, data ) => {
+        if( err ){
+          reject( err );
+          return;
+        }
+        //console.log( data );
+        resolve( data.results[ 0 ].address_components[ 3 ].long_name );
+      } );
     } );
-  } );
+  }
 
   Promise.all( [ theaters, geocode ] )
     .then( datas => {
       var data = {
         movies: datas[0].movies,
         theaters: datas[0].theaters,
-        city: datas[ 1 ]
+        city: datas[ 1 ] || location
       };
 
       res.setHeader( 'Cache-Control', 'no-cache, no-store, must-revalidate' );

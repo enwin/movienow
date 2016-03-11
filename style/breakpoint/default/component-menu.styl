@@ -1,70 +1,30 @@
-.site-menu
+.layer.site-menu
    background-color: rgba( $dark, 0 )
-   display: none
-   height: 100vh
-   position: fixed
-   transform: translateY( -100% )
-   transition: transform 0s $ease-in-quad  0.4s, background 0.3s linear 0.1s
-   width: 100%
-   z-index: 5
-   top: 0
 
    &:not( [aria-hidden=true] )
-      display: block
-      transform: translateY( 0 )
-      transition-timing-function: $ease-out-quad , linear
-      transition-delay: 0s
       background-color: rgba( $dark, 0.7 )
 
-      .menu-wrapper
-         transform: translateY( 0 )
-         transition-timing-function: $ease-out-quad
-         transition-delay: 0.1s
+   .layer-wrapper
+      background-color: $light
+      color: $dark
+      padding: rem( 10 ) 0 0
 
-         .button-close
-            transition-timing-function: $ease-out-quad
-            transition-delay: 0.2s
-            opacity: 1
-            transform: translateY( 0 )
+      .button-close
+         svg
+            fill: $light
 
-   .hidden
-      hide()
-
-.menu-wrapper
-   -webkit-overflow-scrolling: touch
-   background-color: $light
-   padding-top: rem( 10 )
-   position: relative
-   transform: translateY( -100% )
-   transition: transform 0.3s $ease-in-quad
-   width: 100%
-   z-index: 4
-
-   .dash-wrapper
+   .button-locationChange
+      outline: none
+      padding: rem( 20 )
+      text-align: center
       display: block
-      padding: 0 rem( 20 )
-
-   .button-close
-      margin-top: rem( 13 )
-      opacity: 0
-      position: absolute
-      transform: translateY( -100% )
-      transition: transform 0.2s $ease-in-quad, opacity 0.2s $ease-in-quad
       width: 100%
 
-      svg
-         fill: $light
-         height: rem( 48 )
-         width: rem( 48 )
-
-      span
-         hide()
 
 .menu-item
    text-transform: uppercase
 
    a
-      color: $dark
       display: block
       padding: rem( 20 )
       text-decoration: none
@@ -89,6 +49,7 @@
 
    .icon-favorite
       display: none
+
    .icon-favorited
       display: inline-block
 

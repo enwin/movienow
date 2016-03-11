@@ -1,0 +1,68 @@
+.layer
+   background-color: rgba( $light, 0 )
+   display: none
+   height: 100vh
+   position: fixed
+   transform: translateY( -100% )
+   transition: transform 0s $ease-in-quad  0.4s, background 0.3s linear 0.1s
+   width: 100%
+   z-index: 5
+   top: 0
+
+   &:not( [aria-hidden=true] )
+      display: block
+      transform: translateY( 0 )
+      transition-timing-function: $ease-out-quad , linear
+      transition-delay: 0s
+      background-color: rgba( $light, 0.7 )
+
+      .layer-wrapper
+         transform: translateY( 0 )
+         transition-timing-function: $ease-out-quad
+         transition-delay: 0.1s
+
+         .button-close
+            transition-timing-function: $ease-out-quad
+            transition-delay: 0.2s
+            opacity: 1
+            transform: translateY( 0 )
+
+   .hidden
+      hide()
+
+   .layer-title
+      text-align: center
+      font-size: rem( 18 )
+      margin: rem( 10 ) 0 rem( 15 )
+
+.layer-wrapper
+   -webkit-overflow-scrolling: touch
+   background-color: $color-secondary-dark
+   color: $light
+   padding: rem( 10 ) rem( 14 ) 0
+   position: relative
+   transform: translateY( -100% )
+   transition: transform 0.3s $ease-in-quad
+   width: 100%
+   z-index: 4
+
+   .dash-wrapper
+      display: block
+      padding: 0 rem( 20 )
+
+   .button-close
+      left: 0
+      margin-top: rem( 13 )
+      opacity: 0
+      position: absolute
+      transform: translateY( -100% )
+      transition: transform 0.2s $ease-in-quad, opacity 0.2s $ease-in-quad
+      width: 100%
+
+      svg
+         fill: $color-secondary-dark
+         height: rem( 48 )
+         width: rem( 48 )
+
+      span
+         hide()
