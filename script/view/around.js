@@ -2,6 +2,8 @@
 
 import user from '../data/user';
 
+import layer from './layer';
+
 import Screen from './screen';
 import view from '../../page/view/around.jade';
 import domList from '../../page/view/around-list.jade';
@@ -25,8 +27,9 @@ class Around extends Screen {
     bind( this.el, 'focus', '[role=tabpanel]', e => this.tabs && this.tabs.panelFocus( e ), true );
     bind( this.el, 'keydown', '[role=tabpanel]', e => this.tabs && this.tabs.panelKey( e ) );
 
-    bind( document.body, 'click', '.button-location', this.handleLocation.bind( this ) );
-    bind( document.body, 'submit', '.layer-location form', this.handleLocationForm.bind( this ) );
+    bind( this.el, 'click', '.button-location', this.handleLocation.bind( this ) );
+    bind( document.body, 'click', '.layer .button-location', this.handleLocationLayer.bind( this ) );
+    bind( document.body, 'submit', '.layer-location form', this.handleLocationLayer.bind( this ) );
   }
 
   displayed (){
@@ -48,14 +51,18 @@ class Around extends Screen {
 
   fetchTheaters ( e ){
 
-    this.updateSearchForm( `${e.coords.latitude}, ${e.coords.longitude}` );
-
     this.sync( '/api/aroundme', {
       headers: {
         'x-movienow-coords': JSON.stringify( [ e.coords.latitude, e.coords.longitude ] )
       }
     } )
       .then( this.ready.bind( this ) )
+      .then( () => {
+        if( this.locationCallback ){
+          this.locationCallback();
+          delete this.locationCallback;
+        }
+      } )
       .catch( e => console.log( e ) );
   }
 
@@ -64,9 +71,9 @@ class Around extends Screen {
     loader.hide();
   }
 
-  getLocation (){
+  getLocation ( callback ){
 
-    this.updateSearchForm( 'Getting your location' );
+    this.locationCallback = callback;
 
     loader.show();
 
@@ -86,17 +93,25 @@ class Around extends Screen {
     this.getLocation();
   }
 
-  handleLocationForm ( e ){
+  handleLocationLayer ( e ){
     e.preventDefault();
     var form = e.currentTarget;
 
-    this.sync( '/api/aroundme', {
-      headers: {
-        'x-movienow-location': form.location.value.trim()
-      }
-    } )
-      .then( this.ready.bind( this ) )
-      .catch( e => console.log( e ) );
+    if( form.location ){
+      this.sync( '/api/aroundme', {
+        headers: {
+          'x-movienow-location': form.location.value.trim()
+        }
+      } )
+        .then( this.ready.bind( this ) )
+        .then( () => layer.show( 'menu' ) )
+        .catch( e => console.log( e ) );
+    }
+    else{
+      this.getLocation( function(){
+        layer.show( 'menu' );
+      } );
+    }
   }
 
   initialize (){
@@ -123,8 +138,7 @@ class Around extends Screen {
   render (){
     this.el.innerHTML = view( this.datas );
     this.els = {
-      list: this.el.querySelector( '.screen-content' ),
-      search: this.el.querySelector( '#locationSearch' )
+      list: this.el.querySelector( '.screen-content' )
     };
 
   }
@@ -135,10 +149,6 @@ class Around extends Screen {
 
   setTabs (){
     this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
-  }
-
-  updateSearchForm ( string ){
-    this.els.search.value = string;
   }
 }
 

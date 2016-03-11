@@ -14,13 +14,15 @@ class Layer{
   handleAnimation ( e ){
     if( e.target.classList.contains( '.layer' ) ){
       e.target.style.display = '';
+
     }
   }
 
   setClose (){
     //this.datas.renderClose = true;
-
-    this.toggle( this.layer );
+    if( this.layer ){
+      this.toggle( this.layer );
+    }
   }
 
   handleControls ( e ){
@@ -36,12 +38,35 @@ class Layer{
     this.toggle( layer );
 
   }
+  /**
+   * display a specified layer
+   * @param  {string} layer id of the layer to display
+   */
+  show ( layer ){
+    // close the currentLayer
+    this.setClose();
+
+    // try to find an element who controls the layer
+    var buttonForLayer = document.querySelector( `[aria-controls=${layer}]` );
+    // to trigger a click on it
+    if( buttonForLayer ){
+      buttonForLayer.click();
+    }
+    // otherwise open the layer directly
+    else{
+      this.toggle(  document.getElementById( layer ) );
+    }
+  }
 
   toggle ( layer ){
 
     var open = layer.hasAttribute( 'aria-hidden' );
 
     layer.style.display = 'block';
+
+    if( !open ){
+      delete this.layer;
+    }
 
     window.setTimeout( () => {
       window.requestAnimationFrame( () => {
