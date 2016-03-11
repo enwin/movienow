@@ -33,6 +33,9 @@ class Around extends Screen {
     if( this.datas.movies && !this.tabs ){
       this.setTabs();
     }
+    else if( !this.datas.movies ){
+      this.getLocation();
+    }
   }
 
   dom() {
