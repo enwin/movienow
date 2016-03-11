@@ -4,7 +4,7 @@ header.screen-header
   form#theaterFilter.screen-nav.screen-form
     span.input-floating
       include ../../_source/svg/icon_search.svg
-      input#movieBlob( type="search" pattern=".*" required value="#{screenParams.filter || ''}" )
+      input#movieBlob( type="text" pattern=".*" required value="#{screenParams.filter || ''}" autocomplete="off" )
       label( for="movieBlob" ) Search movies
 
 div.screen-content
