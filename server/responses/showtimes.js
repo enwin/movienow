@@ -12,7 +12,6 @@ var Showtimes = require( 'showtimes' ),
  * @param  {array} movies array of movies to save
  */
 var saveMovies = function( movies ){
-
   return Promise.all( movies.map( movie => movieDB.add( movie ) ) );
 };
 
@@ -65,7 +64,7 @@ class api {
           reject( err );
           return;
         }
-
+        saveMovies( [ result ] );
         resolve( result );
       } );
     } );
@@ -99,7 +98,7 @@ class api {
 
           it.store[ where ].movies = result;
           it.store[ where ].moviesDay = it.day;
-
+          saveMovies( result );
           resolve( result );
         } );
       }
