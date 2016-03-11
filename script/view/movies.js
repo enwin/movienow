@@ -14,7 +14,7 @@ import user from '../data/user';
 class Movies extends Screen {
 
   bind (){
-    bind( this.el, 'input', 'input[type=search]', this.handleTyping.bind( this ) );
+    bind( this.el, 'input', '.screen-header input', this.handleTyping.bind( this ) );
   }
 
   displayed ( params ){
