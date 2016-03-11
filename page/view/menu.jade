@@ -15,9 +15,9 @@ if city
   span.dash-wrapper( aria-hidden="true" )
     include ../../_source/svg/pattern.svg
   div.menu-item.menu-location( class=!asFavorites ? 'empty' : '' )
-    button.button.button-locationChange.layer-close( type="button" aria-controls="locationDialog" aria-expanded="false" )
+    button.button.button-locationChange.layer-close.layer-control( type="button" aria-controls="locationDialog" aria-expanded="false" )
       span Change location (#[span.menu-location-city!=city])
 
-button.button.button-close( type="button" aria-controls="menu" aria-expanded="false" )
+button.button.button-close.layer-control( type="button" aria-controls="menu" aria-expanded="false" )
   include ../../_source/svg/icon_close.svg
   span Close menu

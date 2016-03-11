@@ -8,7 +8,7 @@ class Layer{
   bind (){
     bind( document.body, 'click', '.layer a[href^="/"], .layer-close', (e) => this.setClose(e) );
     bind( document.body, 'transitionend', '.layer', (e) => this.handleAnimation(e) );
-    bind( document.body, 'click', '[aria-controls]', (e) => this.handleControls(e) );
+    bind( document.body, 'click', '.layer-control[aria-controls]', (e) => this.handleControls(e) );
   }
 
   handleAnimation ( e ){
