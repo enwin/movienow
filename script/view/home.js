@@ -29,6 +29,10 @@ class Home extends Screen {
     //bind( this.el, 'click', '.button-around', this.handleLocation.bind( this ) );
   }
 
+  displayed (){
+    this.setTitle( '' );
+  }
+
   dom (){
     return {
       tagName: 'div',
@@ -69,7 +73,6 @@ class Home extends Screen {
   }
 
   initialize (){
-    this.setTitle( '' );
     this.bind();
     this.render();
     this.loadPoster();
