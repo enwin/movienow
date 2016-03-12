@@ -96,6 +96,10 @@ class Around extends Screen {
     var form = e.currentTarget;
 
     if( form.location ){
+      if( document.activeElement && this.els.layer.contains( document.activeElement ) ){
+        document.activeElement.blur();
+      }
+
       this.sync( '/api/aroundme', {
         headers: {
           'x-movienow-location': form.location.value.trim()
@@ -138,7 +142,8 @@ class Around extends Screen {
   render (){
     this.el.innerHTML = view( this.datas );
     this.els = {
-      list: this.el.querySelector( '.screen-content' )
+      list: this.el.querySelector( '.screen-content' ),
+      layer: document.getElementById( 'locationDialog' )
     };
 
   }
