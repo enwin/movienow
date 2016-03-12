@@ -30,6 +30,28 @@ module.exports = function( app, config ){
     } )
   } ) );
 
+  if( config.dev ){
+    app.use( logger( 'dev' ) );
+
+    var browserSync = require( 'browser-sync' ),
+        bs = browserSync( {
+          logSnippet: false,
+          ui: false,
+          notify: false,
+          ghostMode: false
+        } );
+
+    app.use( require( 'connect-browser-sync' )( bs ) );
+
+    bs.watch( [ 'page/**/*.jade', 'script/**/*.js' ] ).on( 'change', bs.reload );
+
+    bs.watch( 'style/**/*.styl', function ( event, file ) {
+      if (event === "change") {
+        bs.reload( "*.css" );
+      }
+    } );
+  }
+
   // should be placed before express.static
   app.use( compress( {
     filter: function (req, res ){
@@ -86,28 +108,6 @@ module.exports = function( app, config ){
     'index': '/',
     'etag': false
   } ) );
-
-  if( config.dev ){
-    app.use( logger( 'dev' ) );
-
-    var browserSync = require( 'browser-sync' ),
-        bs = browserSync( {
-          logSnippet: false,
-          ui: false,
-          notify: false,
-          ghostMode: false
-        } );
-
-    app.use( require( 'connect-browser-sync' )( bs ) );
-
-    bs.watch( [ 'page/**/*.jade', 'script/**/*.js' ] ).on( 'change', bs.reload );
-
-    bs.watch( 'style/**/*.styl', function ( event, file ) {
-      if (event === "change") {
-        bs.reload( "*.css" );
-      }
-    } );
-  }
 
   app.set( 'views', config.pages );
   app.set( 'view engine', 'jade' );
