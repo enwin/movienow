@@ -1,9 +1,12 @@
 var request = require( 'request-promise' ),
     cheerio = require( 'cheerio' );
 
-var currentYear = new Date().getFullYear(),
-    filterYear = new RegExp( [ currentYear, currentYear-1 ].join('|') ),
+var filterName = /\!|\?|\(.*\)/gi,
     posterSize = '@._V1_SX200.jpg';
+
+function sanitize( text ){
+  return text ? text.toLowerCase().replace( filterName, '' ).trim() : text;
+}
 
 function parsePoster( src ){
   // find the last @ sign to remove all characters from this character
@@ -30,41 +33,63 @@ function parsePoster( src ){
   } );
 }
 
-function parseResult( $ ){
+function parseResult( $, name ){
   var $results = $( '.findList .findResult' ),
       $el,
+      title,
+      aka,
       data,
       link,
       poster;
 
-  // if theres more than one result loop on it and try to match the more recent on ( current year or previous year )
+  console.log( $results.length );
+
+  // if theres more than one result loop on it and try to match the title or the aka
+  // if no poster is found it will fallback to the first movie on the list
   if( $results.length !== 1 ){
     $results.each( ( index, el ) => {
-      $el = $( el );
 
-      if( !$el.text().match( filterYear ) || data ){
+      if( data ){
         return;
       }
 
-      link = $el.find( 'a' ).attr( 'href' );
-      poster = $el.find( 'img' ).attr( 'src' );
+      $el = $( el );
+      title = $el.find( 'a' ).text();
+      aka = $el.find( 'i' ).text();
 
-      data = {
-        id: link.split( '/' )[ 2 ]
-      };
+      if( aka ){
+        aka = sanitize( aka.slice( 1, -1 ) );
+      }
+
+      if( ( title && sanitize( title ) === name ) || ( aka && aka === name ) ){
+        link = $el.find( 'a' ).attr( 'href' );
+        poster = $el.find( 'img' ).attr( 'src' );
+
+        data = {
+          id: link.split( '/' )[ 2 ],
+          title: title
+        };
+      }
+
 
     } );
   }
-  else{
+  else {
+    title = $results.find( 'a' ).text();
     link = $results.find( 'a' ).attr( 'href' );
     poster = $results.find( 'img' ).attr( 'src' );
 
     data = {
-      id: link.split( '/' )[ 2 ]
+      id: link.split( '/' )[ 2 ],
+      title: title
     };
   }
+
   // return a promise that will fetch the poster and store it
   return new Promise( ( resolve, reject ) => {
+    if( !poster ){
+      reject( new Error( `No poster found for ${name}` ) );
+    }
     // don't send the poster if its the nopicture poster
     if( poster.indexOf( 'nopicture' ) > -1 ){
       resolve( data );
@@ -84,6 +109,9 @@ function parseResult( $ ){
 }
 
 function fetch( movieName ){
+
+  movieName = sanitize( movieName );
+
   return new Promise( ( resolve, reject ) => {
     var options = {
       uri: 'http://www.imdb.com/find',
@@ -92,15 +120,17 @@ function fetch( movieName ){
         s: 'tt'
       },
       headers: {
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'DNT': 1
       },
-      transform: body => {
+      transform: ( body ) => {
         return cheerio.load(body);
       }
     };
 
     request( options )
-      .then( $ => resolve( parseResult( $ ) ) )
+      .then( $ => resolve( parseResult( $, movieName ) ) )
       .catch( reject );
   } );
 
