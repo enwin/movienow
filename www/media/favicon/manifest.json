@@ -37,5 +37,8 @@
 			"type": "image\/png",
 			"density": 4
 		}
-	]
+	],
+	"start_url": "http:\/\/movienow.enwin.io",
+	"display": "standalone",
+	"orientation": "portrait"
 }
