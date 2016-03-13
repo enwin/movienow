@@ -1,16 +1,18 @@
 var request = require( 'request-promise' ),
     cheerio = require( 'cheerio' );
 
-var filterName = /\!|\?|\(.*\)/gi,
-    posterSize = '@._V1_SX200.jpg';
+var filterName = /\!|\?|\(.*\)|\(?(2D|3D)\)?/gi,
+    the = /(.*), (the)/,
+    splitSpaces = /\s{2,}/,
+    posterSize = '._V1_SX200.jpg';
 
 function sanitize( text ){
-  return text ? text.toLowerCase().replace( filterName, '' ).trim() : text;
+  return text ? text.toLowerCase().replace( the, '$2 $1' ).replace( filterName, '' ).trim().split( splitSpaces )[0] : text;
 }
 
 function parsePoster( src ){
   // find the last @ sign to remove all characters from this character
-  var index = src.lastIndexOf( '@' );
+  var index = src.lastIndexOf( '._V1_' );
 
   if( index < 0 ){
     src = null;
@@ -42,8 +44,6 @@ function parseResult( $, name ){
       link,
       poster;
 
-  console.log( $results.length );
-
   // if theres more than one result loop on it and try to match the title or the aka
   // if no poster is found it will fallback to the first movie on the list
   if( $results.length !== 1 ){
@@ -73,6 +73,21 @@ function parseResult( $, name ){
 
 
     } );
+
+    // fallback to the first item if its title contains the searched title
+    if( !data ){
+      $results = $( '.findList .findResult:first-child' );
+      title = $results.find( 'a' ).text();
+      link = $results.find( 'a' ).attr( 'href' );
+
+      if( sanitize( title ).indexOf( name ) !== -1 ){
+        data = {
+          id: link.split( '/' )[ 2 ],
+          title: title
+        };
+        poster = $results.find( 'img' ).attr( 'src' );
+      }
+    }
   }
   else {
     title = $results.find( 'a' ).text();
@@ -136,4 +151,28 @@ function fetch( movieName ){
 
 }
 
-module.exports = fetch;
+module.exports.find = fetch;
+
+var poster = function( id ){
+
+  return new Promise( ( resolve, reject ) => {
+    var options = {
+      uri: id,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'DNT': 1
+      },
+      transform: ( body ) => {
+        return cheerio.load(body)( '.title-overview .poster img' ).attr( 'src' );
+      }
+    };
+
+    request( options )
+      .then( $ => parsePoster( $ ) )
+      .then( resolve )
+      .catch( reject );
+  } );
+};
+
+module.exports.poster = poster;
