@@ -57,9 +57,13 @@ module.exports.movies = function( req, res ){
 
 module.exports.around = ( req, res ) => {
   var coords = req.headers[ 'x-movienow-coords' ] ? JSON.parse( req.headers[ 'x-movienow-coords' ] ) : null,
-      location = citySanitize( req.headers[ 'x-movienow-location' ] ),
+      location = req.headers[ 'x-movienow-location' ],
       theaters,
       geocode;
+
+  if( location ){
+    citySanitize( location );
+  }
 
   theaters = api.getTheaterAround( coords ? coords.join() : location )
     .then( parseAround );
