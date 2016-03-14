@@ -56,18 +56,21 @@ div.screen-content
           img( src="/media/posters/#{id}" )
 
       dl.movie-desc
-        dt Runtime
-        dd.movie-runtime!= runtime
-        dt Rating
-        dd.movie-rating!= rating
+        if runtime
+          dt Runtime
+          dd.movie-runtime!= runtime
+        if rating
+          dt Rating
+          dd.movie-rating!= rating
         if director
           dt Director
           dd.movie-director!= director
         if cast
           dt Cast
           dd.movie-cast!= cast.join(', ')
-        dt.movie-synopsis-title Synopsis
-        dd.movie-synopsis!= description
+        if description
+          dt.movie-synopsis-title Synopsis
+          dd.movie-synopsis!= description
         if trailer
           dt Trailer
           dd
