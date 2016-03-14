@@ -6,7 +6,7 @@ class Layer{
   }
 
   bind (){
-    bind( document.body, 'click', '.layer a[href^="/"], .layer-close', (e) => this.setClose(e) );
+    bind( document.body, 'click', '.layer a[href^="/"], .layer-close', (e) => this.close(e) );
     bind( document.body, 'transitionend', '.layer', (e) => this.handleAnimation(e) );
     bind( document.body, 'click', '.layer-control[aria-controls]', (e) => this.handleControls(e) );
   }
@@ -18,7 +18,7 @@ class Layer{
     }
   }
 
-  setClose (){
+  close (){
     //this.datas.renderClose = true;
     if( this.layer ){
       this.toggle( this.layer );
@@ -44,7 +44,7 @@ class Layer{
    */
   show ( layer ){
     // close the currentLayer
-    this.setClose();
+    this.close();
 
     // try to find an element who controls the layer
     var buttonForLayer = document.querySelector( `[aria-controls=${layer}]` );

@@ -11,6 +11,8 @@ import bind from '../helper/bind';
 import loader from '../module/loader';
 import Tablist from '../helper/accedeweb-tablist';
 
+import router from '../module/router';
+
 class Around extends Screen {
 
   bind (){
@@ -106,14 +108,21 @@ class Around extends Screen {
         }
       } )
         .then( this.ready.bind( this ) )
-        .then( () => layer.show( 'menu' ) )
+        .then( () => {
+          form.reset();
+          router.navigate( {}, '', '/' );
+          layer.show( 'menu' );
+        } )
         .catch( console.log );
     }
     else{
       this.getLocation()
         .then( e => {
           this.fetchTheaters( e )
-            .then( () => layer.show( 'menu' ) );
+            .then( () => {
+              router.navigate( {}, '', '/around' );
+              layer.close();
+            } );
         } );
     }
   }
@@ -133,10 +142,6 @@ class Around extends Screen {
     user.location = this.datas.city;
 
     this.renderLists();
-
-    if( this.datas.screenParams.visible ){
-      this.setTabs();
-    }
   }
 
   render (){
@@ -150,6 +155,10 @@ class Around extends Screen {
 
   renderLists (){
     this.els.list.innerHTML = domList( this.datas );
+
+    if( this.datas.screenParams.visible ){
+      this.setTabs();
+    }
   }
 
   setTabs (){
