@@ -1,6 +1,14 @@
+var defaults = { location: {'city': {'long':'Paris', 'slug': 'paris' } } };
+
 class User {
   constructor (){
-    this.datas = JSON.parse( window.localStorage.getItem( 'user' ) ) || { location: {'city': {'long':'Paris', 'slug': 'paris' } } };
+    this.datas = JSON.parse( window.localStorage.getItem( 'user' ) ) || defaults;
+
+    // clean previous user schema
+    if( !this.datas.location.city ){
+      this.datas = defaults;
+      this.save();
+    }
 
     this.setSession();
   }
