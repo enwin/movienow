@@ -31,7 +31,7 @@ class Menu {
 
     this.datas = datas;
 
-    this.datas.city = user.location;
+    this.datas.location = user.location;
 
     this.bind();
 
@@ -76,7 +76,7 @@ class Menu {
   }
 
   updateLocation (){
-    this.els.location.innerHTML = user.location;
+    this.els.location.innerHTML = user.location.city.long;
   }
 }
 

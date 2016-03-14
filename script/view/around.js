@@ -139,7 +139,7 @@ class Around extends Screen {
 
   ready (){
 
-    user.location = this.datas.city;
+    user.location = this.datas.geo;
 
     this.renderLists();
   }

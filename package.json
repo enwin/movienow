@@ -50,6 +50,7 @@
     "mongoose": "^4.4.6",
     "serve-static": "^1.10.2",
     "showtimes": "enwin/showtimes",
+    "slug": "^0.9.1",
     "stylus": "^0.53.0"
   }
 }

@@ -83,7 +83,7 @@ class Theater extends Screen {
 
     this.datas.favorited = favList.is( this.datas.screenParams.id );
 
-    this.sync( [ '/api/theaters', this.datas.location.toLowerCase(), this.datas.screenParams.id ].join('/') )
+    this.sync( [ '/api/theaters', this.datas.location.city.slug, this.datas.screenParams.id ].join('/') )
       .then( () => this.ready() )
       .catch( e => console.log( e ) );
   }
