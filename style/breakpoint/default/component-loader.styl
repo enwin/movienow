@@ -11,29 +11,44 @@
    opacity: 0
    position: absolute
    top: 50%
-   transform: translate( -50%, -50% )
-   transition: opacity 0.2s $ease-out-quad
+   transform: translate( -50%, -46% )
+   transition: opacity 0.2s $ease-out-quad, transform 0.3s $ease-out-quad
    height: rem( 58 )
-   width: rem( 30 )
+   width: rem( 32 )
 
+      //transition: transform 0.3s $ease-out-quad
    svg
       fill: $color-secondary
-      height: 100%
-      transform: translateY( rem( 10 ) )
-      transition: transform 0.3s $ease-out-quad
-      width: 100%
+
+   .fix
+      // height: 100%
+      // width: 100%
+      position: absolute
+
+   .big-wheel
+      // height: auto
+      // width: ( 80/114*100% )
+      position: absolute
+      left: rem( 2 )
+      top: rem( 2 )
+
+   .small-wheel
+      // height: auto
+      // width: ( 45.4/114*100% )
+      position: absolute
+      right: rem( 8 )
+      bottom: rem( 8 )
 
 .play
    .loader-wrapper
       opacity: 1
+      transform: translate( -50%, -50% )
 
-      svg
-         transform: none
 
       .big-wheel
-         transform-origin: 47.5px 48px
+         //transform-origin: 47.5px 48px
          animation: spin 0.5s linear infinite
 
       .small-wheel
-         transform-origin: 62.7px 168.1px
+         //transform-origin: 62.7px 168.1px
          animation: spin 0.4s linear infinite

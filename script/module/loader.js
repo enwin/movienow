@@ -25,8 +25,10 @@ class Loader{
 
   show (){
     document.body.appendChild( this.el );
-    window.requestAnimationFrame( () => this.display() );
+    window.setTimeout( () => {
+      window.requestAnimationFrame( () => this.display() );
+    }, 16 );
   }
 }
-
-export default new Loader();
+window.loader = new Loader();
+export default window.loader;
