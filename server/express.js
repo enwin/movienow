@@ -99,7 +99,7 @@ module.exports = function( app, config ){
   } ) );
 
   // browserify
-  browserify.settings( { 'transform': [ 'babelify', 'jadeify' ] } );
+  browserify.settings( { 'transform': [ [ 'babelify', { 'presets': [ 'es2015' ] }], 'jadeify' ] } );
 
   app.use( '/app.js', browserify( 'script/app.js' ) );
 
