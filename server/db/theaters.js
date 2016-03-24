@@ -5,7 +5,7 @@ var mongoose = require( 'mongoose' ),
     request = require( 'request-promise' );
 
 // Settings
-var theaterssSchema = new Schema( {
+var theatersSchema = new Schema( {
   id: { type: String, index: { unique: true, dropDups: true } },
   name: String,
   address: String,
@@ -17,7 +17,7 @@ var theaterssSchema = new Schema( {
   }
 } );
 
-mongoose.model( 'theaters', theaterssSchema );
+mongoose.model( 'theaters', theatersSchema );
 
 var theaterDb = mongoose.model( 'theaters' );
 
@@ -36,11 +36,12 @@ var get = ( theater ) => {
 };
 
 module.exports.get = get;
-var savedObject;
+
 var add = ( theater ) => {
+  var savedObject;
 
   return get( theater )
-    .then( ( theaterFound ) => {
+    .then( theaterFound => {
       // send the stored theater
       if( theaterFound ){
         savedObject = theaterFound.toObject();
@@ -68,7 +69,8 @@ module.exports.add = add;
 
 var save = ( theater ) => {
   var toSave = Object.assign( {}, theater ),
-      savedObject
+      savedObject;
+
   delete toSave.movies;
 
   return new Promise( ( resolve, reject ) => {
@@ -85,7 +87,7 @@ var save = ( theater ) => {
       delete savedObject._id;
       delete savedObject._v;
 
-      resolve(  );
+      resolve( savedObject );
 
     } );
   } );
