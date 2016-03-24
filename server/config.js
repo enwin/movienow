@@ -4,6 +4,7 @@ var path = require('path'),
     _ = require( 'lodash' ),
     rootPath = path.normalize( __dirname + '/..'),
     pkg = require( '../package.json' ),
+    privateConfig = require( '../privateConfig.json' ),
     config;
 
 var defaults = {
@@ -17,6 +18,6 @@ var defaults = {
   'version': pkg.version
 };
 
-config = _.assign( {}, defaults );
+config = _.assign( privateConfig, defaults );
 
 module.exports = config;

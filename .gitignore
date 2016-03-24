@@ -8,3 +8,4 @@ www/**/*.js
 www/**/*.css
 server/ssl/*
 /db/
+privateConfig.json
