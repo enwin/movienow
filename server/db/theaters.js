@@ -99,7 +99,10 @@ var theaterMap = ( theater ) => {
     geocoder.geocode( theater.address, ( err, data ) => {
 
       if( err || !data.results.length ){
-        reject( err || data );
+        //reject( err || data );
+        resolve( {
+          coord: {}
+        } );
         return;
       }
       resolve( {
