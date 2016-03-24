@@ -30,8 +30,17 @@ class Theater extends Screen {
   }
 
   displayed (){
+    var refresh;
+
     if( this.datas.location !== user.location ){
       this.datas.location = user.location;
+      refresh = true;
+    }
+    else if( this.newDay() ){
+      refresh = true;
+    }
+
+    if( refresh ){
       this.els.list.innerHTML = '';
       this.getData();
     }

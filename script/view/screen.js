@@ -41,6 +41,10 @@ class Screen {
     return el;
   }
 
+  newDay (){
+    return moment().format( 'DDD' ) !== this.datas.screenParams.fetchedDay;
+  }
+
   parse ( data ){
     return _extend( this.datas, data );
   }
@@ -96,6 +100,8 @@ class Screen {
     var dayOfYear = moment().format( 'DDD' );
 
     url += `?day=${dayOfYear}`;
+
+    this.datas.screenParams.fetchedDay = dayOfYear;
 
     params.credentials = 'same-origin';
 

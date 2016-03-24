@@ -18,6 +18,8 @@ class Movies extends Screen {
   }
 
   displayed ( params ){
+    var refresh;
+
     if( params.filter !== this.datas.screenParams.filter ){
       // update the current screenParam filter to either the value of filter or empty if undefined
       this.datas.screenParams.filter = params.filter ? params.filter : '';
@@ -34,6 +36,13 @@ class Movies extends Screen {
 
     if( this.datas.location !== user.location ){
       this.datas.location = user.location;
+      refresh = true;
+    }
+    else if( this.newDay() ){
+      refresh = true;
+    }
+
+    if( refresh ){
       this.els.list.innerHTML = '';
       this.getData();
     }

@@ -42,7 +42,8 @@ class Theater extends Screen {
   }
 
   displayed (){
-    var favStatus = favList.is( this.datas.screenParams.id );
+    var favStatus = favList.is( this.datas.screenParams.id ),
+        refresh;
 
     if( favStatus !== this.datas.favorited ){
       this.datas.favorited = favStatus;
@@ -51,6 +52,13 @@ class Theater extends Screen {
 
     if( this.datas.location !== user.location ){
       this.datas.location = user.location;
+      refresh = true;
+    }
+    else if( this.newDay() ){
+      refresh = true;
+    }
+
+    if( refresh ){
       this.els.list.innerHTML = '';
       this.getData();
     }
