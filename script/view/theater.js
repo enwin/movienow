@@ -85,11 +85,7 @@ class Theater extends Screen {
 
     this.sync( [ '/api/theaters', this.datas.location.city.slug, this.datas.screenParams.id ].join('/') )
       .then( () => this.ready() )
-      .catch( e => console.log( e ) );
-  }
-
-  getDays (){
-    this.datas.nextDay = moment().add( 2, 'd' ).format( 'dddd' );
+      .catch( e => console.error( e.message, e.stack) );
   }
 
   parse ( data ){
@@ -98,36 +94,34 @@ class Theater extends Screen {
         showtime,
         disabled;
 
-    data.movies.forEach( ( movies, dayIndex ) => {
-      movies.forEach( movie => {
+    data.movies.forEach( movie => {
 
-        movie.infos = {};
+      movie.infos = {};
 
-        movie.showtimes.forEach( ( types, showIndex ) => {
-          types.times.forEach( ( time, index ) => {
+      movie.showtimes.forEach( ( types, showIndex ) => {
+        types.times.forEach( ( time, index ) => {
 
-            showtime = moment( time, 'HH:mm' ).add( dayIndex, 'd' );
+          showtime = moment( time, 'HH:mm' );
 
-            disabled = now.isAfter( showtime );
+          disabled = now.isAfter( showtime );
 
-            if( !dayIndex && !movie.infos.nextShowTime && !disabled ){
-              movie.infos.nextShowTime = {
-                formated: now.to( showtime ),
-                value: showtime.diff( now )
-              };
-            }
-
-            movie.showtimes[ showIndex ].times[ index ] = {
-              disabled: disabled,
-              formated: time,
-              value: showtime.format( 'YYYY-MM-DDTHH:mm' )
+          if( !movie.infos.nextShowTime && !disabled ){
+            movie.infos.nextShowTime = {
+              formated: now.to( showtime ),
+              value: showtime.diff( now )
             };
-          } );
+          }
+
+          movie.showtimes[ showIndex ].times[ index ] = {
+            disabled: disabled,
+            formated: time,
+            value: showtime.format( 'YYYY-MM-DDTHH:mm' )
+          };
         } );
       } );
     } );
 
-    data.movies[0] = _sort( data.movies[0], movie => {
+    data.movies = _sort( data.movies, movie => {
       return movie.infos.nextShowTime ? movie.infos.nextShowTime.value : Infinity;
     } );
 
@@ -136,7 +130,6 @@ class Theater extends Screen {
   }
 
   ready (){
-    this.getDays();
     this.setTitle( this.datas.name );
     this.render();
   }
@@ -145,7 +138,8 @@ class Theater extends Screen {
     this.el.innerHTML = view( this.datas );
     this.els = {
       content: this.el.querySelector( '.screen-content' ),
-      favorites: this.el.querySelector( '.screen-header .theater-favorite' )
+      favorites: this.el.querySelector( '.screen-header .theater-favorite' ),
+      header: this.el.querySelector( '.screen-header' )
     };
 
     if( this.datas.movies ){

@@ -12,53 +12,64 @@ header.screen-header
 
   nav.screen-nav.nav-days
     ul.nav-list( role="tablist" )
-      each day, index in [ 'Today', 'Tomorrow', nextDay ]
-        li.nav-list-item( role="tab" aria-controls="theater-#{index}" )!= nextDay ? day : ''
+      each type, index in [ 'Movies', 'Info' ]
+        li.nav-list-item( role="tab" aria-controls="theater-#{index}" )!= type
 
 div.screen-content
   if movies
-    each day, index in movies
-      div.theater-movies.screen-panel( role="tabpanel" id="theater-#{index}" aria-hidden=!index ? 'false' : 'true' )
-        ul.theater-movies-list
-          each movie in day
-            li.theater-movies-item
-              include ../../_source/svg/pattern.svg
+    div.theater-movies.screen-panel( role="tabpanel" id="theater-0" aria-hidden="false" )
+      ul.theater-movies-list
+        each movie in movies
+          li.theater-movies-item
+            include ../../_source/svg/pattern.svg
 
-              article.movie
-                figure.movie-artwork
-                  span.movie-artwork-wrapper
-                    img( src="/media/posters/#{movie.id}" )
-                div.movie-infos
-                  h1.movie-title
-                    a( href="/movies/#{movie.id}" )!= movie.name
+            article.movie
+              figure.movie-artwork
+                span.movie-artwork-wrapper
+                  img( src="/media/posters/#{movie.id}" )
+              div.movie-infos
+                h1.movie-title
+                  a( href="/movies/#{movie.id}" )!= movie.name
 
-                  if movie.infos
-                    ul.movie-infos-list
-                      each info, key in movie.infos
-                        if key === 'nextShowTime'
-                          li.movie-infos-item( class="movie-#{key}" ) (next screening #{info.formated})
-                        else
-                          li.movie-infos-item( class="movie-#{key}" )!= info
+                if movie.infos
+                  ul.movie-infos-list
+                    each info, key in movie.infos
+                      if key === 'nextShowTime'
+                        li.movie-infos-item( class="movie-#{key}" ) (next screening #{info.formated})
+                      else
+                        li.movie-infos-item( class="movie-#{key}" )!= info
 
-                  if movie.showtimes[0].info !== 'all'
-                    ul
-                      each showType in movie.showtimes
-                        li.movie-times
-                          span.movie-times-info!= showType.info
-                          ul.movie-times-list
-                            each time in showType.times
-                              li.movie-times-item
-                                if time.disabled
-                                  s
-                                    time( datetime="#{time.value}" )!= time.formated
-                                else
+                if movie.showtimes[0].info !== 'all'
+                  ul
+                    each showType in movie.showtimes
+                      li.movie-times
+                        span.movie-times-info!= showType.info
+                        ul.movie-times-list
+                          each time in showType.times
+                            li.movie-times-item
+                              if time.disabled
+                                s
                                   time( datetime="#{time.value}" )!= time.formated
-                  else
-                    ul.movie-times-list.movie-times
-                      each time in movie.showtimes[0].times
-                        li.movie-times-item
-                          if time.disabled
-                            s
-                              time( datetime="#{time.value}" )!= time.formated
-                          else
+                              else
+                                time( datetime="#{time.value}" )!= time.formated
+                else
+                  ul.movie-times-list.movie-times
+                    each time in movie.showtimes[0].times
+                      li.movie-times-item
+                        if time.disabled
+                          s
                             time( datetime="#{time.value}" )!= time.formated
+                        else
+                          time( datetime="#{time.value}" )!= time.formated
+
+
+    div.screen-panel.screen-map( role="tabpanel" id="theater-1" aria-hidden='false' )
+      //- span.theater-marker( aria-hidden="true" )
+      //-   include ../../_source/svg/marker.svg
+      dl.info-desc.info-theater
+        if address
+          dt Address
+          dd!= address
+        if phoneNumber
+          dt Phone
+          dd!= phoneNumber

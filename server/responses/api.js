@@ -5,7 +5,8 @@ var api = require( './showtimes' ),
     _sortBy = require( 'lodash/sortBy' ),
     slug = require( 'slug' ),
     unSlug = /\s/gi,
-    citySanitize = require( '../helpers/city' ).sanitize;
+    citySanitize = require( '../helpers/city' ).sanitize,
+    apiStore = {};
 
 function parseAround( data ){
   var movies = [];
@@ -26,16 +27,62 @@ function send500( e ){
   this.status( 500 ).send( { error:e } );
 }
 
+function sendData( data ){
+  this.setHeader( 'Cache-Control', `public, max-age=${10 * 60 * 60 * 24 * 363}` );
+  this.setHeader( 'Last-Modified', new Date().toUTCString() );
+  this.setHeader( 'Expires', new Date( Date.now()+ (1000 * 60 * 60 * 24 * 363) ).toUTCString() );
+  this.send( data );
+}
+
+function send( res, cache ){
+
+  for( var key in cache.headers ){
+    res.setHeader( key, cache.headers[ key ] );
+  }
+
+  res.send( cache.data );
+}
+
+module.exports.cache = function( req, res, next ){
+
+  var url = req.url.replace( '?', '/' );
+
+  if( apiStore[ url ] ){
+    if( req.headers[ 'if-modified-since' ] ){
+      res.status( 304 ).end();
+    }
+    else{
+      send( res, apiStore[ url ] );
+    }
+    return;
+  }
+
+  res.cacheSend = function( data ){
+    apiStore[ url ] = {
+      headers: {
+        'Cache-Control': `public, max-age=${10 * 60 * 60 * 24 * 363}`,
+        'Last-Modified': new Date().toUTCString(),
+        'Expires': new Date( Date.now()+ (1000 * 60 * 60 * 24 * 363) ).toUTCString(),
+      },
+      data: data
+    };
+
+    send( res, apiStore[ url ] );
+  };
+
+  next();
+};
+
 module.exports.theaters = function( req, res ){
   if( req.params.id ){
-    api.getTheaterPlannig( req.params.city.replace( unSlug, ' ' ), req.params.id )
-      .then( data => res.send( data ) )
+    api.getTheater( req.params.city.replace( unSlug, ' ' ), req.params.id )
+      .then( data => res.cacheSend( data ) )
       .catch( send500.bind( res ) );
   }
   else{
     //api.getTheaters( result );
     api.getTheaters( req.params.city.replace( unSlug, ' ' ) )
-    .then( data => res.send( data ) )
+    .then( data => res.cacheSend( data ) )
     .catch( send500.bind( res ) );
   }
 };
@@ -45,12 +92,12 @@ module.exports.movies = function( req, res ){
 
   if( req.params.id ){
     api.getMovie( req.params.city.replace( unSlug, ' ' ), req.params.id )
-      .then( data => res.send( data ) )
+      .then( data => res.cacheSend( data ) )
       .catch( send500.bind( res ) );
   }
   else{
     api.getMovies( req.params.city.replace( unSlug, ' ' ) )
-      .then( data => res.send( data ) )
+      .then( data => res.cacheSend( data ) )
       .catch( send500.bind( res ) );
   }
 };
