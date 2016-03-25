@@ -48,11 +48,8 @@ function parseGeo( result ){
   return geo;
 }
 
-function sendData( data ){
-  this.setHeader( 'Cache-Control', `public, max-age=${10 * 60 * 60 * 24 * 363}` );
-  this.setHeader( 'Last-Modified', new Date().toUTCString() );
-  this.setHeader( 'Expires', new Date( Date.now()+ (1000 * 60 * 60 * 24 * 363) ).toUTCString() );
-  this.send( data );
+function send500( e ){
+  this.status( 500 ).send( { error:e } );
 }
 
 function send( res, cache ){
