@@ -1,5 +1,5 @@
 import Route from 'route-parser';
-
+import loader from '../module/loader';
 // data
 import '../data/favorites';
 
@@ -94,6 +94,7 @@ class Routes extends Router  {
 
   routeMatched ( routeName, params ){
     body.handleSiteHeader( 'home' !== routeName );
+    loader.hide();
   }
 
   theaters ( params ){

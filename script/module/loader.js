@@ -20,7 +20,9 @@ class Loader{
   }
 
   remove (){
-    document.body.removeChild( this.el );
+    if( this.el.parentNode ){
+      document.body.removeChild( this.el );
+    }
   }
 
   show (){
