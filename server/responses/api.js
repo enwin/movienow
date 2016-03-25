@@ -23,8 +23,29 @@ function parseAround( data ){
 
 }
 
-function send500( e ){
-  this.status( 500 ).send( { error:e } );
+function parseGeo( result ){
+
+  var match = [ 'locality', 'administrative_area_level_1', 'country' ],
+      type = [ 'city', 'area', 'country' ],
+      geo = {},
+      index = 0;
+
+  result.forEach( component => {
+
+    if( match.indexOf( component.types[ 0 ] ) < 0 ){
+      return;
+    }
+
+    geo[ type[ index ] ] = {
+      short: component.short_name,
+      long: component.long_name,
+      slug: slug( component.long_name.toLowerCase() )
+    };
+
+    index++;
+  } );
+
+  return geo;
 }
 
 function sendData( data ){
@@ -109,7 +130,7 @@ module.exports.around = ( req, res ) => {
       geocode;
 
   if( location ){
-    citySanitize( location );
+    location = citySanitize( location );
   }
 
   theaters = api.getTheaterAround( coords ? coords.join() : location )
@@ -118,60 +139,26 @@ module.exports.around = ( req, res ) => {
   if( coords ){
     geocode = new Promise( ( resolve, reject ) => {
       geocoder.reverseGeocode( coords[ 0 ], coords[ 1 ], ( err, data ) => {
-        var geo = {},
-            result = data.results[ 0 ].address_components;
+        var result = data.results[ 0 ].address_components;
         if( err ){
           reject( err );
           return;
         }
 
-        [ 'number', 'route', 'city', 'level2', 'area', 'country' ].forEach( ( type, index ) => {
-
-          if( index < 2 || index === 3 ){
-            return;
-          }
-
-          geo[ type ] = {
-            short: result[ index ].short_name,
-            long: result[ index ].long_name,
-            slug: slug( result[ index ].long_name.toLowerCase() )
-          };
-        } );
-
-        resolve( geo );
+        resolve( parseGeo( result ) );
       } );
     } );
   }
   else{
     geocode = new Promise( ( resolve, reject ) => {
       geocoder.geocode( location, function ( err, data ) {
-        var geo = {},
-            result = data.results[ 0 ].address_components;
+        var result = data.results[ 0 ].address_components;
         if( err ){
           reject( err );
           return;
         }
 
-
-        var match = [ 'locatlity', 'administrative_area_level_1', 'country' ],
-            type = [ 'city', 'area', 'country' ],
-            index = 0;
-        result.forEach( component => {
-
-          if( match.indexOf( component.types[ 0 ] ) < 0 ){
-            return;
-          }
-
-          geo[ type[ index ] ] = {
-            short: result[ index ].short_name,
-            long: result[ index ].long_name,
-            slug: slug( result[ index ].long_name.toLowerCase() )
-          };
-
-          index++;
-        } );
-
-        resolve( geo );
+        resolve( parseGeo( result ) );
       });
     } );
   }
