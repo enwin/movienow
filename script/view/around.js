@@ -76,7 +76,6 @@ class Around extends Screen {
     return new Promise( ( resolve, reject ) => {
       navigator.geolocation.getCurrentPosition( resolve, reject, {
         // test
-        enableHighAccuracy: true,
         timeout: 10000,
         // 5 minutes
         maximumAge: ( 60000 * 5 )
