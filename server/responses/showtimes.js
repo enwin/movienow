@@ -71,7 +71,6 @@ class api {
   }
 
   getMovies ( where ) {
-    var it = this;
     return new Promise( (resolve, reject) => {
 
       var showtimes = new Showtimes( where, {
@@ -122,7 +121,6 @@ class api {
   }
 
   getTheaters ( where ) {
-    var it = this;
 
     return new Promise( (resolve, reject) => {
 
