@@ -1,6 +1,29 @@
 .screen-theater
+   .screen-header
+      height: rem( 102 )
+
+   &.map
+      .screen-content
+         transform: 'translateY( calc( 100vh - %s ) )' % rem( 54 + 48 )
+
+      .nav-list
+         position: absolute
+         width: 100%
+         left: 0
+         top: rem( 54 )
+         height: rem( 48 )
+         transform: 'translateY( calc( 100vh - %s ) )' % rem( 54 + 48 )
+
    .screen-content
       padding-top: rem( 102 )
+      transition: transform 0.5s $ease-out-quad
+      will-change: transform;
+      position: relative
+
+   .nav-list
+      transition: transform 0.5s $ease-out-quad
+      will-change: transform;
+
 
 
 .theater-movies-list
@@ -121,3 +144,22 @@
          background-color: $text-primary
          left: 0
          bottom: em( 6/14 )
+
+.screen-theater-map
+   background: no-repeat 50% 50%
+   background-size: cover
+   display: block
+   height: 100%
+   position: absolute
+   width: 100%
+   z-index: 0
+
+   svg
+      position: absolute
+      left: 50%
+      top: 50%
+      margin-top: rem( -50 )
+      transform: translateX( -50% )
+
+   .marker
+      fill: $color-primary

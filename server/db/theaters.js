@@ -95,38 +95,38 @@ var save = ( theater ) => {
 
 var theaterMap = ( theater ) => {
 
-  return new Promise( ( resolve, reject ) => {
+  var geocode = new Promise( ( resolve, reject ) => {
     geocoder.geocode( theater.address, ( err, data ) => {
-
       if( err || !data.results.length ){
-        //reject( err || data );
-        resolve( {
-          coord: {}
-        } );
+        resolve( {} );
         return;
       }
-      resolve( {
-        coord: data.results[0].geometry.location
-      } );
+      resolve( data.results[0].geometry.location );
     } );
   } );
 
-  // return geocode.then( coord => {
-  //   // return a base64 of the image
-  //   return request( {
-  //     uri: `https://api.mapbox.com/styles/v1/enwin/cilc1wlfh0023bekqea6ijgm1/static/${coord.lng},${coord.lat},14.5,0,0/720x1280@2x?access_token=${config.mapToken}&attribution=false&logo=false`,
-  //     headers: {
-  //       'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
-  //     },
-  //     encoding: 'binary',
-  //     transform: ( body ) => {
-  //       return  {
-  //         coord: coord,
-  //         map: `data:image/png;base64,${ new Buffer( body, 'binary' ).toString( 'base64' )}`
-  //       };
-  //     }
-  //   } );
-  // } );
+  return geocode.then( coord => {
+
+    if( !coord.lng ){
+      return {
+        coord: {}
+      };
+    }
+    // return a base64 of the image
+    return request( {
+      uri: `https://api.mapbox.com/styles/v1/enwin/cilc1wlfh0023bekqea6ijgm1/static/${coord.lng},${coord.lat},14,0,0/720x1280@2x?access_token=${config.mapToken}&attribution=false&logo=false`,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
+      },
+      encoding: 'binary',
+      transform: ( body ) => {
+        return  {
+          coord: coord,
+          map: `data:image/png;base64,${ new Buffer( body, 'binary' ).toString( 'base64' )}`
+        };
+      }
+    } );
+  } );
 
 };
 

@@ -19,10 +19,12 @@ class Theater extends Screen {
     bind( this.el, 'click', '[role=tab]', e => {
       this.tabs.tabAction( e );
       document.body.scrollTop = document.documentElement.scrollTop = 0;
+      this.handleTabChange( e );
     } );
     bind( this.el, 'focus', '[role=tab]', e => {
       this.tabs.tabFocus( e );
       document.body.scrollTop = document.documentElement.scrollTop = 0;
+      this.handleTabChange( e );
     }, true );
     bind( this.el, 'keydown', '[role=tab]', this.tabs.tabKey );
     bind( this.el, 'focus', '[role=tabpanel]', this.tabs.panelFocus, true );
@@ -31,6 +33,7 @@ class Theater extends Screen {
     bind( this.el, 'click', '.button-favorite', e => this.handleFavorite( e ) );
 
     bind( this.el, 'load', 'img', this.handlePoster.bind( this ), true );
+
   }
 
   dom() {
@@ -77,6 +80,11 @@ class Theater extends Screen {
 
   handlePoster ( e ){
     e.currentTarget.classList.add( 'show' );
+  }
+
+  handleTabChange ( e ){
+    this.el.classList.toggle( 'map', e.currentTarget.getAttribute( 'aria-controls' ) === 'theater-1' );
+
   }
 
   initialize (){
@@ -143,6 +151,7 @@ class Theater extends Screen {
   }
 
   render (){
+    this.el.classList.toggle( 'hasMap', this.datas.map );
     this.el.innerHTML = view( this.datas );
     this.els = {
       content: this.el.querySelector( '.screen-content' ),

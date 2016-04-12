@@ -8,8 +8,8 @@
    top: 0
    width: 100%
    z-index: 2
-   background: $color-secondary-dark url( '/media/dyn/city/paris.jpg' ) no-repeat 50% 0
-   background-size: cover
+   // background: $color-secondary-dark url( '/media/dyn/city/paris.jpg' ) no-repeat 50% 0
+   // background-size: cover
 
 .screen-title
    empty();
@@ -67,11 +67,15 @@
    padding: 0 rem( 15 )
 
 .screen-content
-   padding: rem( 54 ) rem( 20 ) 0
+   padding-top: rem( 54 )
    //height: 100vh
-   background-color: $light
    min-height: 100%
    -webkit-overflow-scrolling: touch
+
+.screen-content-wrapper
+   background-color: $light
+   padding-left: ( 20/360*100% )
+
 
 .screen-section
    margin: rem( 20 ) 0 rem( 30 )

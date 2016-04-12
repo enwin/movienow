@@ -104,17 +104,17 @@ class api {
           return;
         }
 
-        // theaterdDB.add( result )
-        //   .then( theater => {
+        theaterdDB.add( result )
+          .then( theater => {
 
-        //     Object.assign( result, theater );
+            Object.assign( result, theater );
 
             saveMovies( result.movies );
 
             resolve( result );
 
-          // } )
-          // .catch( console.log );
+          } )
+          .catch( console.log );
 
       } );
     } );

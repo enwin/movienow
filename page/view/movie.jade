@@ -7,74 +7,75 @@ header.screen-header
         li.nav-list-item( role="tab" aria-controls="movie-#{index}" )!= type
 
 div.screen-content
-  if theaters
-    div.screen-panel( role="tabpanel" id="movie-0" aria-hidden='false' )
-      ul.theater-movies-list
-        each theater in theaters
-          li.theater-movies-item
-            include ../../_source/svg/pattern.svg
-            article.movie
-              div.movie-infos
-                h1.movie-title
-                  a( href="/theaters/#{theater.id}" )!= theater.name
+  div.screen-content-wrapper
+    if theaters
+      div.screen-panel( role="tabpanel" id="movie-0" aria-hidden='false' )
+        ul.theater-movies-list
+          each theater in theaters
+            li.theater-movies-item
+              include ../../_source/svg/pattern.svg
+              article.movie
+                div.movie-infos
+                  h1.movie-title
+                    a( href="/theaters/#{theater.id}" )!= theater.name
 
-                if theater.infos
-                  ul.movie-infos-list
-                    each info, key in theater.infos
-                      if key === 'nextShowTime'
-                        li.movie-infos-item( class="movie-#{key}" ) (next screening #{info.formated})
-                      else
-                        li.movie-infos-item( class="movie-#{key}" )!= info
-
-                if theater.showtimes[0].info !== 'all'
-                  ul
-                    each showType in theater.showtimes
-                      li.movie-times
-                        span.movie-times-info!= showType.info
-                        ul.movie-times-list
-                          each time in showType.times
-                            li.movie-times-item
-                              if time.disabled
-                                s
-                                  time( datetime="#{time.value}" )!= time.formated
-                              else
-                                time( datetime="#{time.value}" )!= time.formated
-                else
-                  ul.movie-times-list.movie-times
-                    each time in theater.showtimes[0].times
-                      li.movie-times-item
-                        if time.disabled
-                          s
-                            time( datetime="#{time.value}" )!= time.formated
+                  if theater.infos
+                    ul.movie-infos-list
+                      each info, key in theater.infos
+                        if key === 'nextShowTime'
+                          li.movie-infos-item( class="movie-#{key}" ) (next screening #{info.formated})
                         else
-                          time( datetime="#{time.value}" )!= time.formated
+                          li.movie-infos-item( class="movie-#{key}" )!= info
 
-    div.screen-panel( role="tabpanel" id="movie-1" aria-hidden='false' )
+                  if theater.showtimes[0].info !== 'all'
+                    ul
+                      each showType in theater.showtimes
+                        li.movie-times
+                          span.movie-times-info!= showType.info
+                          ul.movie-times-list
+                            each time in showType.times
+                              li.movie-times-item
+                                if time.disabled
+                                  s
+                                    time( datetime="#{time.value}" )!= time.formated
+                                else
+                                  time( datetime="#{time.value}" )!= time.formated
+                  else
+                    ul.movie-times-list.movie-times
+                      each time in theater.showtimes[0].times
+                        li.movie-times-item
+                          if time.disabled
+                            s
+                              time( datetime="#{time.value}" )!= time.formated
+                          else
+                            time( datetime="#{time.value}" )!= time.formated
 
-      figure.movie-artwork
-        span.movie-artwork-wrapper
-          img( src="/media/posters/#{id}" )
+      div.screen-panel( role="tabpanel" id="movie-1" aria-hidden='false' )
 
-      dl.info-desc.info-movie
-        if runtime
-          dt Runtime
-          dd.movie-runtime!= runtime
-        if rating
-          dt Rating
-          dd.movie-rating!= rating
-        if director
-          dt Director
-          dd.movie-director!= director
-        if cast
-          dt Cast
-          dd.movie-cast!= cast.join(', ')
-        if description
-          dt.movie-synopsis-title Synopsis
-          dd.movie-synopsis!= description
-        if trailer
-          dt Trailer
-          dd
-            figure.movie-trailer
-              div
-                iframe( width="320" height="180" src="https://www.youtube.com/embed/#{trailer.split( '?v=' )[1]}?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen )
+        figure.movie-artwork
+          span.movie-artwork-wrapper
+            img( src="/media/posters/#{id}" )
+
+        dl.info-desc.info-movie
+          if runtime
+            dt Runtime
+            dd.movie-runtime!= runtime
+          if rating
+            dt Rating
+            dd.movie-rating!= rating
+          if director
+            dt Director
+            dd.movie-director!= director
+          if cast
+            dt Cast
+            dd.movie-cast!= cast.join(', ')
+          if description
+            dt.movie-synopsis-title Synopsis
+            dd.movie-synopsis!= description
+          if trailer
+            dt Trailer
+            dd
+              figure.movie-trailer
+                div
+                  iframe( width="320" height="180" src="https://www.youtube.com/embed/#{trailer.split( '?v=' )[1]}?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen )
 

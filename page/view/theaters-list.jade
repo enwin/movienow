@@ -1,5 +1,6 @@
-if theaters
-  ul.item-list
-    each theater in theaters
-      li.theater-item
-        a.item-title( href="/theaters/#{theater.id}" )!= theater.name
+div.screen-content-wrapper
+  if theaters
+    ul.item-list
+      each theater in theaters
+        li.theater-item
+          a.item-title( href="/theaters/#{theater.id}" )!= theater.name

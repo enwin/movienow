@@ -1,8 +1,9 @@
-if favorites
-  ul.item-list
-    each theater in favorites
-      li.theater-item
-        a.item-title( href="/theaters/#{theater.id}" )!= theater.name
-        button.button.button-favorite( type="button" data-id=theater.id )
-          include ../../_source/svg/icon_favorited.svg
-          span Remove #{theater.name} from favorites
+div.screen-content-wrapper
+  if favorites
+    ul.item-list
+      each theater in favorites
+        li.theater-item
+          a.item-title( href="/theaters/#{theater.id}" )!= theater.name
+          button.button.button-favorite( type="button" data-id=theater.id )
+            include ../../_source/svg/icon_favorited.svg
+            span Remove #{theater.name} from favorites
