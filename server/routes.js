@@ -1,6 +1,7 @@
 var response = require( './responses/base' ),
     showtimes = require( './responses/api' ),
-    media = require( './responses/media' );
+    media = require( './responses/media' ),
+    config = require( './config' );
 
 module.exports = function( app ){
 
@@ -20,7 +21,11 @@ module.exports = function( app ){
   app.get( '/api/movies/:city/:id?', showtimes.movies );
   app.get( '/api/aroundme', showtimes.around );
 
-  app.get( '/media/posters/:id', media.poster );
+  app.get( '/media/poster/:id', media.poster );
 
   app.post( '/user', response.user );
+
+  // app.get( '/sw.js', ( req, res ) => {
+  //   res.sendFile( `${config.root}/script/sw.js` );
+  // } );
 };

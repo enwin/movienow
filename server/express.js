@@ -102,6 +102,7 @@ module.exports = function( app, config ){
   browserify.settings( { 'transform': [ [ 'babelify', { 'presets': [ 'es2015' ] }], 'jadeify' ] } );
 
   app.use( '/app.js', browserify( 'script/app.js' ) );
+  app.use( '/sw.js', browserify( 'script/sw.js' ) );
 
   // setup root folder
   app.use( files( config.files, {
