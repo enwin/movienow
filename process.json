@@ -1,0 +1,12 @@
+{
+  "apps" : [
+    {
+      "name": "Movienow!",
+      "script": "server.js",
+      "env": {
+        "COMMON_VARIABLE": "true"
+      }
+
+    },
+  ]
+}
