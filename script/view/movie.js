@@ -44,6 +44,10 @@ class Theater extends Screen {
       this.els.list.innerHTML = '';
       this.getData();
     }
+    else if( this.data.theaters ){
+      this.orderTheaters();
+      this.render();
+    }
   }
 
   dom() {
@@ -70,23 +74,24 @@ class Theater extends Screen {
   getData (){
     this.sync( [ '/api/movies', this.data.location.city.slug, this.data.screenParams.id ].join('/') )
       .catch( e => console.log( e ) )
+      .then( () => this.orderTheaters() )
       .then( () => this.ready() );
   }
 
-  parse ( data ){
+  orderTheaters (){
 
     var now = moment(),
         showtime,
         disabled;
 
-    data.theaters.forEach( theater => {
+    this.data.theaters.forEach( theater => {
 
       theater.infos = {};
 
       theater.showtimes.forEach( ( types, showIndex ) => {
         types.times.forEach( ( time, index ) => {
 
-          showtime = moment( time, 'HH:mm' );
+          showtime = moment( time.formated || time, 'HH:mm' );
 
           disabled = now.isAfter( showtime );
 
@@ -99,19 +104,16 @@ class Theater extends Screen {
 
           theater.showtimes[ showIndex ].times[ index ] = {
             disabled: disabled,
-            formated: time,
+            formated: time.formated || time,
             value: showtime.format( 'YYYY-MM-DDTHH:mm' )
           };
         } );
       } );
     } );
 
-    data.theaters = _sort( data.theaters, theater => {
+    this.data.theaters = _sort( this.data.theaters, theater => {
       return theater.infos.nextShowTime ? theater.infos.nextShowTime.value : Infinity;
     } );
-
-    return _extend( this.data, data );
-
   }
 
   ready (){

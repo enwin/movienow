@@ -6,7 +6,6 @@ import Screen from './screen';
 import moment from 'moment';
 import view from '../../page/view/theater.jade';
 import _sort from 'lodash/sortBy';
-import _extend from 'lodash/extend';
 import bind from '../helper/bind';
 import Tablist from '../helper/accedeweb-tablist';
 
@@ -62,6 +61,20 @@ class Theater extends Screen {
       this.els.list.innerHTML = '';
       this.getData();
     }
+    else if( this.data.movies ){
+      this.orderMovies();
+      this.render();
+    }
+  }
+
+  getData (){
+
+    this.data.favorited = favList.is( this.data.screenParams.id );
+
+    this.sync( [ '/api/theaters', this.data.location.city.slug, this.data.screenParams.id ].join('/') )
+      .then( () => this.orderMovies() )
+      .then( () => this.ready() )
+      .catch( e => console.error( e.message, e.stack) );
   }
 
   handleFavorite (){
@@ -87,29 +100,19 @@ class Theater extends Screen {
     this.render();
   }
 
-  getData (){
-
-    this.data.favorited = favList.is( this.data.screenParams.id );
-
-    this.sync( [ '/api/theaters', this.data.location.city.slug, this.data.screenParams.id ].join('/') )
-      .then( () => this.ready() )
-      .catch( e => console.error( e.message, e.stack) );
-  }
-
-  parse ( data ){
-
+  orderMovies (){
     var now = moment(),
         showtime,
         disabled;
 
-    data.movies.forEach( movie => {
+    this.data.movies.forEach( movie => {
 
       movie.infos = {};
 
       movie.showtimes.forEach( ( types, showIndex ) => {
         types.times.forEach( ( time, index ) => {
 
-          showtime = moment( time, 'HH:mm' );
+          showtime = moment( time.formated || time, 'HH:mm' );
 
           disabled = now.isAfter( showtime );
 
@@ -122,19 +125,16 @@ class Theater extends Screen {
 
           movie.showtimes[ showIndex ].times[ index ] = {
             disabled: disabled,
-            formated: time,
+            formated: time.formated || time,
             value: showtime.format( 'YYYY-MM-DDTHH:mm' )
           };
         } );
       } );
     } );
 
-    data.movies = _sort( data.movies, movie => {
+    this.data.movies = _sort( this.data.movies, movie => {
       return movie.infos.nextShowTime ? movie.infos.nextShowTime.value : Infinity;
     } );
-
-    return _extend( this.data, data );
-
   }
 
   ready (){
