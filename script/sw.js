@@ -57,7 +57,8 @@ const cacheName = `site-${pkg.version}-1`,
         '/',
         '/style.css',
         '/app.js',
-        '/media/font/ticketing.woff'
+        '/media/font/ticketing.woff',
+        '/media/dyn/city/paris.jpg'
       ];
 
 self.addEventListener('install', e => {
