@@ -52,7 +52,7 @@ const routes = {
 
 // we'll version our cache (and learn how to delete caches in
 // some other post)
-const cacheName = `site-${pkg.version}-1`,
+const cacheName = `site-${pkg.version}`,
       siteFiles = [
         '/',
         '/style.css',
