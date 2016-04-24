@@ -1,0 +1,17 @@
+div.message-block( aria-live="assertive" )
+
+  if icon
+    div.message-icon
+      case icon
+        when 'geolocation'
+          include ../../_source/svg/icon_geolocation.svg
+        when 'favorited'
+          include ../../_source/svg/icon_favorited.svg
+
+      if 'error' === type
+        include ../../_source/svg/icon_bar.svg
+
+  if title
+    h1.message-title!= title
+  if text
+    p.message-text!= text
