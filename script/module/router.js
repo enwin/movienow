@@ -93,7 +93,7 @@ class Routes extends Router  {
   }
 
   routeMatched ( routeName, params ){
-    body.handleSiteHeader( 'home' !== routeName );
+    body.handleSiteHeader( routeName, params );
     loader.hide();
   }
 

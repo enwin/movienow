@@ -3,9 +3,13 @@ header( role="banner" ).site-header
   h1.site-logo
     include ../../_source/svg/logo.svg
 
-  button.site-menu-button.layer-control( type="button" aria-controls="menu" aria-expanded="false" )
+  button.site-header-button.layer-control( type="button" aria-controls="menu" aria-expanded="false" )
     include ../../_source/svg/icon_menu.svg
     span Menu
+
+  button.site-header-button.button-back( type="button" )
+    include ../../_source/svg/icon_back.svg
+    span Back
 
   nav#menu.layer.site-menu( role="navigation" aria-hidden="true" )
     h1.hidden Menu
