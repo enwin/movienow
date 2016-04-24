@@ -1,7 +1,6 @@
 /* global self: true, caches: true */
 
 import pkg from '../package.json';
-import manifest from '../www/media/favicon/manifest.json';
 
 function fetchAndCache( req, options ) {
 
@@ -58,10 +57,6 @@ const cacheName = `site-${pkg.version}-1`,
         '/app.js',
         '/media/font/ticketing.woff'
       ];
-
-if( manifest.start_url ){
-  siteFiles.push( manifest.start_url );
-}
 
 self.addEventListener('install', e => {
   console.log( 'install', Date() );
