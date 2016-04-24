@@ -9,3 +9,4 @@ www/**/*.css
 server/ssl/*
 /db/
 privateConfig.json
+ecosystem.json
