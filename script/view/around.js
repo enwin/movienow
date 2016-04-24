@@ -7,6 +7,7 @@ import layer from './layer';
 import Screen from './screen';
 import view from '../../page/view/around.jade';
 import domList from '../../page/view/around-list.jade';
+import domMessage from '../../page/view/message.jade';
 import bind from '../helper/bind';
 import loader from '../module/loader';
 import Tablist from '../helper/accedeweb-tablist';
@@ -39,6 +40,12 @@ class Around extends Screen {
       this.setTabs();
     }
     else if( !this.data.movies ){
+
+      // geolocation is not allowed for the website
+      if( this.data.geoError && this.data.geoError.code === 1 ){
+        return;
+      }
+
       this.getLocation()
         .then( this.fetchTheaters.bind( this ) )
         .catch( this.geoError.bind( this ) );
@@ -66,6 +73,17 @@ class Around extends Screen {
 
   geoError ( e ){
     loader.hide();
+    this.data.geoError = {
+      code: e.code,
+      message: e.message
+    };
+
+    this.els.list.innerHTML = domMessage( {
+      title: 'Aw Snap!',
+      text: e.code === 1 ? 'Movienow! is not allowed to access<br>your location.' : e.message,
+      icon: 'geolocation',
+      type: 'error'
+    } );
   }
 
   getLocation (){
@@ -84,6 +102,11 @@ class Around extends Screen {
   }
 
   handleLocation (){
+
+    // geolocation is not allowed for the website
+    if( this.data.geoError && this.data.geoError.code === 1 ){
+      return;
+    }
 
     this.els.list.innerHTML = '';
 

@@ -1,5 +1,4 @@
 import _sortBy from 'lodash/sortBy';
-import _remove from 'lodash/sortBy';
 
 class Favorites {
   constructor (){

@@ -1,4 +1,4 @@
-if favorites
+if favorites.length
   ul.item-list
     each theater in favorites
       li.theater-item
@@ -6,3 +6,6 @@ if favorites
         button.button.button-favorite( type="button" data-id=theater.id )
           include ../../_source/svg/icon_favorited.svg
           span Remove #{theater.name} from favorites
+else
+  -var title = "My Oh My!", text = "You don't have any favorite theater yet", icon = 'favorited';
+  include ./message.jade
