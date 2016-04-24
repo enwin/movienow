@@ -24,9 +24,10 @@ div.screen-content
             include ../../_source/svg/pattern.svg
 
             article.movie
-              figure.movie-artwork
-                span.movie-artwork-wrapper
-                  img( src="/media/poster/#{movie.id}" )
+              a.movie-artwork( href="/movies/#{movie.id}" )
+                figure
+                  span.movie-artwork-wrapper
+                    img( src="/media/poster/#{movie.id}" )
               div.movie-infos
                 h1.movie-title
                   a( href="/movies/#{movie.id}" )!= movie.name
