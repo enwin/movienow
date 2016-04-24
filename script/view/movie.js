@@ -4,7 +4,6 @@ import Screen from './screen';
 import moment from 'moment';
 import view from '../../page/view/movie.jade';
 import _sort from 'lodash/sortBy';
-import _extend from 'lodash/extend';
 import bind from '../helper/bind';
 
 import Tablist from '../helper/accedeweb-tablist';
