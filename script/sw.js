@@ -10,15 +10,17 @@ function fetchAndCache( req, options ) {
       //return res;
       return caches.open( options.cache ).then( cache => {
         return cache.keys().then( keys => {
-          let keysLength = keys.length;
-          // limit the cache to the number setted in the limit option
-          if( options.limit <= keysLength ){
-            let oldKeys = keys.splice( 0, keysLength - options.limit );
-            oldKeys.forEach( key => {
-              cache.delete( key )
-                .then( () => console.info( `removed ${key.url} from ${options.cache} cache` ) )
-                .catch( err => console.error( err ) );
-            } );
+          if( options.limit ){
+            let keysLength = keys.length;
+            // limit the cache to the number setted in the limit option
+            if( options.limit <= keysLength ){
+              let oldKeys = keys.splice( 0, keysLength - options.limit );
+              oldKeys.forEach( key => {
+                cache.delete( key )
+                  .then( () => console.info( `removed ${key.url} from ${options.cache} cache` ) )
+                  .catch( err => console.error( err ) );
+              } );
+            }
           }
 
           return cache.put( req, res.clone() )
