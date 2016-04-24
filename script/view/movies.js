@@ -20,11 +20,11 @@ class Movies extends Screen {
   displayed ( params ){
     var refresh;
 
-    if( params.filter !== this.datas.screenParams.filter ){
+    if( params.filter !== this.data.screenParams.filter ){
       // update the current screenParam filter to either the value of filter or empty if undefined
-      this.datas.screenParams.filter = params.filter ? params.filter : '';
+      this.data.screenParams.filter = params.filter ? params.filter : '';
       // update the input
-      this.els.filter.value = this.datas.screenParams.filter;
+      this.els.filter.value = this.data.screenParams.filter;
       // filter
       this.handleFilter();
     }
@@ -34,8 +34,8 @@ class Movies extends Screen {
       this.els.filter.focus();
     }
 
-    if( this.datas.location !== user.location ){
-      this.datas.location = user.location;
+    if( this.data.location !== user.location ){
+      this.data.location = user.location;
       refresh = true;
     }
     else if( this.newDay() ){
@@ -58,17 +58,17 @@ class Movies extends Screen {
   handleFilter (){
     var filterValue;
 
-    if( !this.datas.allMovies ){
+    if( !this.data.allMovies ){
       return;
     }
 
     filterValue = this.els.filter.value.trim().toLowerCase();
 
     if( filterValue.length ){
-      this.datas.movies = this.datas.allMovies.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 );
+      this.data.movies = this.data.allMovies.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 );
     }
     else{
-      this.datas.movies = this.datas.allMovies;
+      this.data.movies = this.data.allMovies;
     }
 
     this.renderList();
@@ -86,7 +86,7 @@ class Movies extends Screen {
   }
 
   initialize (){
-    this.datas.location = user.location;
+    this.data.location = user.location;
 
     this.bind();
     this.getData();
@@ -95,7 +95,7 @@ class Movies extends Screen {
   }
 
   getData (){
-    this.sync( [ '/api/movies', this.datas.location.city.slug ].join('/') )
+    this.sync( [ '/api/movies', this.data.location.city.slug ].join('/') )
       .catch( e => console.log( e ) )
       .then( () => this.ready() );
   }
@@ -103,7 +103,7 @@ class Movies extends Screen {
   parse (datas){
     datas = _sortBy( datas, 'name' );
 
-    return _extend( this.datas, {
+    return _extend( this.data, {
       allMovies: datas,
       movies: datas
     } );
@@ -115,7 +115,7 @@ class Movies extends Screen {
   }
 
   render (){
-    this.el.innerHTML = view( this.datas );
+    this.el.innerHTML = view( this.data );
     this.els = {
       list: this.el.querySelector( '.screen-content' ),
       filter: this.el.querySelector( '.screen-form input' )
@@ -123,7 +123,7 @@ class Movies extends Screen {
   }
 
   renderList (){
-    this.els.list.innerHTML = domList( this.datas );
+    this.els.list.innerHTML = domList( this.data );
   }
 }
 

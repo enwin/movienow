@@ -42,14 +42,14 @@ class Home extends Screen {
 
   hidden (){
     // only switch posters when the posters are loaded
-    if( this.datas.posters.length ){
+    if( this.data.posters.length ){
       // get the next poster by removing it from the posters array
-      var nextPoster = this.datas.posters.splice( 0, 1 )[ 0 ];
+      var nextPoster = this.data.posters.splice( 0, 1 )[ 0 ];
 
       // refill the poster array if empty
-      if( !this.datas.posters.length ){
+      if( !this.data.posters.length ){
         // shuffle it first
-        this.datas.posters = _shuffle( this.datas.loadedPosters );
+        this.data.posters = _shuffle( this.data.loadedPosters );
       }
       // display poster
       this.setPoster( nextPoster );
@@ -81,8 +81,8 @@ class Home extends Screen {
   loadPoster (){
     var posterPromises = preload( posters );
 
-    this.datas.posters = [];
-    this.datas.loadedPosters = [];
+    this.data.posters = [];
+    this.data.loadedPosters = [];
 
     posterPromises.forEach( poster => {
       poster
@@ -92,26 +92,26 @@ class Home extends Screen {
 
   posterLoaded ( poster ){
 
-    if( this.datas.currentPoster && this.datas.currentPoster !== poster ){
-      this.datas.posters.push( poster );
+    if( this.data.currentPoster && this.data.currentPoster !== poster ){
+      this.data.posters.push( poster );
     }
 
-    this.datas.loadedPosters.push( poster );
+    this.data.loadedPosters.push( poster );
 
-    if( !this.datas.currentPoster ){
+    if( !this.data.currentPoster ){
       this.setPoster(poster);
     }
   }
 
   render (){
-    this.el.innerHTML = view( this.datas );
+    this.el.innerHTML = view( this.data );
     this.els = {
       poster: this.el.querySelector( '.home-poster' )
     };
   }
 
   setPoster ( url ){
-    this.datas.currentPoster = url;
+    this.data.currentPoster = url;
 
     //this.els.poster.style.backgroundImage = `url( ${url} )`;
     this.els.poster.innerHTML = `<img src="${url}" alt="" >`;

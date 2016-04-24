@@ -35,10 +35,10 @@ class Around extends Screen {
   }
 
   displayed (){
-    if( this.datas.movies && !this.tabs ){
+    if( this.data.movies && !this.tabs ){
       this.setTabs();
     }
-    else if( !this.datas.movies ){
+    else if( !this.data.movies ){
       this.getLocation()
         .then( this.fetchTheaters.bind( this ) )
         .catch( this.geoError.bind( this ) );
@@ -138,13 +138,13 @@ class Around extends Screen {
 
   ready (){
 
-    user.location = this.datas.geo;
+    user.location = this.data.geo;
 
     this.renderLists();
   }
 
   render (){
-    this.el.innerHTML = view( this.datas );
+    this.el.innerHTML = view( this.data );
     this.els = {
       list: this.el.querySelector( '.screen-content' ),
       layer: document.getElementById( 'locationDialog' )
@@ -153,9 +153,9 @@ class Around extends Screen {
   }
 
   renderLists (){
-    this.els.list.innerHTML = domList( this.datas );
+    this.els.list.innerHTML = domList( this.data );
 
-    if( this.datas.screenParams.visible ){
+    if( this.data.screenParams.visible ){
       this.setTabs();
     }
   }

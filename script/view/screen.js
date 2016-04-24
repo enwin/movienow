@@ -11,13 +11,13 @@ class Screen {
     args = args || {};
     args.visible = false;
 
-    this.datas = {
+    this.data = {
       screenParams: args
     };
 
     // fix for browsersync using window.name
-    if( !this.datas.name ){
-      this.datas.name = '';
+    if( !this.data.name ){
+      this.data.name = '';
     }
 
     if( this.initialize ){
@@ -42,11 +42,11 @@ class Screen {
   }
 
   newDay (){
-    return moment().format( 'DDD' ) !== this.datas.screenParams.fetchedDay;
+    return moment().format( 'DDD' ) !== this.data.screenParams.fetchedDay;
   }
 
   parse ( data ){
-    return _extend( this.datas, data );
+    return _extend( this.data, data );
   }
 
   remove (){
@@ -54,7 +54,7 @@ class Screen {
       main.removeChild( this.el );
     }
 
-    this.datas.screenParams.visible = false;
+    this.data.screenParams.visible = false;
 
     if( this.hidden ){
       this.hidden();
@@ -85,7 +85,7 @@ class Screen {
       this.setTitle( this._screenTitle );
     }
 
-    this.datas.screenParams.visible = true;
+    this.data.screenParams.visible = true;
 
     if( this.displayed ){
       this.displayed( params );
@@ -101,7 +101,7 @@ class Screen {
 
     url += `?day=${dayOfYear}`;
 
-    this.datas.screenParams.fetchedDay = dayOfYear;
+    this.data.screenParams.fetchedDay = dayOfYear;
 
     params.credentials = 'same-origin';
 

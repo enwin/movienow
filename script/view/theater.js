@@ -42,16 +42,16 @@ class Theater extends Screen {
   }
 
   displayed (){
-    var favStatus = favList.is( this.datas.screenParams.id ),
+    var favStatus = favList.is( this.data.screenParams.id ),
         refresh;
 
-    if( favStatus !== this.datas.favorited ){
-      this.datas.favorited = favStatus;
-      this.els.favorites.classList.toggle( 'favorited', this.datas.favorited );
+    if( favStatus !== this.data.favorited ){
+      this.data.favorited = favStatus;
+      this.els.favorites.classList.toggle( 'favorited', this.data.favorited );
     }
 
-    if( this.datas.location !== user.location ){
-      this.datas.location = user.location;
+    if( this.data.location !== user.location ){
+      this.data.location = user.location;
       refresh = true;
     }
     else if( this.newDay() ){
@@ -65,14 +65,14 @@ class Theater extends Screen {
   }
 
   handleFavorite (){
-    this.datas.favorited = !this.datas.favorited;
+    this.data.favorited = !this.data.favorited;
 
-    favList[ this.datas.favorited ? 'add' : 'remove' ]( {
-      id: this.datas.screenParams.id,
-      name: this.datas.name
+    favList[ this.data.favorited ? 'add' : 'remove' ]( {
+      id: this.data.screenParams.id,
+      name: this.data.name
     } );
 
-    this.els.favorites.classList.toggle( 'favorited', this.datas.favorited );
+    this.els.favorites.classList.toggle( 'favorited', this.data.favorited );
   }
 
   handlePoster ( e ){
@@ -80,7 +80,7 @@ class Theater extends Screen {
   }
 
   initialize (){
-    this.datas.location = user.location;
+    this.data.location = user.location;
 
     this.getData();
 
@@ -89,9 +89,9 @@ class Theater extends Screen {
 
   getData (){
 
-    this.datas.favorited = favList.is( this.datas.screenParams.id );
+    this.data.favorited = favList.is( this.data.screenParams.id );
 
-    this.sync( [ '/api/theaters', this.datas.location.city.slug, this.datas.screenParams.id ].join('/') )
+    this.sync( [ '/api/theaters', this.data.location.city.slug, this.data.screenParams.id ].join('/') )
       .then( () => this.ready() )
       .catch( e => console.error( e.message, e.stack) );
   }
@@ -133,24 +133,24 @@ class Theater extends Screen {
       return movie.infos.nextShowTime ? movie.infos.nextShowTime.value : Infinity;
     } );
 
-    return _extend( this.datas, data );
+    return _extend( this.data, data );
 
   }
 
   ready (){
-    this.setTitle( this.datas.name );
+    this.setTitle( this.data.name );
     this.render();
   }
 
   render (){
-    this.el.innerHTML = view( this.datas );
+    this.el.innerHTML = view( this.data );
     this.els = {
       content: this.el.querySelector( '.screen-content' ),
       favorites: this.el.querySelector( '.screen-header .theater-favorite' ),
       header: this.el.querySelector( '.screen-header' )
     };
 
-    if( this.datas.movies ){
+    if( this.data.movies ){
       this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
       this.bind();
     }

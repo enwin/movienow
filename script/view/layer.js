@@ -19,7 +19,7 @@ class Layer{
   }
 
   close (){
-    //this.datas.renderClose = true;
+    //this.data.renderClose = true;
     if( this.layer ){
       this.toggle( this.layer );
     }

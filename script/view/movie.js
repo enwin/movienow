@@ -32,8 +32,8 @@ class Theater extends Screen {
   displayed (){
     var refresh;
 
-    if( this.datas.location !== user.location ){
-      this.datas.location = user.location;
+    if( this.data.location !== user.location ){
+      this.data.location = user.location;
       refresh = true;
     }
     else if( this.newDay() ){
@@ -58,7 +58,7 @@ class Theater extends Screen {
   }
 
   initialize (){
-    this.datas.location = user.location;
+    this.data.location = user.location;
 
     this.getData();
 
@@ -68,7 +68,7 @@ class Theater extends Screen {
   }
 
   getData (){
-    this.sync( [ '/api/movies', this.datas.location.city.slug, this.datas.screenParams.id ].join('/') )
+    this.sync( [ '/api/movies', this.data.location.city.slug, this.data.screenParams.id ].join('/') )
       .catch( e => console.log( e ) )
       .then( () => this.ready() );
   }
@@ -110,18 +110,18 @@ class Theater extends Screen {
       return theater.infos.nextShowTime ? theater.infos.nextShowTime.value : Infinity;
     } );
 
-    return _extend( this.datas, data );
+    return _extend( this.data, data );
 
   }
 
   ready (){
-    this.setTitle( this.datas.name );
+    this.setTitle( this.data.name );
     this.render();
     this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
   }
 
   render (){
-    this.el.innerHTML = view( this.datas );
+    this.el.innerHTML = view( this.data );
   }
 }
 

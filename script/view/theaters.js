@@ -27,11 +27,11 @@ class Theaters extends Screen {
   displayed ( params ){
     var refresh;
 
-    if( params.filter !== this.datas.screenParams.filter ){
+    if( params.filter !== this.data.screenParams.filter ){
       // update the current screenParam filter to either the value of filter or empty if undefined
-      this.datas.screenParams.filter = params.filter ? params.filter : '';
+      this.data.screenParams.filter = params.filter ? params.filter : '';
       // update the input
-      this.els.filter.value = this.datas.screenParams.filter;
+      this.els.filter.value = this.data.screenParams.filter;
       // filter
       this.handleFilter();
     }
@@ -41,8 +41,8 @@ class Theaters extends Screen {
       this.els.filter.focus();
     }
 
-    if( this.datas.location !== user.location ){
-      this.datas.location = user.location;
+    if( this.data.location !== user.location ){
+      this.data.location = user.location;
       refresh = true;
     }
     else if( this.newDay() ){
@@ -58,7 +58,7 @@ class Theaters extends Screen {
   handleFilter (){
     var filterValue;
 
-    if( !this.datas.allTheaters ){
+    if( !this.data.allTheaters ){
       return;
     }
 
@@ -66,10 +66,10 @@ class Theaters extends Screen {
 
     if( filterValue.length ){
       // sort theater by name only when filtering
-      this.datas.theaters = _sortBy( this.datas.allTheaters.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 ), theater => theater.name.toLowerCase() );
+      this.data.theaters = _sortBy( this.data.allTheaters.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 ), theater => theater.name.toLowerCase() );
     }
     else{
-      this.datas.theaters = this.datas.allTheaters;
+      this.data.theaters = this.data.allTheaters;
     }
 
     this.renderList();
@@ -87,7 +87,7 @@ class Theaters extends Screen {
   }
 
   initialize (){
-    this.datas.location = user.location;
+    this.data.location = user.location;
 
     this.bind();
     this.getData();
@@ -96,7 +96,7 @@ class Theaters extends Screen {
   }
 
   getData (){
-    this.sync( [ '/api/theaters', this.datas.location.city.slug ].join( '/') )
+    this.sync( [ '/api/theaters', this.data.location.city.slug ].join( '/') )
       .catch( console.log )
       .then( () => this.ready() );
   }
@@ -104,7 +104,7 @@ class Theaters extends Screen {
   parse (datas){
     datas = _sortBy( datas, 'name' );
 
-    return _extend( this.datas, {
+    return _extend( this.data, {
       allTheaters: datas,
       theaters: datas
     } );
@@ -116,7 +116,7 @@ class Theaters extends Screen {
   }
 
   render (){
-    this.el.innerHTML = view( this.datas );
+    this.el.innerHTML = view( this.data );
     this.els = {
       list: this.el.querySelector( '.screen-content' ),
       filter: this.el.querySelector( '.screen-form input' )
@@ -124,7 +124,7 @@ class Theaters extends Screen {
   }
 
   renderList (){
-    this.els.list.innerHTML = domList( this.datas );
+    this.els.list.innerHTML = domList( this.data );
   }
 }
 

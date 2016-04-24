@@ -18,11 +18,11 @@ class Favorites extends Screen {
   displayed ( params ){
     this.getData();
 
-    if(params.filter !== this.datas.screenParams.filter ){
+    if(params.filter !== this.data.screenParams.filter ){
       // update the current screenParam filter to either the value of filter or empty if undefined
-      this.datas.screenParams.filter = params.filter ? params.filter : '';
+      this.data.screenParams.filter = params.filter ? params.filter : '';
       // update the input
-      this.els.filter.value = this.datas.screenParams.filter;
+      this.els.filter.value = this.data.screenParams.filter;
       // filter
       this.handleFilter();
     }
@@ -40,24 +40,24 @@ class Favorites extends Screen {
   }
 
   getData (){
-    this.datas.allFavorites = favList.list();
-    this.datas.favorites = this.datas.allFavorites.slice();
+    this.data.allFavorites = favList.list();
+    this.data.favorites = this.data.allFavorites.slice();
   }
 
   handleFilter (){
     var filterValue;
 
-    if( !this.datas.allFavorites ){
+    if( !this.data.allFavorites ){
       return;
     }
 
      filterValue = this.els.filter.value.trim().toLowerCase();
 
     if( filterValue.length ){
-      this.datas.favorites = this.datas.allFavorites.filter( favorite => favorite.name.toLowerCase().indexOf( filterValue ) > -1 );
+      this.data.favorites = this.data.allFavorites.filter( favorite => favorite.name.toLowerCase().indexOf( filterValue ) > -1 );
     }
     else{
-      this.datas.favorites = this.datas.allFavorites;
+      this.data.favorites = this.data.allFavorites;
     }
 
     this.renderList();
@@ -94,7 +94,7 @@ class Favorites extends Screen {
   }
 
   render (){
-    this.el.innerHTML = view( this.datas );
+    this.el.innerHTML = view( this.data );
     this.els = {
       list: this.el.querySelector( '.screen-content' ),
       filter: this.el.querySelector( '.screen-form input' )
@@ -102,7 +102,7 @@ class Favorites extends Screen {
   }
 
   renderList (){
-    this.els.list.innerHTML = domList( this.datas );
+    this.els.list.innerHTML = domList( this.data );
   }
 }
 

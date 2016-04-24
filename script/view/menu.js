@@ -29,9 +29,9 @@ class Menu {
       list: this.el.querySelector( '.layer-wrapper' )
     };
 
-    this.datas = datas;
+    this.data = datas;
 
-    this.datas.location = user.location;
+    this.data.location = user.location;
 
     this.bind();
 
@@ -45,7 +45,7 @@ class Menu {
   }
 
   getFavs (){
-    this.datas.asFavorites = !!favList.list().length;
+    this.data.asFavorites = !!favList.list().length;
   }
 
   handleAnimation (){
@@ -53,7 +53,7 @@ class Menu {
   }
 
   render (){
-    this.els.list.innerHTML = dom( this.datas );
+    this.els.list.innerHTML = dom( this.data );
 
     this.els.buttons = Array.prototype.slice.call( document.querySelectorAll( '[aria-controls="menu"]' ) );
     this.els.favorites = this.el.querySelector( '.menu-favorites' );
@@ -72,7 +72,7 @@ class Menu {
 
   updateFavIcon (){
     this.getFavs();
-    this.els.favorites.classList.toggle( 'empty', !this.datas.asFavorites );
+    this.els.favorites.classList.toggle( 'empty', !this.data.asFavorites );
   }
 
   updateLocation (){
