@@ -106,6 +106,13 @@ class Screen {
     params.credentials = 'same-origin';
 
     return window.fetch( url, params ).then( r => r.json() )
+      .then( data => {
+        if( data.error ){
+          loader.hide();
+          return Promise.reject( data );
+        }
+        return data;
+      } )
       .then( data => this.parse( data ) )
       .then( () => loader.hide() );
 

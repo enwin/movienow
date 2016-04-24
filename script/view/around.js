@@ -68,7 +68,7 @@ class Around extends Screen {
       }
     } )
       .then( this.ready.bind( this ) )
-      .catch( console.log );
+      .catch( console.error );
   }
 
   geoError ( e ){

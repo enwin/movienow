@@ -96,8 +96,8 @@ class Movies extends Screen {
 
   getData (){
     this.sync( [ '/api/movies', this.data.location.city.slug ].join('/') )
-      .catch( e => console.log( e ) )
-      .then( () => this.ready() );
+      .then( () => this.ready() )
+      .catch( console.error );
   }
 
   parse (datas){
