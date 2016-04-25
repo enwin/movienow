@@ -123,7 +123,6 @@ class Theater extends Screen {
           // if there's no next showtime found and current showtime is not already passed
           // also check when there's a next showtime if the next show index contains a showtime before the next showtime
           if( ( !nextShowTime && !disabled ) || ( nextShowTime && showIndex > nextShowTimeIndex && !disabled && nextShowTime.isAfter( showtime ) ) ){
-            console.log( 'in', showtime );
             nextShowTime = showtime;
             nextShowTimeIndex = showIndex;
             movie.infos.nextShowTime = {
