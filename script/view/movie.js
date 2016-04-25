@@ -81,11 +81,15 @@ class Theater extends Screen {
 
     var now = moment(),
         showtime,
+        nextShowTime,
+        nextShowTimeIndex,
         disabled;
 
     this.data.theaters.forEach( theater => {
 
       theater.infos = {};
+      nextShowTime = null;
+      nextShowTimeIndex = null;
 
       theater.showtimes.forEach( ( types, showIndex ) => {
         types.times.forEach( ( time, index ) => {
@@ -94,7 +98,11 @@ class Theater extends Screen {
 
           disabled = now.isAfter( showtime );
 
-          if( !theater.infos.nextShowTime && !disabled ){
+          // if there's no next showtime found and current showtime is not already passed
+          // also check when there's a next showtime if the next show index contains a showtime before the next showtime
+          if( ( !nextShowTime && !disabled ) || ( nextShowTime && showIndex > nextShowTimeIndex && !disabled && nextShowTime.isAfter( showtime ) ) ){
+            nextShowTime = showtime;
+            nextShowTimeIndex = showIndex;
             theater.infos.nextShowTime = {
               formated: now.to( showtime ),
               value: showtime.diff( now )
