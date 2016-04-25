@@ -20,14 +20,15 @@ html( class="no-js intro" lang=lang )
     link( rel="stylesheet" href="/style.css" )
 
     script.
-      var loaded;
+      var loaded,
+      cleanSplash = function(){
+          document.body.removeChild( document.getElementById( 'splash' ) );
+          document.documentElement.classList.remove( 'play' );
+          document.documentElement.classList.remove( 'ready' );
+      };
+
       window.addEventListener( 'load', function(){
         loaded = true;
-        var cleanSplash = function(){
-            document.body.removeChild( document.getElementById( 'splash' ) );
-            document.documentElement.classList.remove( 'play' );
-            document.documentElement.classList.remove( 'ready' );
-        }
         var slashEnd = function( e ){
           if( e.target.id === 'logo' && document.documentElement.classList.contains( 'ready' ) ){
             document.body.removeEventListener( 'transitionend', slashEnd );
