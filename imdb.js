@@ -51,3 +51,35 @@ var imdb = require( './server/helpers/imdb' );
 // imdb.poster( 'tt2948356' )
 //   .then( console.log )
 //  .catch( console.log );
+
+// imdb.find( 'Ratchet et Clank' )
+//   .then( data => console.log( 'Ratchet et Clank', data.id, data.title, !!data.poster ) )
+//  .catch( console.log );
+
+// imdb.find( 'Marie et les Naufragés' )
+//   .then( data => console.log( 'Marie et les Naufragés', data.id, data.title, !!data.poster ) )
+//  .catch( console.log );
+
+// imdb.find( 'Truth : le prix de la vérité' )
+//   .then( data => console.log( 'Truth : le prix de la vérité', data.id, data.title, !!data.poster ) )
+//  .catch( console.log );
+
+// imdb.find( 'Les Visiteurs : la Révolution' )
+//   .then( data => console.log( 'Les Visiteurs : la Révolution', data.id, data.title, !!data.poster ) )
+//  .catch( console.log );
+
+// imdb.find( 'Batman v Superman : l\'aube de la justice' )
+//   .then( data => console.log( 'Batman v Superman : l\'aube de la justice', data.id, data.title, !!data.poster ) )
+//  .catch( console.log );
+
+// imdb.find( 'Five' )
+//   .then( data => console.log( 'Five', data.id, data.title, !!data.poster ) )
+//  .catch( console.log );
+
+// imdb.find( 'Démolition' )
+//   .then( data => console.log( 'Démolition', data.id, data.title, !!data.poster ) )
+//  .catch( console.log );
+
+// imdb.find( 'Robinson Crusoe' )
+//   .then( data => console.log( 'Robinson Crusoe', data.id, data.title, !!data.poster ) )
+//  .catch( console.log );

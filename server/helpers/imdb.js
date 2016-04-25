@@ -1,13 +1,16 @@
 var request = require( 'request-promise' ),
     cheerio = require( 'cheerio' );
 
-var filterName = /\!|\?|\(.*\)|\(?(2D|3D)\)?/gi,
+var remove = /\!|\?|\(.*\)|(,\s\(?(2D|3D)\)?)|\(?(2D|3D)\)?/gi,
     the = /(.*), (the)/,
+    toSpace = /(\s?(and|et|&|:)\s?)/gi,
     splitSpaces = /\s{2,}/,
+    isTv = /\((TV|Short|Video)/,
+    movieYear = /\((\d*)\)/,
     posterSize = '._V1_SX200.jpg';
 
 function sanitize( text ){
-  return text ? text.toLowerCase().replace( the, '$2 $1' ).replace( filterName, '' ).trim().split( splitSpaces )[0] : text;
+  return text ? text.toLowerCase().replace( the, '$2 $1' ).replace( remove, '' ).replace( toSpace, ' ' ).trim().split( splitSpaces )[0] : text;
 }
 
 function parsePoster( src ){
@@ -21,6 +24,7 @@ function parsePoster( src ){
     // add the size we want
     src = src.substr( 0, index ) + posterSize;
   }
+
   // return a base64 of the image
   return request( {
     uri: src,
@@ -39,40 +43,87 @@ function parseResult( $, name ){
   var $results = $( '.findList .findResult' ),
       $el,
       title,
+      titleText,
       aka,
+      foundAka,
+      foundTitle,
       data,
       link,
       poster;
-
   // if theres more than one result loop on it and try to match the title or the aka
   // if no poster is found it will fallback to the first movie on the list
   if( $results.length !== 1 ){
+    // search in titles
     $results.each( ( index, el ) => {
 
-      if( data ){
+      if( foundTitle ){
         return;
       }
 
       $el = $( el );
       title = $el.find( 'a' ).text();
+      titleText = $el.text();
+
+      if( isTv.test( titleText ) ){
+        return;
+      }
+
+
+      if( ( title && sanitize( title ) === name ) ){
+        link = $el.find( 'a' ).attr( 'href' );
+        poster = $el.find( 'img' ).attr( 'src' );
+
+        foundTitle = {
+          id: link.split( '/' )[ 2 ],
+          title: title,
+          poster: poster,
+          year: +titleText.match( movieYear )[1]
+        };
+      }
+
+
+    } );
+
+    // search in akas
+    $results.each( ( index, el ) => {
+
+      if( foundAka ){
+        return;
+      }
+
+      $el = $( el );
+      title = $el.find( 'a' ).text();
+      titleText = $el.text();
       aka = $el.find( 'i' ).text();
 
       if( aka ){
         aka = sanitize( aka.slice( 1, -1 ) );
       }
 
-      if( ( title && sanitize( title ) === name ) || ( aka && aka === name ) ){
+      if( aka && aka === name ){
         link = $el.find( 'a' ).attr( 'href' );
         poster = $el.find( 'img' ).attr( 'src' );
 
-        data = {
+        foundAka = {
           id: link.split( '/' )[ 2 ],
-          title: title
+          title: title,
+          poster: poster,
+          year: +titleText.match( movieYear )[1]
         };
       }
 
 
     } );
+
+    if( foundTitle && foundAka ){
+      data = foundTitle.year > foundAka.year ? foundTitle : foundAka;
+    }
+    else if( foundTitle ){
+      data = foundTitle;
+    }
+    else if( foundAka ){
+      data = foundAka;
+    }
 
     // fallback to the first item if its title contains the searched title
     if( !data ){
@@ -80,13 +131,11 @@ function parseResult( $, name ){
       title = $results.find( 'a' ).text();
       link = $results.find( 'a' ).attr( 'href' );
 
-      if( sanitize( title ).indexOf( name ) !== -1 ){
-        data = {
-          id: link.split( '/' )[ 2 ],
-          title: title
-        };
-        poster = $results.find( 'img' ).attr( 'src' );
-      }
+      data = {
+        id: link.split( '/' )[ 2 ],
+        poster: $results.find( 'img' ).attr( 'src' ),
+        title: title
+      };
     }
   }
   else {
@@ -96,22 +145,24 @@ function parseResult( $, name ){
 
     data = {
       id: link.split( '/' )[ 2 ],
+      poster: poster,
       title: title
     };
   }
 
   // return a promise that will fetch the poster and store it
   return new Promise( ( resolve, reject ) => {
-    if( !poster ){
+    if( !data.poster ){
       reject( new Error( `No poster found for ${name}` ) );
     }
     // don't send the poster if its the nopicture poster
-    if( poster.indexOf( 'nopicture' ) > -1 ){
+    if( data.poster.indexOf( 'nopicture' ) > -1 ){
+      delete data.poster;
       resolve( data );
       return;
     }
 
-    parsePoster( poster )
+    parsePoster( data.poster )
       .then( poster => {
         // send back the poster along with the imdb id
         if( poster ){
