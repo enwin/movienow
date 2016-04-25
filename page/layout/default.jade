@@ -20,25 +20,35 @@ html( class="no-js intro" lang=lang )
     link( rel="stylesheet" href="/style.css" )
 
     script.
+      var loaded;
       window.addEventListener( 'load', function(){
-        var slashEnd = document.body.addEventListener( 'transitionend', function( e ){
+        loaded = true;
+        var slashEnd = function( e ){
           if( e.target.id === 'logo' && document.documentElement.classList.contains( 'ready' ) ){
             document.body.removeEventListener( 'transitionend', slashEnd );
             document.body.removeChild( document.getElementById( 'splash' ) );
             document.documentElement.classList.remove( 'play' );
             document.documentElement.classList.remove( 'ready' );
-          };
-        } );
+          }
+          else if( !document.documentElement.classList.contains( 'ready' ) ){
+            document.body.removeEventListener( 'transitionend', slashEnd );
+          }
+        };
+
+        document.body.addEventListener( 'transitionend', slashEnd );
 
         window.setTimeout( function(){
-          document.documentElement.classList.remove( 'intro' );
           document.documentElement.classList.add( 'ready' );
+          document.documentElement.classList.remove( 'intro' );
         }, 200 );
       });
 
       window.setTimeout( function(){
+        if( loaded ){
+          return;
+        }
         document.documentElement.classList.add( 'play' );
-      }, 50 );
+      }, 200 );
 
   body( class=pageType )
     //- div#fb-root

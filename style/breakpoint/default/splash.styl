@@ -1,12 +1,14 @@
 main
 header
-   transition: opacity 0.2s linear 0.3s
+.screen-loader
+   transition: opacity 0.2s linear 0.2s
 
 .intro
    main
    header
    .screen-loader
       opacity: 0
+      transition-delay: 0s
 
 .play
    .splash
@@ -17,10 +19,9 @@ header
 .ready
    .splash
       .logo
-         transform:  translate( -50%, -100% )
+         transform:  translate( -50%, -150% )
          opacity: 0
-         transition: opacity 0.8s $ease-out, transform 1.5s $ease-out
-         transition-delay: 0s
+         transition: opacity 0.2s linear 0s, transform 0.4s ease-in 0s
 
 .splash
    height: 100vh
