@@ -2,6 +2,43 @@
 
 import pkg from '../package.json';
 
+function api( e ){
+  var url = new URL( e.request.url );
+
+  // always hit the network for geolocation
+  if( url.pathname === '/api/aroundme' ){
+    return fetch( e.request );
+  }
+
+  return caches.match( e.request )
+    .then( req => {
+      if( !req ){
+        return fetch( e.request );
+      }
+      return req;
+    } )
+    .then( res => {
+       return caches.open( 'api' ).then( cache => {
+
+          cache.keys().then( keys => {
+            keys.forEach( key => {
+              let apiUrl = new URL( key.url );
+
+              if( apiUrl.pathname === url.pathname && apiUrl.search !== url.search ){
+                cache.delete( key )
+                  .then( () => console.info( `removed ${key.url} from api cache` ) )
+                  .catch( err => console.error( err ) );
+              }
+            } );
+          } );
+
+          return cache.put( e.request, res.clone() )
+            .then( () => res )
+            .catch( err => console.error( err ) );
+       } );
+    } );
+};
+
 function fetchAndCache( req, options ) {
 
   return fetch( req )
@@ -57,7 +94,8 @@ function siteCache( e ){
 }
 
 const routes = {
-  '/media/poster/': posters
+  '/media/poster/': posters,
+  '/api/': api
 };
 
 // we'll version our cache (and learn how to delete caches in
