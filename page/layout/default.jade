@@ -23,12 +23,15 @@ html( class="no-js intro" lang=lang )
       var loaded;
       window.addEventListener( 'load', function(){
         loaded = true;
-        var slashEnd = function( e ){
-          if( e.target.id === 'logo' && document.documentElement.classList.contains( 'ready' ) ){
-            document.body.removeEventListener( 'transitionend', slashEnd );
+        var cleanSplash = function(){
             document.body.removeChild( document.getElementById( 'splash' ) );
             document.documentElement.classList.remove( 'play' );
             document.documentElement.classList.remove( 'ready' );
+        }
+        var slashEnd = function( e ){
+          if( e.target.id === 'logo' && document.documentElement.classList.contains( 'ready' ) ){
+            document.body.removeEventListener( 'transitionend', slashEnd );
+            cleanSplash();
           }
           else if( !document.documentElement.classList.contains( 'ready' ) ){
             document.body.removeEventListener( 'transitionend', slashEnd );
@@ -45,6 +48,7 @@ html( class="no-js intro" lang=lang )
 
       window.setTimeout( function(){
         if( loaded ){
+          cleanSplash();
           return;
         }
         document.documentElement.classList.add( 'play' );
