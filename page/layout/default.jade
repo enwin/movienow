@@ -1,7 +1,7 @@
 block vars
 
 doctype
-html( class="no-js" lang=lang )
+html( class="no-js intro" lang=lang )
   head
     meta( charset="utf-8" )
     meta( http-equiv="X-UA-Compatible" content="IE=edge" )
@@ -19,11 +19,31 @@ html( class="no-js" lang=lang )
     //- Stylesheets
     link( rel="stylesheet" href="/style.css" )
 
-    //- Modernizr
-    //-script( src="#{url.js}modernizr.js" )
+    script.
+      window.addEventListener( 'load', function(){
+        var slashEnd = document.body.addEventListener( 'transitionend', function( e ){
+          if( e.target.id === 'logo' && document.documentElement.classList.contains( 'ready' ) ){
+            document.body.removeEventListener( 'transitionend', slashEnd );
+            document.body.removeChild( document.getElementById( 'splash' ) );
+            document.documentElement.classList.remove( 'play' );
+            document.documentElement.classList.remove( 'ready' );
+          };
+        } );
+
+        window.setTimeout( function(){
+          document.documentElement.classList.remove( 'intro' );
+          document.documentElement.classList.add( 'ready' );
+        }, 200 );
+      });
+
+      window.setTimeout( function(){
+        document.documentElement.classList.add( 'play' );
+      }, 50 );
 
   body( class=pageType )
     //- div#fb-root
+
+    include ../module/splash
 
     block header
       include ../module/header

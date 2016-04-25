@@ -1,0 +1,62 @@
+main
+header
+   transition: opacity 0.2s linear 0.3s
+
+.intro
+   main
+   header
+   .screen-loader
+      opacity: 0
+
+.play
+   .splash
+      .logo
+         opacity: 1
+         transform: translate( -50%, -50% )
+
+.ready
+   .splash
+      .logo
+         transform:  translate( -50%, -100% )
+         opacity: 0
+         transition: opacity 0.8s $ease-out, transform 1.5s $ease-out
+         transition-delay: 0s
+
+.splash
+   height: 100vh
+   position: fixed
+   width: 100%
+   z-index: 1
+
+   .logo
+      display: block
+      fill: $light
+      left: 50%
+      opacity: 0
+      position: absolute
+      top: 50%
+      transform: translate( -50%, -20% )
+      transform-origin: 0 0
+      transition: opacity 0.8s $ease-out-quart, transform 1s $ease-out-quart
+      transition-delay: 0.2s
+      width: rem( 260 )
+
+   svg
+      width: 100%
+
+   .big-wheel
+      animation: spin 0.5s linear infinite
+      height: rem( 43 )
+      left: rem( 79 )
+      position: absolute
+      top: rem( 57 )
+      width: rem( 44 )
+
+   .small-wheel
+      animation: spin 0.4s linear infinite
+      height: rem( 25 )
+      left: rem( 96 )
+      position: absolute
+      top: rem( 131 )
+      width: rem( 26 )
+
