@@ -33,9 +33,6 @@ html( class="no-js intro" lang=lang )
             document.body.removeEventListener( 'transitionend', slashEnd );
             cleanSplash();
           }
-          else if( !document.documentElement.classList.contains( 'ready' ) ){
-            document.body.removeEventListener( 'transitionend', slashEnd );
-          }
         };
 
         document.body.addEventListener( 'transitionend', slashEnd );
