@@ -48,10 +48,6 @@ var imdb = require( './server/helpers/imdb' );
 //   .then( data => console.log( 'Revenant, The', data.id, data.title, !!data.poster ) )
 //  .catch( console.log );
 
-// imdb.poster( 'tt2948356' )
-//   .then( console.log )
-//  .catch( console.log );
-
 // imdb.find( 'Ratchet et Clank' )
 //   .then( data => console.log( 'Ratchet et Clank', data.id, data.title, !!data.poster ) )
 //  .catch( console.log );
@@ -82,4 +78,12 @@ var imdb = require( './server/helpers/imdb' );
 
 // imdb.find( 'Robinson Crusoe' )
 //   .then( data => console.log( 'Robinson Crusoe', data.id, data.title, !!data.poster ) )
+//  .catch( console.log );
+
+// imdb.find( 'Fritz Bauer, un héros allemand' )
+//   .then( data => console.log( 'Fritz Bauer, un héros allemand', data.id, data.title, !!data.poster ) )
+//  .catch( console.log );
+
+// imdb.find( 'D\'une pierre deux coups' )
+//   .then( data => console.log( 'D\'une pierre deux coups', data.id, data.title, !!data.poster ) )
 //  .catch( console.log );

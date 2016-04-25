@@ -3,7 +3,7 @@ var request = require( 'request-promise' ),
 
 var remove = /\!|\?|\(.*\)|(,\s\(?(2D|3D)\)?)|\(?(2D|3D)\)?/gi,
     the = /(.*), (the)/,
-    toSpace = /(\s?(and|et|&|:)\s?)/gi,
+    toSpace = /((\s(and|et|&)|\s?:)\s)/gi,
     splitSpaces = /\s{2,}/,
     isTv = /\((TV|Short|Video)/,
     movieYear = /\((\d*)\)/,
@@ -49,7 +49,7 @@ function parseResult( $, name ){
       foundTitle,
       data,
       link,
-      poster;
+      moviePoster;
   // if theres more than one result loop on it and try to match the title or the aka
   // if no poster is found it will fallback to the first movie on the list
   if( $results.length !== 1 ){
@@ -71,12 +71,12 @@ function parseResult( $, name ){
 
       if( ( title && sanitize( title ) === name ) ){
         link = $el.find( 'a' ).attr( 'href' );
-        poster = $el.find( 'img' ).attr( 'src' );
+        moviePoster = $el.find( 'img' ).attr( 'src' );
 
         foundTitle = {
           id: link.split( '/' )[ 2 ],
           title: title,
-          poster: poster,
+          poster: moviePoster,
           year: +titleText.match( movieYear )[1]
         };
       }
@@ -102,12 +102,12 @@ function parseResult( $, name ){
 
       if( aka && aka === name ){
         link = $el.find( 'a' ).attr( 'href' );
-        poster = $el.find( 'img' ).attr( 'src' );
+        moviePoster = $el.find( 'img' ).attr( 'src' );
 
         foundAka = {
           id: link.split( '/' )[ 2 ],
           title: title,
-          poster: poster,
+          poster: moviePoster,
           year: +titleText.match( movieYear )[1]
         };
       }
@@ -141,11 +141,11 @@ function parseResult( $, name ){
   else {
     title = $results.find( 'a' ).text();
     link = $results.find( 'a' ).attr( 'href' );
-    poster = $results.find( 'img' ).attr( 'src' );
+    moviePoster = $results.find( 'img' ).attr( 'src' );
 
     data = {
       id: link.split( '/' )[ 2 ],
-      poster: poster,
+      poster: moviePoster,
       title: title
     };
   }
