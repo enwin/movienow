@@ -46,6 +46,16 @@ function posters( e ) {
     } );
 }
 
+function siteCache( e ){
+  return caches.match( e.request )
+    .then( req => {
+      if( !req ){
+        return fetch( e.request );
+      }
+      return req;
+    } );
+}
+
 const routes = {
   '/media/poster/': posters
 };
@@ -100,7 +110,5 @@ self.addEventListener( 'fetch', e => {
     return url.pathname.indexOf( route ) >= 0;
   } );
 
-
-  e.respondWith( matchedRoute ? routes[ matchedRoute ]( e ) : fetch( e.request ) );
-  // e.respondWith( fetch( e.request ) );
+  e.respondWith( matchedRoute ? routes[ matchedRoute ]( e ) : siteCache( e ) );
 });
