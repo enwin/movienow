@@ -7,6 +7,7 @@ import '../data/favorites';
 import Favorites from '../view/favorites';
 import Theaters from '../view/theaters';
 import Theater from '../view/theater';
+import Credits from '../view/credits';
 import Movies from '../view/movies';
 import Around from '../view/around';
 import Movie from '../view/movie';
@@ -195,6 +196,25 @@ class Routes extends Router  {
     }
   }
 
+  credits (params){
+    //menu.setCurrent( 'credits' );
+
+    if( !this.screens.credits ){
+      this.screens.credits = new Credits( params );
+    }
+    if( this.screens.current !== this.screens.credits ){
+      // remove the current screen
+      if( this.screens.current ){
+        this.screens.current.remove();
+      }
+
+      // show the next screen
+      this.screens.credits.show( params );
+      // set the next screen as current
+      this.screens.current = this.screens.credits;
+    }
+  }
+
   favorites (params){
     //menu.setCurrent( 'favorites' );
 
@@ -221,6 +241,7 @@ export default new Routes( {
     '/movies(/:id)(?filter=:filter)(?search=:search)': 'movies',
     '/favorites(?filter=:filter)': 'favorites',
     '/around': 'around',
+    '/credits': 'credits',
     '/': 'home'
   }
 } );

@@ -14,6 +14,7 @@ module.exports = function( app ){
   app.get( '/theaters(/:id)?', response.theaters );
   app.get( '/movies(/:id)?', response.movies );
   app.get( '/around', response.around );
+  app.get( '/credits', response.credits );
 
   app.use( '/api/', showtimes.cache );
 

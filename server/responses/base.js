@@ -82,6 +82,10 @@ module.exports.around = function( req, res ){
   res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
 };
 
+module.exports.credits = function( req, res ){
+  res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
+};
+
 // store user city in the session
 module.exports.user = function( req, res ){
   req.session.city = req.body.city;

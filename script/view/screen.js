@@ -26,6 +26,11 @@ class Screen {
   }
 
   _el ( params ){
+
+    if( params.el ){
+      return params.el;
+    }
+
     var el = document.createElement( params.tagName || 'div' );
 
     el.setAttribute( 'tabindex', -1 );

@@ -18,6 +18,12 @@ if location
     button.button.button-locationChange.layer-close.layer-control( type="button" aria-controls="locationDialog" aria-expanded="false" )
       span Change location (#[span.menu-location-city!=location.city.long])
 
+span.dash-wrapper( aria-hidden="true" )
+  include ../../_source/svg/pattern.svg
+footer
+  div.menu-item
+    a( href="/credits" ) Credits
+
 button.button.button-close.layer-control( type="button" aria-controls="menu" aria-expanded="false" )
   include ../../_source/svg/icon_close.svg
   span Close menu
