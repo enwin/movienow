@@ -40,24 +40,27 @@ header
       transform-origin: 0 0
       transition: opacity 0.8s $ease-out-quart, transform 1s $ease-out-quart
       transition-delay: 0.2s
-      width: rem( 260 )
+      width: rem( 188 )
 
    svg
+      height: 100%
       width: 100%
 
    .big-wheel
-      animation: spin 0.5s linear infinite
-      height: rem( 43 )
-      left: rem( 79 )
+      animation: spinTranslate 0.5s linear infinite
+      height: ( 31/90*100% )
+      left: ( 73/188*100% )
       position: absolute
-      top: rem( 57 )
-      width: rem( 44 )
+      top: ( 20/90*100% )
+      transform: translate( -50%, -50% )
+      width: ( 30/188*100% )
+      transform-origin: 0 0
 
    .small-wheel
       animation: spin 0.4s linear infinite
-      height: rem( 25 )
-      left: rem( 96 )
+      height:( 17/90*100% )
+      left: ( 70/188*100% )
       position: absolute
-      top: rem( 131 )
-      width: rem( 26 )
+      top: ( 58/90*100% )
+      width: ( 18/188*100% )
 
