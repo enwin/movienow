@@ -7,7 +7,6 @@ class Credits extends Screen {
 
   displayed (){
     this.el.style.display = 'block';
-    console.log( 'displayed', this.el );
   }
 
   dom (){
@@ -18,7 +17,6 @@ class Credits extends Screen {
 
   hidden (){
     this.el.style.display = '';
-    console.log( 'hidden', this.el );
   }
 
 
