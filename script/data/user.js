@@ -5,7 +5,7 @@ class User {
     this.data = JSON.parse( window.localStorage.getItem( 'user' ) ) || defaults;
 
     // clean previous user schema
-    if( !this.data || !this.data.location ){
+    if( !this.data || !this.data.location || ( this.data.location && !this.data.location.country ) ){
       this.data = defaults;
       this.save();
     }
