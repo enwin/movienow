@@ -123,7 +123,7 @@ self.addEventListener('install', e => {
 });
 
 self.addEventListener('activate', function activator (event) {
-  console.log( 'activate', event );
+  console.log( 'activate' );
   caches.keys().then( keys => {
     return Promise.all( keys
         .filter( key => {
