@@ -15,18 +15,6 @@ class Theater extends Screen {
 
   bind (){
 
-    bind( this.el, 'click', '[role=tab]', e => {
-      this.tabs.tabAction( e );
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
-    } );
-    bind( this.el, 'focus', '[role=tab]', e => {
-      this.tabs.tabFocus( e );
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
-    }, true );
-    bind( this.el, 'keydown', '[role=tab]', this.tabs.tabKey );
-    bind( this.el, 'focus', '[role=tabpanel]', this.tabs.panelFocus, true );
-    bind( this.el, 'keydown', '[role=tabpanel]', this.tabs.panelKey );
-
     bind( this.el, 'click', '.button-favorite', e => this.handleFavorite( e ) );
 
     bind( this.el, 'load', 'img', this.handlePoster.bind( this ), true );
@@ -118,6 +106,8 @@ class Theater extends Screen {
     this.getData();
 
     this.render();
+
+    this.bind();
   }
 
   orderMovies (){
@@ -179,9 +169,14 @@ class Theater extends Screen {
     };
 
     if( this.data.movies ){
-      this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
-      this.bind();
+      this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ), {
+        openTab: this.scrollTop
+      } );
     }
+  }
+
+  scrollTop (){
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
 }
 

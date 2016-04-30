@@ -13,18 +13,6 @@ import user from '../data/user';
 class Theater extends Screen {
 
   bind (){
-    bind( this.el, 'click', '[role=tab]', e => {
-      this.tabs.tabAction( e );
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
-    } );
-    bind( this.el, 'focus', '[role=tab]', e => {
-      this.tabs.tabFocus( e );
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
-    }, true );
-    bind( this.el, 'keydown', '[role=tab]', e => this.tabs && this.tabs.tabKey( e ) );
-    bind( this.el, 'focus', '[role=tabpanel]', e => this.tabs && this.tabs.panelFocus( e ), true );
-    bind( this.el, 'keydown', '[role=tabpanel]', e => this.tabs && this.tabs.panelKey( e ) );
-
     bind( this.el, 'load', 'img', this.handlePoster.bind( this ), true );
   }
 
@@ -126,11 +114,20 @@ class Theater extends Screen {
   ready (){
     this.setTitle( this.data.name );
     this.render();
-    this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
   }
 
   render (){
     this.el.innerHTML = view( this.data );
+
+    if( this.data.theaters ){
+      this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ), {
+        openTab: this.scrollTop
+      } );
+    }
+  }
+
+  scrollTop (){
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
 }
 
