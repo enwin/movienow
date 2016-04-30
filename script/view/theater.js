@@ -41,12 +41,16 @@ class Theater extends Screen {
   }
 
   displayed (){
-    var favStatus = favList.is( this.data.screenParams.id ),
+    var faved = favList.find( this.data.screenParams.id ),
         refresh;
 
-    if( favStatus !== this.data.favorited ){
-      this.data.favorited = favStatus;
-      this.els.favorites.classList.toggle( 'favorited', this.data.favorited );
+    if( faved !== this.data.favorite ){
+      this.data.favorite = faved;
+      this.els.favorites.classList.toggle( 'favorited', !!faved );
+
+      if( !faved ){
+        delete this.data.favorite;
+      }
     }
 
     if( this.data.location !== user.location ){
@@ -68,24 +72,40 @@ class Theater extends Screen {
   }
 
   getData (){
+    var countrySlug = this.data.location.country.slug;
 
-    this.data.favorited = favList.is( this.data.screenParams.id );
+    if( undefined === this.data.favorite ){
+      this.data.favorite = favList.find( this.data.screenParams.id );
+    }
 
-    this.sync( [ '/api/theaters', this.data.location.city.slug, this.data.screenParams.id ].join('/') )
+    if( this.data.favorite && this.data.favorite.country ){
+      countrySlug = this.data.favorite.country;
+    }
+
+    this.sync( [ '/api/theaters', countrySlug, this.data.screenParams.id ].join('/') )
       .then( () => this.orderMovies() )
       .then( () => this.ready() )
       .catch( console.error );
   }
 
   handleFavorite (){
-    this.data.favorited = !this.data.favorited;
+    var fav = !!this.data.favorite;
 
-    favList[ this.data.favorited ? 'add' : 'remove' ]( {
-      id: this.data.screenParams.id,
-      name: this.data.name
-    } );
+    if( !fav ){
+      this.data.favorite = {
+        id: this.data.screenParams.id,
+        name: this.data.name,
+        country: this.data.location.country.slug
+      };
+    }
 
-    this.els.favorites.classList.toggle( 'favorited', this.data.favorited );
+    favList[ fav ? 'remove' : 'add' ]( this.data.favorite );
+
+    if( fav ){
+      delete this.data.favorite;
+    }
+
+    this.els.favorites.classList.toggle( 'favorited', !fav );
   }
 
   handlePoster ( e ){

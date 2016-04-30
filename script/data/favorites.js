@@ -46,12 +46,12 @@ class Favorites {
   }
 
   /**
-   * find if theater is favorited
+   * return a theater based on its id
    * @param  {number} theaterId id of the theater
-   * @return {boolean}           return true if favorited
+   * @return {boolean}          return the theater object or undefined
    */
-  is ( theaterId ){
-    return !!this.favorites.find( theater => theater.id === theaterId );
+  find ( theaterId ){
+    return this.favorites.find( theater => theater.id === theaterId );
   }
 
   /**
