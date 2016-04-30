@@ -19,11 +19,6 @@ class Credits extends Screen {
     this.el.style.display = '';
   }
 
-
-  initialize (){
-    console.log( 'in', this.el );
-  }
-
 }
 
 
