@@ -1,4 +1,4 @@
-var defaults = { location: {'city': {'long':'Paris', 'slug': 'paris' } } };
+var defaults = { location: {'city': {'long':'Paris', 'slug': 'paris' }, 'country': {'long': 'France', 'slug': 'france'} } };
 
 class User {
   constructor (){
