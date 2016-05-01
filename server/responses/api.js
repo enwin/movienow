@@ -25,24 +25,21 @@ function parseAround( data ){
 
 function parseGeo( result ){
 
-  var match = [ 'locality', 'administrative_area_level_1', 'country' ],
-      type = [ 'city', 'area', 'country' ],
+  var types = [ 'locality', 'administrative_area_level_1', 'country' ],
+      name = [ 'city', 'area', 'country' ],
       geo = {},
-      index = 0;
+      match;
 
-  result.forEach( component => {
+  types.forEach( ( type, index ) => {
+    match = result.find( component => component.types.indexOf( type ) > -1 );
 
-    if( match.indexOf( component.types[ 0 ] ) < 0 ){
-      return;
+    if( match ){
+      geo[ name[ index ] ] = {
+        short: match.short_name,
+        long: match.long_name,
+        slug: slug( match.long_name.toLowerCase() )
+      };
     }
-
-    geo[ type[ index ] ] = {
-      short: component.short_name,
-      long: component.long_name,
-      slug: slug( component.long_name.toLowerCase() )
-    };
-
-    index++;
   } );
 
   return geo;
