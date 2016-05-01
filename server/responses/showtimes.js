@@ -52,9 +52,9 @@ class api {
       } );
   }
 
-  getMovie ( where, mid ) {
+  getMovie ( where, mid, lang ) {
     var showtimes = new Showtimes( where, {
-      lang: 'fr',
+      lang: lang || 'fr',
       date: 0
     } );
 
@@ -70,11 +70,11 @@ class api {
     } );
   }
 
-  getMovies ( where ) {
+  getMovies ( where, lang ) {
     return new Promise( (resolve, reject) => {
 
       var showtimes = new Showtimes( where, {
-        lang: 'fr',
+        lang: lang || 'fr',
         date: 0
       } );
 

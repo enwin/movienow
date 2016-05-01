@@ -104,14 +104,13 @@ module.exports.theaters = function( req, res ){
 
 
 module.exports.movies = function( req, res ){
-
   if( req.params.id ){
-    api.getMovie( req.params.city.replace( unSlug, ' ' ), req.params.id )
+    api.getMovie( req.params.city.replace( unSlug, ' ' ), req.params.id, req.session.country || req.session.lang )
       .then( data => res.cacheSend( data ) )
       .catch( send500.bind( res ) );
   }
   else{
-    api.getMovies( req.params.city.replace( unSlug, ' ' ) )
+    api.getMovies( req.params.city.replace( unSlug, ' ' ), req.session.country || req.session.lang )
       .then( data => res.cacheSend( data ) )
       .catch( send500.bind( res ) );
   }
@@ -158,12 +157,14 @@ module.exports.around = ( req, res ) => {
   }
 
   Promise.all( [ theaters, geocode ] )
-    .then( datas => {
+    .then( result => {
       var data = {
-        movies: datas[0].movies,
-        theaters: datas[0].theaters,
-        geo: datas[ 1 ]
+        movies: result[0].movies,
+        theaters: result[0].theaters,
+        geo: result[ 1 ]
       };
+
+      req.session.country = result[ 1 ].country.short;
 
       res.setHeader( 'Cache-Control', 'no-cache, no-store, must-revalidate' );
       res.send( data );
