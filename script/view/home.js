@@ -128,6 +128,6 @@ class Home extends Screen {
 
 
 
-export default ( ...args ) => {
+export default ( args ) => {
   return new Home( args );
 };
