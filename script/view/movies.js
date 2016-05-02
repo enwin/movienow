@@ -4,6 +4,7 @@ import bind from '../helper/bind';
 import Screen from './screen';
 import view from '../../page/view/movies.jade';
 import domList from '../../page/view/movies-list.jade';
+import domMessage from '../../page/view/message.jade';
 import router from '../module/router';
 
 import _sortBy from 'lodash/sortBy';
@@ -127,7 +128,20 @@ class Movies extends Screen {
   }
 
   renderList (){
-    this.els.list.innerHTML = domList( this.data );
+    var html;
+
+    if( this.data.movies.length ){
+      html = domList( this.data );
+    }
+    else{
+      html = domMessage( {
+        title: 'Bummer',
+        text: 'There\'s no movie matching your search',
+        icon: 'search',
+        type: 'error-reversed'
+      } );
+    }
+    this.els.list.innerHTML = html;
   }
 }
 

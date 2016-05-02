@@ -4,6 +4,7 @@ import bind from '../helper/bind';
 import Screen from './screen';
 import view from '../../page/view/theaters.jade';
 import domList from '../../page/view/theaters-list.jade';
+import domMessage from '../../page/view/message.jade';
 import router from '../module/router';
 
 import _sortBy from 'lodash/sortBy';
@@ -128,7 +129,21 @@ class Theaters extends Screen {
   }
 
   renderList (){
-    this.els.list.innerHTML = domList( this.data );
+    var html;
+
+    if( this.data.theaters.length ){
+      html = domList( this.data );
+    }
+    else{
+      html = domMessage( {
+        title: 'Woops!',
+        text: 'There\'s no theater matching your search',
+        icon: 'search',
+        type: 'error-reversed'
+      } );
+    }
+
+    this.els.list.innerHTML = html;
   }
 }
 
