@@ -7,9 +7,13 @@ div.message-block( aria-live="assertive" )
           include ../../_source/svg/icon_geolocation.svg
         when 'favorited'
           include ../../_source/svg/icon_favorited.svg
+        when 'search'
+          include ../../_source/svg/icon_search.svg
 
       if 'error' === type
         include ../../_source/svg/icon_bar.svg
+      else if 'error-reversed' === type
+        include ../../_source/svg/icon_bar-reversed.svg
 
   if title
     h1.message-title!= title
