@@ -7,6 +7,7 @@ class Layer{
 
   bind (){
     bind( document.body, 'click', '.layer a[href^="/"], .layer-close', (e) => this.close(e) );
+    bind( document.body, 'click', '.layer', (e) => this.handleLayerClick(e) );
     bind( document.body, 'transitionend', '.layer', (e) => this.handleAnimation(e) );
     bind( document.body, 'click', '.layer-control[aria-controls]', (e) => this.handleControls(e) );
   }
@@ -38,6 +39,13 @@ class Layer{
     this.toggle( layer );
 
   }
+
+  handleLayerClick ( e ){
+    if( e.target.classList.contains( 'layer' ) ){
+      this.close();
+    }
+  }
+
   /**
    * display a specified layer
    * @param  {string} layer id of the layer to display
