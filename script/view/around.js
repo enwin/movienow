@@ -18,18 +18,6 @@ class Around extends Screen {
 
   bind (){
 
-    bind( this.el, 'click', '[role=tab]', e => {
-      this.tabs.tabAction( e );
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
-    } );
-    bind( this.el, 'focus', '[role=tab]', e => {
-      this.tabs.tabFocus( e );
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
-    }, true );
-    bind( this.el, 'keydown', '[role=tab]', e => this.tabs && this.tabs.tabKey( e ) );
-    bind( this.el, 'focus', '[role=tabpanel]', e => this.tabs && this.tabs.panelFocus( e ), true );
-    bind( this.el, 'keydown', '[role=tabpanel]', e => this.tabs && this.tabs.panelKey( e ) );
-
     bind( this.el, 'click', '.button-location', this.handleLocation.bind( this ) );
     bind( document.body, 'click', '.layer .button-location', this.handleLocationLayer.bind( this ) );
     bind( document.body, 'submit', '.layer-location form', this.handleLocationLayer.bind( this ) );
@@ -184,7 +172,13 @@ class Around extends Screen {
   }
 
   setTabs (){
-    this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ) );
+    this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ), {
+      openTab: this.scrollTop
+    } );
+  }
+
+  scrollTop (){
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
 }
 
