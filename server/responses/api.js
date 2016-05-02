@@ -46,7 +46,13 @@ function parseGeo( result ){
 }
 
 function send500( e ){
-  this.status( 500 ).send( { error:e } );
+  console.error( e );
+  this.status( 500 ).send( {
+    error: {
+      code: 500,
+      message: typeof( e ) !== 'object' ? e : null
+    }
+  } );
 }
 
 function send( res, cache ){

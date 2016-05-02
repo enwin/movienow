@@ -71,9 +71,13 @@ class Theater extends Screen {
     }
 
     this.sync( [ '/api/theaters', countrySlug, this.data.screenParams.id ].join('/') )
-      .then( () => this.orderMovies() )
-      .then( () => this.ready() )
-      .catch( console.error );
+      .then( data => {
+        if( !data ){
+          return;
+        }
+        this.orderMovies();
+        this.ready();
+      } );
   }
 
   handleFavorite (){

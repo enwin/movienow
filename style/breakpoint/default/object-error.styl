@@ -1,0 +1,45 @@
+.error-dialog
+   background-color: rgba( $light, 0 )
+   display: none
+   height: 100vh
+   position: fixed
+   transform: translateY( 100% )
+   transition: transform 0s $ease-in-quad  0.4s, background 0.3s linear 0.1s
+   width: 100%
+   z-index: 15
+   text-align: center
+   top: 0
+
+   &:not( [aria-hidden=true] )
+      display: block
+      transform: translateY( 0 )
+      transition-timing-function: $ease-out-quad , linear
+      transition-delay: 0s
+      background-color: rgba( $light, 0.7 )
+
+      .layer-wrapper
+         transform: translateY( 0 )
+         transition-timing-function: $ease-out-quad
+         transition-delay: 0.1s
+
+   .layer-wrapper
+      bottom: 0
+      left: 0
+      padding: rem( 10 ) rem( 14 )
+      position: absolute
+      transform: translateY( 100% )
+      width: 100%
+
+   .errorDone
+      display: block
+      padding: rem( 8 )
+      margin: rem( 16 ) auto
+      font-size: rem( 14 )
+
+      &:after
+         content: ''
+         width: auto
+         height: 1px
+         background-color: $light
+         display: block
+         margin-top: 1px

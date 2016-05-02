@@ -60,9 +60,13 @@ class Theater extends Screen {
 
   getData (){
     this.sync( [ '/api/movies', this.data.location.city.slug, this.data.screenParams.id ].join('/') )
-      .then( () => this.orderTheaters() )
-      .then( () => this.ready() )
-      .catch( console.error );
+      .then( data => {
+        if( !data ){
+          return;
+        }
+        this.orderMovies();
+        this.ready();
+      } );
   }
 
   orderTheaters (){

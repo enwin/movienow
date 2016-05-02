@@ -1,6 +1,7 @@
 import loader from '../module/loader';
 import _extend from 'lodash/extend';
 import moment from 'moment';
+import errorDialog from './error';
 
 var main = document.getElementById( 'main' );
 
@@ -114,12 +115,18 @@ class Screen {
       .then( data => {
         if( data.error ){
           loader.hide();
-          return Promise.reject( data );
+          return Promise.reject( data.error );
         }
         return data;
       } )
       .then( data => this.parse( data ) )
-      .then( () => loader.hide() );
+      .then( data => {
+        loader.hide();
+        return data;
+      } )
+      .catch( err => {
+        errorDialog.show( err );
+      } );
 
   }
 }

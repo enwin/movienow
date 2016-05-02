@@ -55,8 +55,7 @@ class Around extends Screen {
         'x-movienow-coords': JSON.stringify( [ e.coords.latitude, e.coords.longitude ] )
       }
     } )
-      .then( this.ready.bind( this ) )
-      .catch( console.error );
+      .then( this.ready.bind( this ) );
   }
 
   geoError ( e ){
@@ -117,13 +116,14 @@ class Around extends Screen {
           'x-movienow-location': form.location.value.trim()
         }
       } )
-        .then( this.ready.bind( this ) )
-        .then( () => {
-          form.reset();
-          router.navigate( {}, '', '/' );
-          layer.show( 'menu' );
-        } )
-        .catch( console.log );
+        .then( data => {
+          if( data ){
+            this.ready( data );
+            form.reset();
+            router.navigate( {}, '', '/' );
+            layer.show( 'menu' );
+          }
+        } );
     }
     else{
       this.getLocation()
