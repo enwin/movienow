@@ -128,6 +128,19 @@ class Theaters extends Screen {
     };
   }
 
+  renderError (){
+
+    this.els.list.innerHTML = this.errorDom( {
+      title: '“I’d rather kiss a wookie”',
+      link: {
+        text: 'Try again',
+        type: 'refresh'
+      },
+      icon: 'search',
+      type: 'error-reversed'
+    } );
+  }
+
   renderList (){
     var html;
 

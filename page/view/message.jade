@@ -19,3 +19,9 @@ div.message-block( aria-live="assertive" )
     h1.message-title!= title
   if text
     p.message-text!= text
+
+  if link
+    if link.href
+      a.button.button-reverse( href=link.href class='button-#{link.type}' )!= link.text
+    else
+      button.button.button-reverse( class='button-#{link.type}' )!= link.text

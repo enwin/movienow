@@ -2,6 +2,8 @@ import loader from '../module/loader';
 import _extend from 'lodash/extend';
 import moment from 'moment';
 import errorDialog from './error';
+import bind from '../helper/bind';
+import domMessage from '../../page/view/message.jade';
 
 var main = document.getElementById( 'main' );
 
@@ -20,6 +22,11 @@ class Screen {
     if( !this.data.name ){
       this.data.name = '';
     }
+
+    this.errorDom = domMessage;
+
+
+    bind( this.el, 'click', '.button-refresh', () => this.getData() );
 
     if( this.initialize ){
       this.initialize();
@@ -68,6 +75,10 @@ class Screen {
 
   }
 
+  renderError ( err ){
+    errorDialog.show( err );
+  }
+
   setTitle ( title ){
     this._screenTitle = title;
     document.title = title.length ? [ title, 'Movie now!' ].join(' | ') : 'Movie now!';
@@ -114,7 +125,6 @@ class Screen {
     return window.fetch( url, params ).then( r => r.json() )
       .then( data => {
         if( data.error ){
-          loader.hide();
           return Promise.reject( data.error );
         }
         return data;
@@ -125,7 +135,8 @@ class Screen {
         return data;
       } )
       .catch( err => {
-        errorDialog.show( err );
+        loader.hide();
+        this.renderError( err );
       } );
 
   }

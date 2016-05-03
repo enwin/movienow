@@ -122,12 +122,28 @@ class Theater extends Screen {
 
   render (){
     this.el.innerHTML = view( this.data );
+    this.els = {
+      content: this.el.querySelector( '.screen-content' )
+    };
 
     if( this.data.theaters ){
       this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ), {
         openTab: this.scrollTop
       } );
     }
+  }
+
+  renderError (){
+
+    this.els.content.innerHTML = this.errorDom( {
+      title: '“What we have here is a failure to communicate”',
+      link: {
+        text: 'Try again',
+        type: 'refresh'
+      },
+      icon: 'search',
+      type: 'error-reversed'
+    } );
   }
 
   scrollTop (){

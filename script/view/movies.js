@@ -127,6 +127,18 @@ class Movies extends Screen {
     };
   }
 
+  renderError (){
+    this.els.list.innerHTML = this.errorDom( {
+      title: '“Houston, we have a problem”',
+      link: {
+        text: 'Try again',
+        type: 'refresh'
+      },
+      icon: 'search',
+      type: 'error-reversed'
+    } );
+  }
+
   renderList (){
     var html;
 

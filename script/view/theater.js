@@ -179,6 +179,19 @@ class Theater extends Screen {
     }
   }
 
+  renderError (){
+
+    this.els.content.innerHTML = this.errorDom( {
+      title: '“Toto, I’ve got a feeling we’re not in Kansas anymore”',
+      link: {
+        text: 'Try again',
+        type: 'refresh'
+      },
+      icon: 'search',
+      type: 'error-reversed'
+    } );
+  }
+
   scrollTop (){
     document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
