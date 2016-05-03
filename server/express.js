@@ -38,7 +38,8 @@ module.exports = function( app, config ){
           logSnippet: false,
           ui: false,
           notify: false,
-          ghostMode: false
+          ghostMode: false,
+          port: 4001
         } );
 
     app.use( require( 'connect-browser-sync' )( bs ) );
