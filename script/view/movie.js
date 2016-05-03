@@ -64,7 +64,7 @@ class Theater extends Screen {
         if( !data ){
           return;
         }
-        this.orderMovies();
+        this.orderTheaters();
         this.ready();
       } );
   }
