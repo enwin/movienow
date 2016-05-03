@@ -8,11 +8,15 @@ html( class="no-js intro" lang=lang )
 
     title= title
 
+    meta( name="description" content=description )
+
     meta( name="apple-mobile-web-app-capable" content="yes" )
     meta( name="apple-mobile-web-app-status-bar-style" content="black" )
 
     //- Mobile
     meta( name="viewport" content=meta.viewport.join() )
+
+    include ../module/social
 
     include ../module/favicon
 
