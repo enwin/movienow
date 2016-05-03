@@ -4,6 +4,7 @@ var api = require( './showtimes' ),
     _uniqBy = require( 'lodash/uniqBy' ),
     _sortBy = require( 'lodash/sortBy' ),
     slug = require( 'slug' ),
+    slack = require( '../helpers/slack' ),
     unSlug = /\s/gi,
     citySanitize = require( '../helpers/city' ).sanitize,
     apiStore = {};
@@ -45,9 +46,47 @@ function parseGeo( result ){
   return geo;
 }
 
-function send500( e ){
-  console.error( e );
-  this.status( 500 ).send( {
+function send500( req, res, e ){
+  var fields = [ {
+      title: 'url',
+      value: req.url
+    }
+  ];
+
+  if( req.body ){
+     fields.push( {
+      title: 'body',
+      value: JSON.stringify( req.body, null, 2 )
+    } );
+  }
+
+  if( 'object' === typeof( e ) ){
+    for( var key in e ){
+      fields.push( {
+        title: key,
+        value: e[ key ]
+      } );
+    }
+  }
+
+  slack.webhook({
+    username: "console.error",
+    attachments: [
+      {
+        fallback: e.message || e,
+        text: e.message || e,
+        pretext: 'API error',
+        color: 'danger',
+        fields: fields
+      }
+    ]
+  }, err => {
+    if( err ){
+      console.error(err);
+    }
+  } );
+
+  res.status( 500 ).send( {
     error: {
       code: 500,
       message: typeof( e ) !== 'object' ? e : null
@@ -98,13 +137,13 @@ module.exports.theaters = function( req, res ){
   if( req.params.id ){
     api.getTheater( req.params.city.replace( unSlug, ' ' ), req.params.id )
       .then( data => res.cacheSend( data ) )
-      .catch( send500.bind( res ) );
+      .catch( e => send500( req, res, e ) );
   }
   else{
     //api.getTheaters( result );
     api.getTheaters( req.params.city.replace( unSlug, ' ' ) )
     .then( data => res.cacheSend( data ) )
-    .catch( send500.bind( res ) );
+    .catch( e => send500( req, res, e ) );
   }
 };
 
@@ -113,12 +152,12 @@ module.exports.movies = function( req, res ){
   if( req.params.id ){
     api.getMovie( req.params.city.replace( unSlug, ' ' ), req.params.id, req.session.country || req.session.lang )
       .then( data => res.cacheSend( data ) )
-      .catch( send500.bind( res ) );
+      .catch( e => send500( req, res, e ) );
   }
   else{
     api.getMovies( req.params.city.replace( unSlug, ' ' ), req.session.country || req.session.lang )
       .then( data => res.cacheSend( data ) )
-      .catch( send500.bind( res ) );
+      .catch( e => send500( req, res, e ) );
   }
 };
 
@@ -175,5 +214,5 @@ module.exports.around = ( req, res ) => {
       res.setHeader( 'Cache-Control', 'no-cache, no-store, must-revalidate' );
       res.send( data );
     } )
-    .catch( send500.bind( res ) );
+    .catch( e => send500( req, res, e ) );
 };
