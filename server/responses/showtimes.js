@@ -90,11 +90,10 @@ class api {
     } );
   }
 
-  getTheater ( where, tid, params ) {
+  getTheater ( where, tid, lang ) {
     return new Promise( (resolve, reject) => {
-
-      var showtimes = new Showtimes( where, params || {
-        lang: 'fr',
+      var showtimes = new Showtimes( where, {
+        lang: lang || 'fr',
         date: 0
       } );
 
@@ -120,12 +119,12 @@ class api {
     } );
   }
 
-  getTheaters ( where ) {
+  getTheaters ( where, lang ) {
 
     return new Promise( (resolve, reject) => {
 
       var showtimes = new Showtimes( where, {
-        lang: 'fr',
+        lang: lang || 'fr',
         date: 0
       } );
 

@@ -135,13 +135,13 @@ module.exports.cache = function( req, res, next ){
 
 module.exports.theaters = function( req, res ){
   if( req.params.id ){
-    api.getTheater( req.params.city.replace( unSlug, ' ' ), req.params.id )
+    api.getTheater( req.params.city.replace( unSlug, ' ' ), req.params.id, req.session.country || req.session.lang )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
   else{
     //api.getTheaters( result );
-    api.getTheaters( req.params.city.replace( unSlug, ' ' ) )
+    api.getTheaters( req.params.city.replace( unSlug, ' ' ), req.session.country || req.session.lang )
     .then( data => res.cacheSend( data ) )
     .catch( e => send500( req, res, e ) );
   }
