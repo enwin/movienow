@@ -7,5 +7,8 @@ if favorites.length
           include ../../_source/svg/icon_favorited.svg
           span Remove #{theater.name} from favorites
 else
-  -var title = "My Oh My!", text = "You don't have any favorite theater yet", icon = 'favorited';
+  if !allFavorites.length
+    -var title = "My Oh My!", text = "You don't have any favorite theater yet", icon = 'favorited';
+  else
+    -var title = "Nope", text = "There's no theater matching your search", icon = 'search', type= 'error-reversed';
   include ./message.jade
