@@ -3,14 +3,6 @@ var defaults = { location: {'city': {'long':'Paris', 'slug': 'paris' }, 'country
 class User {
   constructor (){
     this.data = JSON.parse( window.localStorage.getItem( 'user' ) ) || defaults;
-
-    // clean previous user schema
-    if( !this.data || !this.data.location || ( this.data.location && !this.data.location.country ) ){
-      this.data = defaults;
-      this.save();
-    }
-
-    this.setSession();
   }
 
   get location (){
@@ -19,8 +11,13 @@ class User {
 
   set location ( city ){
     this.data.location = city;
+    this.data.ready = true;
     this.save();
     this.setSession();
+  }
+
+  get ready (){
+    return this.data.ready;
   }
 
   save (){
@@ -32,7 +29,7 @@ class User {
       'location': this.data.location
     };
 
-    window.fetch( '/user', {
+    return window.fetch( '/user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -40,7 +37,7 @@ class User {
       body: JSON.stringify( datas ),
       credentials: 'same-origin'
     } )
-      .then( () => this.save() );
+      .then( () => this.save() )
   }
 }
 

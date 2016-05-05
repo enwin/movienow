@@ -10,7 +10,7 @@ import Tablist from '../helper/accedeweb-tablist';
 
 import user from '../data/user';
 
-class Theater extends Screen {
+class Movie extends Screen {
 
   bind (){
     bind( this.el, 'load', 'img', this.handlePoster.bind( this ), true );
@@ -28,7 +28,6 @@ class Theater extends Screen {
     }
 
     if( refresh ){
-      this.els.list.innerHTML = '';
       this.getData();
     }
     else if( this.data.theaters ){
@@ -50,8 +49,6 @@ class Theater extends Screen {
 
   initialize (){
     this.data.location = user.location;
-
-    this.getData();
 
     this.render();
 
@@ -156,5 +153,5 @@ class Theater extends Screen {
 }
 
 export default ( args ) => {
-  return new Theater( args );
+  return new Movie( args );
 };

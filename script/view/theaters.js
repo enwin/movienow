@@ -51,7 +51,6 @@ class Theaters extends Screen {
     }
 
     if( refresh ){
-      this.els.list.innerHTML = '';
       this.getData();
     }
   }
@@ -91,12 +90,17 @@ class Theaters extends Screen {
     this.data.location = user.location;
 
     this.bind();
-    this.getData();
+    // this.getData();
     this.setTitle( 'Theaters' );
     this.render();
   }
 
   getData (){
+
+    if( this.els.list ){
+      this.els.list.innerHTML = '';
+    }
+
     this.sync( [ '/api/theaters', this.data.location.city.slug ].join( '/') )
       .then( data => {
         if( !data ){

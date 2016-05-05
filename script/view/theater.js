@@ -69,8 +69,8 @@ class Theater extends Screen {
       countrySlug = this.data.favorite.country;
     }
 
-    if( this.els && this.els.list ){
-      this.els.list.innerHTML = '';
+    if( this.els && this.els.content ){
+      this.els.content.innerHTML = '';
     }
 
     this.sync( [ '/api/theaters', countrySlug, this.data.screenParams.id ].join('/') )

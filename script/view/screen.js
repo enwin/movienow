@@ -4,6 +4,8 @@ import moment from 'moment';
 import errorDialog from './error';
 import bind from '../helper/bind';
 import domMessage from '../../page/view/message.jade';
+import user from '../data/user';
+import router from '../module/router';
 
 var main = document.getElementById( 'main' );
 
@@ -124,6 +126,17 @@ class Screen {
   }
 
   sync ( url, params ){
+    if( !user.ready && this.el.id !== 'around' ){
+      return router.screens.around.polite()
+        .then( () => {
+          if( user.ready ){
+            this.getData();
+          }
+          else{
+            this.renderError();
+          }
+        } );
+    }
     loader.show();
 
     params = params || {};

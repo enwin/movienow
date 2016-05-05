@@ -120,8 +120,14 @@ class Around extends Screen {
           if( data ){
             this.ready( data );
             form.reset();
-            router.navigate( {}, '', '/' );
-            layer.show( 'menu' );
+            if( !this.data.polite ){
+              router.navigate( {}, '', '/' );
+              layer.show( 'menu' );
+            }
+            else{
+              delete this.data.polite;
+              layer.close();
+            }
           }
         } );
     }
@@ -130,7 +136,12 @@ class Around extends Screen {
         .then( e => {
           this.fetchTheaters( e )
             .then( () => {
-              router.navigate( {}, '', '/around' );
+              if( !this.data.polite ){
+                router.navigate( {}, '', '/around' );
+              }
+              else{
+                delete this.data.polite;
+              }
               layer.close();
             } );
         } );
@@ -143,8 +154,20 @@ class Around extends Screen {
 
     this.render();
 
-    //this.getLocation();
+  }
 
+  polite (){
+    this.data.polite = true;
+    return new Promise( ( resolve ) => {
+      this.els.layerTitle.innerHTML = this.els.layerTitle.getAttribute( 'data-polite' );
+      this.els.layer.classList.add( 'setup' );
+      layer.show( this.els.layer.id, () => {
+        this.els.layerTitle.innerHTML = this.els.layerTitle.getAttribute( 'data-title' );
+        this.els.layer.classList.remove( 'setup' );
+        resolve();
+      } );
+
+    } );
   }
 
   ready (){
@@ -158,7 +181,8 @@ class Around extends Screen {
     this.el.innerHTML = view( this.data );
     this.els = {
       list: this.el.querySelector( '.screen-content' ),
-      layer: document.getElementById( 'locationDialog' )
+      layer: document.getElementById( 'locationDialog' ),
+      layerTitle: document.getElementById( 'dialogLocationTitle' )
     };
 
   }

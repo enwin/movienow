@@ -1,6 +1,8 @@
 section#locationDialog.layer.layer-location( role="dialog" aria-labelledby="dialogLocationTitle" aria-hidden="true" )
   div.layer-wrapper
-    h1#dialogLocationTitle.layer-title Change location
+    h1#dialogLocationTitle.layer-title( data-title="Change location" data-polite="Set your location" ) Change location
+
+    p.layer-description I'm gonna need your location before showing what you want
 
     span.dash-wrapper( aria-hidden="true" )
       include ../../_source/svg/pattern.svg

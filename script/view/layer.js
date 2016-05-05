@@ -20,7 +20,6 @@ class Layer{
   }
 
   close (){
-    //this.data.renderClose = true;
     if( this.layer ){
       this.toggle( this.layer );
     }
@@ -33,8 +32,6 @@ class Layer{
     if( !button.controls ){
       layer = button.controls = document.getElementById( button.getAttribute( 'aria-controls' ) );
     }
-
-    this.layer = layer;
 
     this.toggle( layer );
 
@@ -50,20 +47,14 @@ class Layer{
    * display a specified layer
    * @param  {string} layer id of the layer to display
    */
-  show ( layer ){
+  show ( layer, onClose ){
     // close the currentLayer
     this.close();
+    layer = document.getElementById( layer );
 
-    // try to find an element who controls the layer
-    var buttonForLayer = document.querySelector( `[aria-controls=${layer}]` );
-    // to trigger a click on it
-    if( buttonForLayer ){
-      buttonForLayer.click();
-    }
-    // otherwise open the layer directly
-    else{
-      this.toggle(  document.getElementById( layer ) );
-    }
+    layer.onClose = onClose;
+
+    this.toggle( layer );
   }
 
   toggle ( layer ){
@@ -75,10 +66,17 @@ class Layer{
     if( !open ){
       delete this.layer;
     }
+    else{
+      this.layer = layer;
+    }
 
     window.setTimeout( () => {
       window.requestAnimationFrame( () => {
         layer[ open ? 'removeAttribute' : 'setAttribute' ]( 'aria-hidden', !open );
+        if( layer.onClose && !open ){
+          layer.onClose();
+          delete layer.onClose;
+        }
       } );
     }, 16 );
 
