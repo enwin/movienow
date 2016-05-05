@@ -50,6 +50,12 @@ class Layer{
   show ( layer, onClose ){
     // close the currentLayer
     this.close();
+
+    if( layer === 'menu' ){
+      document.querySelector( `[aria-controls=${layer}]` ).click();
+      return;
+    }
+
     layer = document.getElementById( layer );
 
     layer.onClose = onClose;

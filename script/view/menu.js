@@ -31,8 +31,6 @@ class Menu {
 
     this.data = datas;
 
-    this.data.location = user.location;
-
     this.bind();
 
     this.getFavs();
@@ -48,11 +46,10 @@ class Menu {
     this.data.asFavorites = !!favList.list().length;
   }
 
-  handleAnimation (){
-    this.el.style.display = '';
-  }
-
   render (){
+
+    this.data.location = user.location;
+
     this.els.list.innerHTML = dom( this.data );
 
     this.els.buttons = Array.prototype.slice.call( document.querySelectorAll( '[aria-controls="menu"]' ) );
@@ -65,18 +62,9 @@ class Menu {
     var open = this.el.hasAttribute( 'aria-hidden' );
 
     if( open ){
-      this.updateFavIcon();
-      this.updateLocation();
+      this.getFavs();
+      this.render();
     }
-  }
-
-  updateFavIcon (){
-    this.getFavs();
-    this.els.favorites.classList.toggle( 'empty', !this.data.asFavorites );
-  }
-
-  updateLocation (){
-    this.els.location.innerHTML = user.location.city.long;
   }
 }
 

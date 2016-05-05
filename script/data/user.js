@@ -1,4 +1,4 @@
-var defaults = { location: {'city': {'long':'Paris', 'slug': 'paris' }, 'country': {'short': 'fr'} } };
+var defaults = { location: {'city': { 'slug': 'paris' }, 'country': {'short': 'fr'} } };
 
 class User {
   constructor (){
@@ -37,7 +37,7 @@ class User {
       body: JSON.stringify( datas ),
       credentials: 'same-origin'
     } )
-      .then( () => this.save() )
+      .then( () => this.save() );
   }
 }
 

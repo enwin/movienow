@@ -16,7 +16,10 @@ if location
     include ../../_source/svg/pattern.svg
   div.menu-item.menu-location( class=!asFavorites ? 'empty' : '' )
     button.button.button-locationChange.layer-close.layer-control( type="button" aria-controls="locationDialog" aria-expanded="false" )
-      span Change location (#[span.menu-location-city!=location.city.long])
+      if location.city.long
+        span Change location (#[span.menu-location-city!=location.city.long])
+      else
+        span Set location
 
 span.dash-wrapper( aria-hidden="true" )
   include ../../_source/svg/pattern.svg
