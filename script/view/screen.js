@@ -7,6 +7,11 @@ import domMessage from '../../page/view/message.jade';
 
 var main = document.getElementById( 'main' );
 
+// check visibility api
+var visibility = [ { name: 'hidden', event:'visibilitychange' }, { name: 'mozHidden', event:'mozvisibilitychange' }, { name: 'msHidden', event:'msvisibilitychange' }, { name: 'webkitHidden', event:'webkitvisibilitychange' } ].find( api => {
+  return api.name in document;
+} );
+
 class Screen {
   constructor ( args ){
     this.el = this._el( this.dom() );
@@ -27,6 +32,13 @@ class Screen {
 
 
     bind( this.el, 'click', '.button-refresh', () => this.getData() );
+
+    // refresh current screen when screen is visible
+    document.addEventListener( visibility.event, () => {
+      if( document[ visibility.name ] && this.data.screenParams.visible && this.displayed ){
+        this.displayed( this._displayParams );
+      }
+    } );
 
     if( this.initialize ){
       this.initialize();
@@ -85,6 +97,8 @@ class Screen {
   }
 
   show ( params ){
+
+    this._displayParams = params;
 
     if( !main.contains( this.el ) ){
       main.appendChild( this.el );

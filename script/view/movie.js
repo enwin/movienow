@@ -59,6 +59,11 @@ class Theater extends Screen {
   }
 
   getData (){
+
+    if( this.els && this.els.content ){
+      this.els.content.innerHTML = '';
+    }
+
     this.sync( [ '/api/movies', this.data.location.city.slug, this.data.screenParams.id ].join('/') )
       .then( data => {
         if( !data ){
@@ -70,7 +75,6 @@ class Theater extends Screen {
   }
 
   orderTheaters (){
-
     var now = moment(),
         showtime,
         nextShowTime,

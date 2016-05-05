@@ -50,7 +50,6 @@ class Theater extends Screen {
     }
 
     if( refresh ){
-      this.els.list.innerHTML = '';
       this.getData();
     }
     else if( this.data.movies ){
@@ -68,6 +67,10 @@ class Theater extends Screen {
 
     if( this.data.favorite && this.data.favorite.country ){
       countrySlug = this.data.favorite.country;
+    }
+
+    if( this.els && this.els.list ){
+      this.els.list.innerHTML = '';
     }
 
     this.sync( [ '/api/theaters', countrySlug, this.data.screenParams.id ].join('/') )
