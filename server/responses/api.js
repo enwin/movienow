@@ -93,7 +93,7 @@ function send500( req, res, e ){
   }
 
   slack.webhook({
-    username: "console.error",
+    username: '500',
     attachments: [
       {
         fallback: e.message || e,
@@ -103,11 +103,7 @@ function send500( req, res, e ){
         fields: fields
       }
     ]
-  }, err => {
-    if( err ){
-      console.error(err);
-    }
-  } );
+  }, () => {} );
 
   res.status( 500 ).send( {
     error: {

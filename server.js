@@ -2,27 +2,29 @@
   var config = require( './server/config' ),
       express = require( 'express' );
 
-  process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+require( './server/helpers/slack' );
 
-  if( 'development' === process.env.NODE_ENV ){
-    config.dev = true;
-  }
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
-  config.port = config.dev ? 4000 : config.port;
+if( 'development' === process.env.NODE_ENV ){
+  config.dev = true;
+}
 
-  var app = express();
+config.port = config.dev ? 4000 : config.port;
 
-  app.locals.config = config;
+var app = express();
 
-  // database
-  require( './server/db' )();
+app.locals.config = config;
 
-  // server handling
-  require( './server/express' )( app, config );
+// database
+require( './server/db' )();
 
-  // routes handling
-  require( './server/routes' )( app, config );
+// server handling
+require( './server/express' )( app, config );
 
-  app.listen( config.port );
+// routes handling
+require( './server/routes' )( app, config );
 
-  console.log( 'Started on port '+ config.port );
+app.listen( config.port );
+
+console.log( 'Started on port '+ config.port );

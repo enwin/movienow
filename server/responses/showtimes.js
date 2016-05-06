@@ -113,7 +113,7 @@ class api {
             resolve( result );
 
           // } )
-          // .catch( console.log );
+          // .catch( console.error );
 
       } );
     } );

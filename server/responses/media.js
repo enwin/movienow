@@ -25,7 +25,7 @@ var handleMovieDb = function( data ){
             poster: poster
           } );
         } )
-        .catch( console.log );
+        .catch( console.error );
     }
     else{
       imdbId.find( data.name )

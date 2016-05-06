@@ -14,7 +14,7 @@ module.exports = function( callback ){
 
   mongoose.connect( config.db, options, function( err ){
     if( err ){
-      console.log( err );
+      console.error( err );
       return;
     }
     if( callback ){
@@ -24,7 +24,7 @@ module.exports = function( callback ){
 
   // Error handler
   mongoose.connection.on('error', function(err){
-    console.log(err);
+    console.error(err);
   });
 
 };

@@ -21,6 +21,18 @@ function getLang( req ){
 
 }
 
+function render( req, res ){
+  res.render( 'index', Object.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ), ( err, str ) => {
+    if( err ){
+      console.error( 'jade render error', err );
+      res.status( 500 ).end();
+      return;
+    }
+
+    res.send( str );
+  } );
+}
+
 function setLang( req ){
   if( req.app.locals.langs && req.app.locals.langs[ req.session.lang ] ){
     return;
@@ -54,9 +66,7 @@ function setLang( req ){
 
 }
 
-module.exports.home = function( req, res ){
-  res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
-};
+module.exports.home = render;
 
 module.exports.lang = function( req, res, next ){
   if( !req.session.lang || !req.app.locals.langs ){
@@ -66,25 +76,15 @@ module.exports.lang = function( req, res, next ){
   next();
 };
 
-module.exports.theaters = function( req, res ){
-  res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
-};
+module.exports.theaters = render;
 
-module.exports.movies = function( req, res ){
-  res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
-};
+module.exports.movies = render;
 
-module.exports.favorites = function( req, res ){
-  res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
-};
+module.exports.favorites = render;
 
-module.exports.around = function( req, res ){
-  res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
-};
+module.exports.around = render;
 
-module.exports.credits = function( req, res ){
-  res.render( 'index', _.assign( {}, req.app.locals.langs[ req.session.lang ], { user: req.user, config: config } ) );
-};
+module.exports.credits = render;
 
 // store user city in the session
 module.exports.user = function( req, res ){
