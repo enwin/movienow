@@ -299,14 +299,18 @@
         tab.tabPanel.tab = tab;
 
         // if tablist is not multiselectable and there's no opened tab yet
-        if( !tablist.multiselectable && !tablist.openedTab.length && !tab.hasAttribute( 'disabled' )){
+        if( !tablist.multiselectable && !tablist.openedTab.length && !tab.hasAttribute( 'disabled' ) && tab.hasAttribute( 'data-tab-open' ) ){
           // store the tab in the openedTab array
           tablist.openedTab.push( tab );
           openedTab = true;
         }
 
+        tab.removeAttribute( 'data-tab-open' );
+
         // get first tab
-        firstTab = tab === tablist.querySelector( '[role="tab"]:not([disabled])' );
+        if( !firstTab && !tab.hasAttribute( 'disabled' ) ){
+          firstTab = tab;
+        }
 
         // set the attributes according the the openedTab status
         tab.setAttribute( 'tabindex', firstTab ? 0 : -1 );
@@ -331,7 +335,7 @@
 
       // if there's no opened tab and it's not an accordion open the first tab
       if( !tablist.openedTab.length && null === tablist.multiselectable ){
-        this.select( tablist.tabs[ 0 ] );
+        this.select( firstTab );
       }
     };
 
