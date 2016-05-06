@@ -21,12 +21,12 @@ class Loader{
 
   remove (){
     if( this.el.parentNode ){
-      document.body.removeChild( this.el );
+      this.el.parentNode.removeChild( this.el );
     }
   }
 
-  show (){
-    document.body.appendChild( this.el );
+  show ( parent ){
+    ( parent || document.body).appendChild( this.el );
     window.setTimeout( () => {
       window.requestAnimationFrame( () => this.display() );
     }, 16 );

@@ -137,7 +137,8 @@ class Screen {
           }
         } );
     }
-    loader.show();
+
+    loader.show( this.el.id === 'around' && !document.getElementById( 'locationDialog' ).hasAttribute( 'aria-hidden' ) && document.getElementById( 'locationDialog' ) );
 
     params = params || {};
 
