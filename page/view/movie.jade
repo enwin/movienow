@@ -3,12 +3,13 @@ header.screen-header
 
   nav.screen-nav.nav-days
     ul.nav-list( role="tablist" )
-      each type, index in [ 'Theaters', 'Info' ]
-        li.nav-list-item( role="tab" aria-controls="movie-#{index}" )!= type
+      each type in [ 'Theaters', 'Info' ]
+        - var panelId = 'movie-'+type.toLowerCase();
+        li.nav-list-item( role="tab" aria-controls=panelId data-tab-open=( panelId === screenParams.tabId ? 'true' : null ) )!= type
 
 div.screen-content
   if theaters
-    div.screen-panel( role="tabpanel" id="movie-0" aria-hidden='false' )
+    div.screen-panel( role="tabpanel" id="movie-theaters" aria-hidden='false' )
       ul.theater-movies-list
         each theater in theaters
           li.theater-movies-item
@@ -49,7 +50,7 @@ div.screen-content
                         else
                           time( datetime="#{time.value}" )!= time.formated
 
-    div.screen-panel( role="tabpanel" id="movie-1" aria-hidden='false' )
+    div.screen-panel( role="tabpanel" id="movie-info" aria-hidden='false' )
 
       figure.movie-artwork
         span.movie-artwork-wrapper

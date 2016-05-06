@@ -238,7 +238,7 @@ class Routes extends Router  {
 export default new Routes( {
   routes: {
     '/theaters(/:id)(?filter=:filter)(?search=:search)': 'theaters',
-    '/movies(/:id)(?filter=:filter)(?search=:search)': 'movies',
+    '/movies(/:id)(?filter=:filter)(?search=:search)(?tab=:tabId)': 'movies',
     '/favorites(?filter=:filter)': 'favorites',
     '/around': 'around',
     '/credits': 'credits',
