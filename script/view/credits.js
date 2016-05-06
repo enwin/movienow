@@ -19,6 +19,10 @@ class Credits extends Screen {
     this.el.style.display = '';
   }
 
+  initialize (){
+    this.setTitle( 'Credits' );
+  }
+
 }
 
 
