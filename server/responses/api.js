@@ -50,13 +50,36 @@ function send500( req, res, e ){
   var fields = [ {
       title: 'url',
       value: req.url
+    }, {
+      title: 'counrty',
+      value: req.session.country,
+      short: true
+    }, {
+      title: 'lang',
+      value: req.session.lang,
+      short: true
     }
-  ];
+  ],
+  body = JSON.stringify( req.body, null, 2 );
 
-  if( req.body ){
+  if( req.headers[ 'x-movienow-coords' ] ){
+    fields.push( {
+      title: 'coords',
+      value: req.headers[ 'x-movienow-coords' ]
+    } );
+  }
+
+  if( req.headers[ 'x-movienow-location' ] ){
+    fields.push( {
+      title: 'location',
+      value: req.headers[ 'x-movienow-location' ]
+    } );
+  }
+
+  if( body.length > 2 ){
      fields.push( {
       title: 'body',
-      value: JSON.stringify( req.body, null, 2 )
+      value: body
     } );
   }
 
