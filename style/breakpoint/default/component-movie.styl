@@ -6,11 +6,14 @@
       min-height: 100%
 
       .movie-artwork
-         float: right
+         float: left
          padding-top: rem( 18 )
-         padding-right: 0
          padding-bottom: rem( 12 )
-         width: rem( 94 )
+         width: rem( 113 )
+
+         img
+            left: 0
+            transform: none
 
 .movie-title
    color: $color-primary-dark
@@ -50,14 +53,14 @@
 
    .movie-synopsis-title
    .movie-trailer-title
-      clear: right
+      clear: left
 
 .movie-trailer
    margin-top: rem( 3 )
 
    div
       position: relative
-      padding-top: ( 180/320*100% )
+      padding-top: ( 172/320*100% )
 
    iframe
       position: absolute
