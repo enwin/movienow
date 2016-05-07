@@ -59,7 +59,7 @@ function fetchAndCache( req, options ) {
             let keysLength = keys.length;
             // limit the cache to the number setted in the limit option
             if( options.limit <= keysLength ){
-              let oldKeys = keys.splice( 0, keysLength - options.limit );
+              let oldKeys = keys.splice( 0, keysLength - options.limit + 1 );
               oldKeys.forEach( key => {
                 cache.delete( key )
                   .then( () => console.info( `removed ${key.url} from ${options.cache} cache` ) )
