@@ -18,32 +18,40 @@ function api( e ){
       return req;
     } )
     .then( res => {
-       return caches.open( 'api' ).then( cache => {
 
-          cache.keys().then( keys => {
-            keys.forEach( key => {
-              let apiUrl = new URL( key.url );
+      if( !res.ok ){
+        return res;
+      }
 
-              if( apiUrl.pathname === url.pathname && apiUrl.search !== url.search ){
-                cache.delete( key )
-                  .then( () => console.info( `removed ${key.url} from api cache` ) )
-                  .catch( err => console.error( err ) );
-              }
-            } );
+      return caches.open( 'api' ).then( cache => {
+
+        cache.keys().then( keys => {
+          keys.forEach( key => {
+            let apiUrl = new URL( key.url );
+
+            if( apiUrl.pathname === url.pathname && apiUrl.search !== url.search ){
+              cache.delete( key )
+                .then( () => console.info( `removed ${key.url} from api cache` ) )
+                .catch( err => console.error( err ) );
+            }
           } );
+        } );
 
-          return cache.put( e.request, res.clone() )
-            .then( () => res )
-            .catch( err => console.error( err ) );
-       } );
+        return cache.put( e.request, res.clone() )
+          .then( () => res )
+          .catch( err => console.error( err ) );
+      } );
     } );
-};
+}
 
 function fetchAndCache( req, options ) {
 
   return fetch( req )
     .then( res => {
       //console.log( res );
+      if( !res.ok ){
+        return res;
+      }
       //return res;
       return caches.open( options.cache ).then( cache => {
         return cache.keys().then( keys => {
@@ -109,7 +117,7 @@ const cacheName = `site-${pkg.version}`,
         '/media/dyn/city/paris.jpg'
       ];
 
-self.addEventListener('install', e => {
+self.addEventListener( 'install', e => {
   console.log( 'install', Date() );
   // once the SW is installed, go ahead and fetch the resources
   // to make this work offline
@@ -122,7 +130,7 @@ self.addEventListener('install', e => {
   );
 });
 
-self.addEventListener('activate', function activator (event) {
+self.addEventListener( 'activate', () => {
   console.log( 'activate' );
   caches.keys().then( keys => {
     return Promise.all( keys
