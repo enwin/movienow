@@ -139,13 +139,14 @@ class api {
     } );
   }
 
-  getTheaterAround ( location ){
+  getTheaterAround ( location, lang ){
 
     var around = new Showtimes( location, {
       pageLimit: 2,
       date: 0,
-      lang: 'fr'
+      lang: lang || 'fr'
     } );
+
     return new Promise( ( resolve, reject ) => {
       around.getTheaters( ( err, result ) => {
         if( err ){

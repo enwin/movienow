@@ -26,15 +26,15 @@ function parseAround( data ){
 
 function parseGeo( result ){
 
-  var types = [ 'locality', 'administrative_area_level_1', 'country' ],
-      name = [ 'city', 'area', 'country' ],
+  var types = [ 'sublocality', 'locality', 'administrative_area_level_1', 'country' ],
+      name = [ 'closest', 'city', 'area', 'country' ],
       geo = {},
       match;
 
   types.forEach( ( type, index ) => {
     match = result.find( component => component.types.indexOf( type ) > -1 );
 
-    if( !index && !match ){
+    if( 1 === index && !match ){
       match = result.find( component => component.types.indexOf( 'sublocality' ) > -1 );
     }
 
@@ -187,15 +187,12 @@ module.exports.movies = function( req, res ){
 module.exports.around = ( req, res ) => {
   var coords = req.headers[ 'x-movienow-coords' ] ? JSON.parse( req.headers[ 'x-movienow-coords' ] ) : null,
       location = req.headers[ 'x-movienow-location' ],
-      theaters,
-      geocode;
+      geocode,
+      data = {};
 
   if( location ){
     location = citySanitize( location );
   }
-
-  theaters = api.getTheaterAround( coords ? coords.join() : location )
-    .then( parseAround );
 
   if( coords ){
     geocode = new Promise( ( resolve, reject ) => {
@@ -224,18 +221,23 @@ module.exports.around = ( req, res ) => {
     } );
   }
 
-  Promise.all( [ theaters, geocode ] )
-    .then( result => {
-      var data = {
-        movies: result[0].movies,
-        theaters: result[0].theaters,
-        geo: result[ 1 ]
-      };
+  geocode
+    .then( geo => {
 
-      req.session.country = result[ 1 ].country.short;
+      data.geo = geo;
+
+      req.session.country = geo.country.short.toLowerCase();
+
+      return api.getTheaterAround( geo.closest ? geo.closest.long : geo.city.long, req.session.country || req.session.lang )
+        .then( parseAround );
+    } )
+    .then( aroundLists => {
+
+      Object.assign( data, aroundLists );
 
       res.setHeader( 'Cache-Control', 'no-cache, no-store, must-revalidate' );
       res.send( data );
     } )
     .catch( e => send500( req, res, e ) );
+
 };

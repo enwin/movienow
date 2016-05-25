@@ -9,8 +9,8 @@ class User {
     return this.data.location;
   }
 
-  set location ( city ){
-    this.data.location = city;
+  set location ( location ){
+    this.data.location = location;
     this.data.ready = true;
     this.save();
     this.setSession();
