@@ -24,6 +24,8 @@ module.exports = function( app ){
 
   app.get( '/media/poster/:id', media.poster );
 
+  app.get( '/media/dyn/city/:city.jpg', media.city );
+
   app.post( '/user', response.user );
 
   // app.get( '/sw.js', ( req, res ) => {
