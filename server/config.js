@@ -9,6 +9,7 @@ var path = require('path'),
 
 var defaults = {
   'db': 'mongodb://127.0.0.1/movienow',
+  'dev': 'development' === process.env.NODE_ENV,
   'files': [ rootPath, 'www' ].join('/'),
   'pages': [ rootPath, 'page' ].join('/'),
   'port': 8088,

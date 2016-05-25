@@ -26,7 +26,9 @@ slack.setWebhook( config.slackHook );
       }
     } );
 
-    slack.webhook( params, () => {} );
+    if( !config.dev ){
+      slack.webhook( params, () => {} );
+    }
 
     return error.apply( this, arguments );
   };

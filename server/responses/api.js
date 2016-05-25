@@ -7,6 +7,7 @@ var api = require( './showtimes' ),
     slack = require( '../helpers/slack' ),
     unSlug = /\s/gi,
     citySanitize = require( '../helpers/city' ).sanitize,
+    config = require( '../config' ),
     apiStore = {};
 
 function parseAround( data ){
@@ -47,10 +48,23 @@ function parseGeo( result ){
     }
   } );
 
+
   return geo;
 }
 
 function send500( req, res, e ){
+
+  res.status( 500 ).send( {
+    error: {
+      code: 500,
+      message: typeof( e ) !== 'object' ? e : null
+    }
+  } );
+
+  if( config.dev ){
+    return;
+  }
+
   var fields = [ {
       title: 'url',
       value: req.url
@@ -108,13 +122,6 @@ function send500( req, res, e ){
       }
     ]
   }, () => {} );
-
-  res.status( 500 ).send( {
-    error: {
-      code: 500,
-      message: typeof( e ) !== 'object' ? e : null
-    }
-  } );
 }
 
 function send( res, cache ){
