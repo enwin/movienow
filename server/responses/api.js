@@ -34,6 +34,10 @@ function parseGeo( result ){
   types.forEach( ( type, index ) => {
     match = result.find( component => component.types.indexOf( type ) > -1 );
 
+    if( !index && !match ){
+      match = result.find( component => component.types.indexOf( 'sublocality' ) > -1 );
+    }
+
     if( match ){
       geo[ name[ index ] ] = {
         short: match.short_name,
