@@ -1,3 +1,5 @@
+'use strict';
+
 var api = require( './showtimes' ),
     geocoder = require( 'geocoder' ),
     _flatten = require( 'lodash/flatten' ),
@@ -69,8 +71,8 @@ function send500( req, res, e ){
       title: 'url',
       value: req.url
     }, {
-      title: 'counrty',
-      value: req.session.country,
+      title: 'api lang',
+      value: req.get( 'accept-language' ),
       short: true
     }, {
       title: 'lang',
@@ -135,20 +137,22 @@ function send( res, cache ){
 
 module.exports.cache = function( req, res, next ){
 
-  var url = req.url.replace( '?', '/' );
+  let url = req.url.replace( '?', '/' ),
+      lang = req.get( 'accept-language' ).split( '-' )[0],
+      path = `${lang}${url}`;
 
-  if( apiStore[ url ] ){
+  if( apiStore[ path ] ){
     if( req.headers[ 'if-modified-since' ] ){
       res.status( 304 ).end();
     }
     else{
-      send( res, apiStore[ url ] );
+      send( res, apiStore[ path ] );
     }
     return;
   }
 
-  res.cacheSend = function( data ){
-    apiStore[ url ] = {
+  res.cacheSend = data => {
+    apiStore[ path ] = {
       headers: {
         'Cache-Control': `public, max-age=${10 * 60 * 60 * 24 * 363}`,
         'Last-Modified': new Date().toUTCString(),
@@ -157,21 +161,21 @@ module.exports.cache = function( req, res, next ){
       data: data
     };
 
-    send( res, apiStore[ url ] );
+    send( res, apiStore[ path ] );
   };
 
   next();
 };
 
 module.exports.theaters = function( req, res ){
+  let lang = req.get( 'accept-language' ).split( '-' )[0];
   if( req.params.id ){
-    api.getTheater( req.params.city.replace( unSlug, ' ' ), req.params.id, req.session.country || req.session.lang )
+    api.getTheater( req.params.where.replace( unSlug, ' ' ), req.params.id, lang )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
   else{
-    //api.getTheaters( result );
-    api.getTheaters( req.params.city.replace( unSlug, ' ' ), req.session.country || req.session.lang )
+    api.getTheaters( req.params.where.replace( unSlug, ' ' ), lang )
     .then( data => res.cacheSend( data ) )
     .catch( e => send500( req, res, e ) );
   }
@@ -179,13 +183,14 @@ module.exports.theaters = function( req, res ){
 
 
 module.exports.movies = function( req, res ){
+  let lang = req.get( 'accept-language' ).split( '-' )[0];
   if( req.params.id ){
-    api.getMovie( req.params.city.replace( unSlug, ' ' ), req.params.id, req.session.country || req.session.lang )
+    api.getMovie( req.params.where.replace( unSlug, ' ' ), req.params.id, lang )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
   else{
-    api.getMovies( req.params.city.replace( unSlug, ' ' ), req.session.country || req.session.lang )
+    api.getMovies( req.params.where.replace( unSlug, ' ' ), lang )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
@@ -233,9 +238,7 @@ module.exports.around = ( req, res ) => {
 
       data.geo = geo;
 
-      req.session.country = geo.country.short.toLowerCase();
-
-      return api.getTheaterAround( geo.closest ? geo.closest.long : geo.city.long, req.session.country || req.session.lang )
+      return api.getTheaterAround( geo.closest ? geo.closest.long : geo.city.long, req.get( 'accept-language' ).split( '-' )[0] )
         .then( parseAround );
     } )
     .then( aroundLists => {
