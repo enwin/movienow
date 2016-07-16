@@ -68,7 +68,7 @@ function setLang( req ){
 
 module.exports.home = render;
 
-module.exports.lang = function( req, res, next ){
+module.exports.lang = ( req, res, next ) => {
   if( !req.session.lang || !req.app.locals.langs ){
     getLang( req );
     setLang( req );

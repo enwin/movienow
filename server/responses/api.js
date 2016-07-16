@@ -135,7 +135,7 @@ function send( res, cache ){
   res.send( cache.data );
 }
 
-module.exports.cache = function( req, res, next ){
+module.exports.cache = ( req, res, next ) => {
 
   let url = req.url.replace( '?', '/' ),
       lang = req.get( 'accept-language' ).split( '-' )[0],
@@ -167,7 +167,7 @@ module.exports.cache = function( req, res, next ){
   next();
 };
 
-module.exports.theaters = function( req, res ){
+module.exports.theaters = ( req, res ) => {
   let lang = req.get( 'accept-language' ).split( '-' )[0];
   if( req.params.id ){
     api.getTheater( req.params.where.replace( unSlug, ' ' ), req.params.id, lang )
@@ -182,7 +182,7 @@ module.exports.theaters = function( req, res ){
 };
 
 
-module.exports.movies = function( req, res ){
+module.exports.movies = ( req, res ) => {
   let lang = req.get( 'accept-language' ).split( '-' )[0];
   if( req.params.id ){
     api.getMovie( req.params.where.replace( unSlug, ' ' ), req.params.id, lang )
@@ -221,7 +221,7 @@ module.exports.around = ( req, res ) => {
   }
   else{
     geocode = new Promise( ( resolve, reject ) => {
-      geocoder.geocode( location, function ( err, data ) {
+      geocoder.geocode( location, ( err, data ) => {
         var result = data.results[ 0 ].address_components;
         if( err ){
           reject( err );
