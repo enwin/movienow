@@ -10,16 +10,12 @@ import _shuffle from 'lodash/shuffle';
 
 var posters = [
   '/media/dyn/home/kubo.jpg',
-  '/media/dyn/home/starwars.jpg',
-  '/media/dyn/home/zootopia.jpg',
-  '/media/dyn/home/josephine.jpg',
-  '/media/dyn/home/anomalisa.jpg',
-  '/media/dyn/home/xmenapocalypse.jpg',
-  '/media/dyn/home/batmanvsuperman.jpg',
-  '/media/dyn/home/highrise.jpg',
-  '/media/dyn/home/midnightspecial.jpg',
-  '/media/dyn/home/deadpool.jpg',
-  '/media/dyn/home/brooklyn.jpg'
+  '/media/dyn/home/suicidesquad1.jpg',
+  '/media/dyn/home/suicidesquad2.jpg',
+  '/media/dyn/home/startrekbeyond.jpg',
+  '/media/dyn/home/rogueone.jpg',
+  '/media/dyn/home/ghostbusters.jpg',
+  '/media/dyn/home/absolutelyfabulous.jpg'
 ];
 
 class Home extends Screen {
@@ -79,7 +75,7 @@ class Home extends Screen {
   }
 
   loadPoster (){
-    var posterPromises = preload( posters );
+    var posterPromises = preload( _shuffle( posters ) );
 
     this.data.posters = [];
     this.data.loadedPosters = [];
