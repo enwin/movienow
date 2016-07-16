@@ -1,7 +1,6 @@
 var response = require( './responses/base' ),
     showtimes = require( './responses/api' ),
-    media = require( './responses/media' ),
-    config = require( './config' );
+    media = require( './responses/media' );
 
 module.exports = function( app ){
 
@@ -25,8 +24,4 @@ module.exports = function( app ){
   app.get( '/media/poster/:id', media.poster );
 
   app.post( '/user', response.user );
-
-  // app.get( '/sw.js', ( req, res ) => {
-  //   res.sendFile( `${config.root}/script/sw.js` );
-  // } );
 };
