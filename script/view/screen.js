@@ -98,6 +98,7 @@ class Screen {
     document.title = title.length ? [ title, 'Movie now!' ].join(' | ') : 'Movie now!';
 
     if( window._paq ){
+      window._paq.push(['setCustomUrl', window.location.href ]);
       window._paq.push(['setDocumentTitle', document.title]);
       window._paq.push(['trackPageView']);
     }
