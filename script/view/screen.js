@@ -156,7 +156,7 @@ class Screen {
 
     params.credentials = 'same-origin';
 
-    Object.assign( params.headers, {
+    Object.assign( params.headers || {}, {
       'accept-language': navigator.language
     } );
 
