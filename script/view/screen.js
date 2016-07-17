@@ -156,9 +156,9 @@ class Screen {
 
     params.credentials = 'same-origin';
 
-    params.headers = {
+    Object.assign( params.headers, {
       'accept-language': navigator.language
-    };
+    } );
 
     return window.fetch( url, params ).then( r => r.json() )
       .then( data => {
