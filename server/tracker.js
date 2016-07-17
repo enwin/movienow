@@ -2,7 +2,7 @@
 
 let config = require( './config' ),
     PiwikTracker = require('piwik-tracker'),
-    piwik = new PiwikTracker( 1, config.trackerUrl );
+    piwik = new PiwikTracker( 1, `${config.trackerUrl}piwik.php` );
 
 // Optional: Respond to tracking errors
 piwik.on( 'error', err => {
