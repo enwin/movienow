@@ -114,7 +114,8 @@ const cacheName = `site-${pkg.version}`,
         '/style.css',
         '/app.js',
         '/media/font/ticketing.woff',
-        '/media/dyn/city/paris.jpg'
+        '/media/dyn/city/paris.jpg',
+        'https://analytics.enwin.io/piwik.js'
       ];
 
 self.addEventListener( 'install', e => {
