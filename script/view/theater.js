@@ -135,7 +135,9 @@ class Theater extends Screen {
         types.times.forEach( ( time, index ) => {
 
           if( !time.formated && this.data.location.country.short === 'CA' ){
-            time += 'pm';
+            let medidian = time.split( ':' )[0] === '11' ? 'am' : 'pm';
+
+            time += medidian;
           }
 
           if( (time.formated || time).slice( -1 ) === 'm' ){
