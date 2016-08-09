@@ -76,7 +76,8 @@ class Movie extends Screen {
         showtime,
         nextShowTime,
         nextShowTimeIndex,
-        disabled;
+        disabled,
+        timeFormat = 'HH:mm';
 
     this.data.theaters.forEach( theater => {
 
@@ -87,7 +88,15 @@ class Movie extends Screen {
       theater.showtimes.forEach( ( types, showIndex ) => {
         types.times.forEach( ( time, index ) => {
 
-          showtime = moment( time.formated || time, 'HH:mm' );
+          if( this.data.location.country.short === 'CA' ){
+            time += 'pm';
+          }
+
+          if( time.slice( -1 ) === 'm' ){
+            timeFormat = 'HH:mmA';
+          }
+
+          showtime = moment( time.formated || time, timeFormat );
 
           disabled = now.isAfter( showtime );
 
