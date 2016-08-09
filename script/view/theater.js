@@ -134,11 +134,11 @@ class Theater extends Screen {
       movie.showtimes.forEach( ( types, showIndex ) => {
         types.times.forEach( ( time, index ) => {
 
-          if( this.data.location.country.short === 'CA' ){
+          if( !time.formated && this.data.location.country.short === 'CA' ){
             time += 'pm';
           }
 
-          if( time.slice( -1 ) === 'm' ){
+          if( (time.formated || time).slice( -1 ) === 'm' ){
             timeFormat = 'HH:mmA';
           }
 
