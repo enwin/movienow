@@ -4,7 +4,7 @@ ul.menu-list.menu-screens
       a( href=menu.link )!= menu.name
 
 span.dash-wrapper( aria-hidden="true" )
-  include ../../_source/svg/pattern.svg
+  include ../../_source/svg/line.svg
 div.menu-item.menu-favorites( class=!asFavorites ? 'empty' : '' )
   a( href="/favorites" )
     include ../../_source/svg/icon_favorites.svg
@@ -13,7 +13,7 @@ div.menu-item.menu-favorites( class=!asFavorites ? 'empty' : '' )
 
 if location
   span.dash-wrapper( aria-hidden="true" )
-    include ../../_source/svg/pattern.svg
+    include ../../_source/svg/line.svg
   div.menu-item.menu-location( class=!asFavorites ? 'empty' : '' )
     button.button.button-locationChange.layer-close.layer-control( type="button" aria-controls="locationDialog" aria-expanded="false" )
       if location.city.long
@@ -22,7 +22,7 @@ if location
         span Set location
 
 span.dash-wrapper( aria-hidden="true" )
-  include ../../_source/svg/pattern.svg
+  include ../../_source/svg/line.svg
 footer
   div.menu-item
     a( href="/credits" ) Credits
