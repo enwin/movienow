@@ -22,7 +22,7 @@ module.exports = function( app, config ){
   app.set( 'showStackError', config.dev ? false : true );
 
   app.use( session( {
-    cookie: { secure: true },
+    cookie: { secure: !config.dev },
     resave: false,
     saveUninitialized: true,
     secret: config.secret,
