@@ -19,7 +19,7 @@ module.exports = function( app, config ){
 
   app.disable( 'x-powered-by' );
 
-  app.set( 'showStackError', config.dev ? false : true );
+  app.set( 'showStackError', !config.dev );
 
   app.use( session( {
     cookie: { secure: !config.dev },
