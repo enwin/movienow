@@ -36,7 +36,8 @@ div.screen-content
                   ul
                     each showType in theater.showtimes
                       li.movie-times
-                        span.movie-times-info!= showType.info
+                        if showType.info !== 'all'
+                          span.movie-times-info!= showType.info
                         ul.movie-times-list
                           each time in showType.times
                             li.movie-times-item
