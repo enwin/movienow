@@ -1,13 +1,11 @@
 var response = require( './responses/base' ),
     showtimes = require( './responses/api' ),
-    tracker = require( './tracker' ),
     media = require( './responses/media' );
 
 module.exports = function( app ){
 
   // set session jade vars
   app.use( response.lang );
-  // app.use( tracker.send );
 
   // home
   app.get( '/', response.home );
