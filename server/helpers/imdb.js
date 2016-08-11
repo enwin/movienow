@@ -204,11 +204,11 @@ function fetch( movieName ){
 
 module.exports.find = fetch;
 
-var poster = function( id ){
+var poster = function( movieURI ){
 
   return new Promise( ( resolve, reject ) => {
     var options = {
-      uri: id,
+      uri: movieURI,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36',
         'Accept-Language': 'en-US,en;q=0.8',
@@ -222,7 +222,7 @@ var poster = function( id ){
     request( options )
       .then( src => {
         if( !src ){
-          throw new Error( `No picture for movie ${moviePage}` );
+          throw new Error( `No picture for movie ${movieURI}` );
         }
 
         return src;
