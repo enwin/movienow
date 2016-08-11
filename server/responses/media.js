@@ -1,47 +1,58 @@
+'use strict';
+
 var movies = require( '../db/movies' ),
     imdbId = require( '../helpers/imdb' );
 
+const reImbd = /\/(tt.*)\//;
+
+var fetchPoster = function( data ){
+  return imdbId.poster( data.imdb )
+    .then( poster => {
+      return {
+        imdb: data.imdb.match( reImbd )[1],
+        poster: poster
+      };
+    } )
+    .catch( () => {
+      // fallback to name search
+      return findPoster( data.name );
+    } );
+};
+
+var findPoster = function( name ){
+  return imdbId.find( name )
+    .then( imdb => {
+      return {
+        imdb: imdb.id,
+        poster: imdb.poster || 'none'
+      };
+    } )
+    .catch( () => {
+      return {
+        poster: 'none'
+      };
+    } );
+};
+
 var handleMovieDb = function( data ){
+  let poster;
 
   if( data && data.poster ){
     return data;
   }
 
-  return new Promise( ( resolve, reject ) => {
+  if( data.imdb ){
+    poster = fetchPoster( data );
+  }
+  else{
+    poster = findPoster( data.name );
+  }
 
-    function save ( info ){
-      movies.update( data.id, info )
-        .then( () => {
-          resolve( info );
-        } )
-        .catch( reject );
-    }
-
-    if( data.imdb ){
-      imdbId.poster( data.imdb )
-        .then( poster => {
-          save( {
-            imdb: data.imdb.match( /\/(tt.*)\//)[1],
-            poster: poster
-          } );
-        } )
-        .catch( console.error );
-    }
-    else{
-      imdbId.find( data.name )
-        .then( imdb => {
-          save( {
-            imdb: imdb.id,
-            poster: imdb.poster || 'none'
-          } );
-        } )
-        .catch( () => {
-          save( {
-            poster: 'none'
-          } );
-        } );
-    }
-  } );
+  return poster
+    .then( info => {
+      return movies.update( data.id, info )
+        .then( () => info );
+    } );
 
 };
 
