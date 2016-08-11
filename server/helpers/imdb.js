@@ -220,7 +220,14 @@ var poster = function( id ){
     };
 
     request( options )
-      .then( $ => parsePoster( $ ) )
+      .then( src => {
+        if( !src ){
+          throw new Error( `No picture for movie ${moviePage}` );
+        }
+
+        return src;
+      } )
+      .then( parsePoster )
       .then( resolve )
       .catch( reject );
   } );
