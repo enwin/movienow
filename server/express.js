@@ -22,7 +22,8 @@ module.exports = function( app, config ){
   app.set( 'showStackError', config.dev ? false : true );
 
   app.use( session( {
-    resave: true,
+    cookie: { secure: true },
+    resave: false,
     saveUninitialized: true,
     secret: config.secret,
     store: new MongoStore( {
