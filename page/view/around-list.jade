@@ -8,7 +8,8 @@ if theaters
               != theater.name
               if theater.address
                 br
-                small!= theater.address
+                - var address = theater.address.split( ', ' );
+                small #{address[0]}, #{address[1]}
 if movies
   div.screen-panel( role="tabpanel" id="around-1" aria-hidden='true' )
     ul.item-list
