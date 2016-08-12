@@ -1,10 +1,11 @@
 if theaters
   ul.item-list
     each theater in theaters
-      li.theater-item
-        a.item-title( href="/theaters/#{theater.id}" )
-          != theater.name
-          if theater.address
-            br
-            - var address = theater.address.split( ', ' );
-            small #{address[0]}, #{address[1]}
+      unless !theater.id
+        li.theater-item
+          a.item-title( href="/theaters/#{theater.id}" )
+            != theater.name
+            if theater.address
+              br
+              - var address = theater.address.split( ', ' );
+              small #{address[0]}, #{address[1]}
