@@ -83,7 +83,8 @@ class Around extends Screen {
         // test
         timeout: 10000,
         // 5 minutes
-        maximumAge: ( 60000 * 5 )
+        maximumAge: ( 60000 * 5 ),
+        enableHighAccuracy: true
       } );
     } );
   }
