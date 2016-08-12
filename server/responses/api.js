@@ -238,7 +238,15 @@ module.exports.around = ( req, res ) => {
 
       data.geo = geo;
 
-      return api.getTheaterAround( geo.closest ? geo.closest.long : geo.city.long, req.get( 'accept-language' ).split( '-' )[0] )
+      return api.getTheaterAround( coords ? coords.join() : geo.closest ? geo.closest.long : geo.city.long, req.get( 'accept-language' ).split( '-' )[0] )
+        .then( data => {
+          // fallback to closest interest point if passing coords doesnt work
+          if( coords &&  ( !data || !data.length ) ){
+            return api.getTheaterAround( geo.closest ? geo.closest.long : geo.city.long, req.get( 'accept-language' ).split( '-' )[0] );
+          }
+
+          return data;
+        } )
         .then( parseAround );
     } )
     .then( aroundLists => {
