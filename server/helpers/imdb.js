@@ -6,6 +6,7 @@ var remove = /\!|\?|\(.*\)|(,\s\(?(2D|3D)\)?)|\(?(2D|3D)\)?/gi,
     toSpace = /((\s(and|et|&)|\s?:)\s)/gi,
     splitSpaces = /\s{2,}/,
     isTv = /\((TV|Short|Video)/,
+    isI = /\((I+)\)/,
     movieYear = /\((\d*)\)/,
     posterSize = '._V1_SX200.jpg';
 
@@ -64,7 +65,7 @@ function parseResult( $, name ){
       title = $el.find( 'a' ).text();
       titleText = $el.text();
 
-      if( isTv.test( titleText ) ){
+      if( isTv.test( titleText ) || isI.test( titleText ) ){
         return;
       }
 
