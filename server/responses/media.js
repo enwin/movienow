@@ -3,28 +3,11 @@
 var movies = require( '../db/movies' ),
     imdbId = require( '../helpers/imdb' );
 
-const reImbd = /\/(tt.*)\//;
-
 var fetchPoster = function( data ){
-  return imdbId.poster( data.imdb )
+  return imdbId.poster( data.imgSrc )
     .then( poster => {
       return {
-        imdb: data.imdb.match( reImbd )[1],
         poster: poster
-      };
-    } )
-    .catch( () => {
-      // fallback to name search
-      return findPoster( data.name );
-    } );
-};
-
-var findPoster = function( name ){
-  return imdbId.find( name )
-    .then( imdb => {
-      return {
-        imdb: imdb.id,
-        poster: imdb.poster || 'none'
       };
     } )
     .catch( () => {
@@ -41,12 +24,7 @@ var handleMovieDb = function( data ){
     return data;
   }
 
-  if( data.imdb ){
-    poster = fetchPoster( data );
-  }
-  else{
-    poster = findPoster( data.name );
-  }
+  poster = fetchPoster( data );
 
   return poster
     .then( info => {

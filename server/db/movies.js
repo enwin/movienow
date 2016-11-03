@@ -4,9 +4,15 @@ var mongoose = require( 'mongoose' ),
 // Settings
 var moviesSchema = new Schema( {
   id: { type: String, index: { unique: true, dropDups: true } },
-  name: String,
-  imdb: String,
+  title: String,
   poster: String,
+  imgSrc: String,
+  rating: String,
+  runtime: Number,
+  description: String,
+  genre: Array,
+  director: String,
+  year: String,
   defaultPoster: { type: Boolean, default: false }
 } );
 
@@ -31,16 +37,7 @@ var get = ( movie ) => {
 module.exports.get = get;
 
 var add = ( movie ) => {
-  var toSave;
   return new Promise( ( resolve, reject ) => {
-    toSave = {
-      id: movie.id,
-      name: movie.name
-    };
-
-    if( movie.imdb ){
-      toSave.imdb = movie.imdb;
-    }
 
     get( movie )
       .then( ( movieFound ) => {
@@ -49,7 +46,7 @@ var add = ( movie ) => {
           return;
         }
 
-        var newMovie = new movieDb( toSave );
+        var newMovie = new movieDb( movie );
 
         newMovie.save( ( err ) => {
           if( err ){

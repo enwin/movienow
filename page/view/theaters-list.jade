@@ -7,5 +7,4 @@ if theaters
             != theater.name
             if theater.address
               br
-              - var address = theater.address.split( ', ' );
-              small #{address[0]}, #{address[1]}
+              small #{theater.address.street}, #{theater.address.zip} #{theater.address.city}

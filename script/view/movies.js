@@ -65,7 +65,7 @@ class Movies extends Screen {
     filterValue = this.els.filter.value.trim().toLowerCase();
 
     if( filterValue.length ){
-      this.data.movies = this.data.allMovies.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 );
+      this.data.movies = this.data.allMovies.filter( (movie) => movie.title.toLowerCase().indexOf( filterValue ) > -1 );
     }
     else{
       this.data.movies = this.data.allMovies;
@@ -99,7 +99,7 @@ class Movies extends Screen {
       this.els.list.innerHTML = '';
     }
 
-    this.sync( [ '/api/movies', this.data.location.city.slug ].join('/') )
+    this.sync( [ '/api/movies', this.data.location.country.short, this.data.location.zip.short ].join('/') )
       .then( data => {
         if( !data ){
           return;
@@ -109,7 +109,7 @@ class Movies extends Screen {
   }
 
   parse (datas){
-    datas = _sortBy( datas, 'name' );
+    datas = _sortBy( datas, 'title' );
 
     return _extend( this.data, {
       allMovies: datas,

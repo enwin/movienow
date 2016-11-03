@@ -61,7 +61,7 @@ class Movie extends Screen {
       this.els.content.innerHTML = '';
     }
 
-    this.sync( [ '/api/movies', this.data.location.city.slug, this.data.screenParams.id ].join('/') )
+    this.sync( [ '/api/movies', this.data.location.country.short, this.data.location.zip.short, this.data.screenParams.id ].join('/') )
       .then( data => {
         if( !data ){
           return;
@@ -86,19 +86,9 @@ class Movie extends Screen {
       nextShowTimeIndex = null;
 
       theater.showtimes.forEach( ( types, showIndex ) => {
-        types.times.forEach( ( time, index ) => {
+        types.times.forEach( time => {
 
-          if( !time.formated && this.data.location.country.short === 'CA' ){
-            let medidian = time.split( ':' )[0] === '11' ? 'am' : 'pm';
-
-            time += medidian;
-          }
-
-          if( (time.formated || time).slice( -1 ) === 'm' ){
-            timeFormat = 'HH:mmA';
-          }
-
-          showtime = moment( time.formated || time, timeFormat );
+          showtime = moment( time.value, 'YYYY-MM-DDTHH:mm' );
 
           disabled = now.isAfter( showtime );
 
@@ -113,11 +103,8 @@ class Movie extends Screen {
             };
           }
 
-          theater.showtimes[ showIndex ].times[ index ] = {
-            disabled: disabled,
-            formated: time.formated || time,
-            value: showtime.format( 'YYYY-MM-DDTHH:mm' )
-          };
+          time.disabled = disabled;
+          time.formated = showtime.format( timeFormat );
         } );
       } );
     } );

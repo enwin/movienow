@@ -8,8 +8,12 @@ var mongoose = require( 'mongoose' ),
 var theatersSchema = new Schema( {
   id: { type: String, index: { unique: true, dropDups: true } },
   name: String,
-  address: String,
-  phoneNumber: String,
+  address: {
+    city: String,
+    street: String,
+    zip: String
+  },
+  phone: String,
   map: String,
   coord: {
     lat: Number,

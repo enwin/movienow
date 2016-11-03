@@ -30,7 +30,7 @@ div.screen-content
                     img( src="/media/poster/#{movie.id}" )
               div.movie-infos
                 h1.movie-title
-                  a( href="/movies/#{movie.id}?tab=movie-info" )!= movie.name
+                  a( href="/movies/#{movie.id}?tab=movie-info" )!= movie.title
 
                 if movie.infos
                   ul.movie-infos-list
@@ -70,7 +70,7 @@ div.screen-content
       dl.info-desc.info-theater
         if address
           dt Address
-          dd!= address
-        if phoneNumber
+          dd #{address.street}, #{address.zip} #{address.city}
+        if phone
           dt Phone
-          dd!= phoneNumber
+          dd!= phone

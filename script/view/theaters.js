@@ -101,7 +101,7 @@ class Theaters extends Screen {
       this.els.list.innerHTML = '';
     }
 
-    this.sync( [ '/api/theaters', this.data.location.city.slug ].join( '/') )
+    this.sync( [ '/api/theaters', this.data.location.country.short, this.data.location.zip.short ].join( '/') )
       .then( data => {
         if( !data ){
           return;

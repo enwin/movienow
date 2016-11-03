@@ -17,8 +17,8 @@ module.exports = function( app ){
 
   app.use( '/api/', showtimes.cache );
 
-  app.get( '/api/theaters/:where/:id?', showtimes.theaters );
-  app.get( '/api/movies/:where/:id?', showtimes.movies );
+  app.get( '/api/theaters/:country/:zip/:id?', showtimes.theaters );
+  app.get( '/api/movies/:country/:zip/:id?', showtimes.movies );
   app.get( '/api/aroundme', showtimes.around );
 
   app.get( '/media/poster/:id', media.poster );

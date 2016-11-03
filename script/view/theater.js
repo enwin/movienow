@@ -59,21 +59,21 @@ class Theater extends Screen {
   }
 
   getData (){
-    var countrySlug = this.data.location.country.slug;
+    var zip = this.data.location.zip.slug;
 
     if( undefined === this.data.favorite ){
       this.data.favorite = favList.find( this.data.screenParams.id );
     }
 
     if( this.data.favorite && this.data.favorite.country ){
-      countrySlug = this.data.favorite.country;
+      zip = this.data.favorite.country;
     }
 
     if( this.els && this.els.content ){
       this.els.content.innerHTML = '';
     }
 
-    this.sync( [ '/api/theaters', countrySlug, this.data.screenParams.id ].join('/') )
+    this.sync( [ '/api/theaters', this.data.location.country.short, zip, this.data.screenParams.id ].join('/') )
       .then( data => {
         if( !data ){
           return;
@@ -90,7 +90,7 @@ class Theater extends Screen {
       this.data.favorite = {
         id: this.data.screenParams.id,
         name: this.data.name,
-        country: this.data.location.country.slug
+        zip: this.data.location.zip.slug
       };
     }
 
@@ -134,17 +134,7 @@ class Theater extends Screen {
       movie.showtimes.forEach( ( types, showIndex ) => {
         types.times.forEach( ( time, index ) => {
 
-          if( !time.formated && this.data.location.country.short === 'CA' ){
-            let medidian = time.split( ':' )[0] === '11' ? 'am' : 'pm';
-
-            time += medidian;
-          }
-
-          if( (time.formated || time).slice( -1 ) === 'm' ){
-            timeFormat = 'HH:mmA';
-          }
-
-          showtime = moment( time.formated || time, timeFormat );
+          showtime = moment( time.value, 'YYYY-MM-DDTHH:mm' );
 
           disabled = now.isAfter( showtime );
 
@@ -159,11 +149,8 @@ class Theater extends Screen {
             };
           }
 
-          movie.showtimes[ showIndex ].times[ index ] = {
-            disabled: disabled,
-            formated: time.formated || time,
-            value: showtime.format( 'YYYY-MM-DDTHH:mm' )
-          };
+          time.disabled = disabled;
+          time.formated = showtime.format( timeFormat );
         } );
       } );
     } );

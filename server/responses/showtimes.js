@@ -2,11 +2,13 @@
 
 var moment = require( 'moment' );
 
-var movieDB = require( '../db/movies' ),
-    theaterdDB = require( '../db/theaters' );
+var movieDB = require( '../db/movies' );
+    // theaterdDB = require( '../db/theaters' );
 
-var Showtimes = require( 'showtimes' ),
-    _clone = require( 'lodash/cloneDeep' );
+// var Showtimes = require( 'showtimes' ),
+// var _clone = require( 'lodash/cloneDeep' );
+
+var showtimes = require( '../helpers/api' );
 
 /**
  * save movies to the database
@@ -16,127 +18,121 @@ var saveMovies = function( movies ){
   return Promise.all( movies.map( movie => movieDB.add( movie ) ) );
 };
 
+// var saveTheaters = function( theaters ){
+//   return Promise.all( theaters.map( theater => theaterDB.add( theater ) ) );
+// }
+
 class api {
 
   constructor (){
     this.day = moment().format( 'd' );
   }
 
-  getTheaterPlannig ( where, tid ){
-    var api = this,
-        days = [],
-        index = 0,
-        p,
-        theater;
+  getMovie ( mid, zip, country ) {
+    // var showtimes = new Showtimes( where, {
+    //   lang: lang || 'fr',
+    //   date: 0
+    // } );
 
-    while( index < 3 ){
-      p = api.getTheater( where, tid, { lang: 'fr', date: index } );
-      days.push( p );
-      index++;
-    }
-
-    return Promise.all( days )
-      .then( results => {
-        results.forEach( ( result, index ) => {
-          if( !index ){
-            theater = _clone( result );
-            delete theater.movies;
-            theater.movies = [ result.movies ];
-          }
-          else{
-            theater.movies.push( result.movies );
-          }
-        } );
-
-        return theater;
+    // return new Promise( (resolve, reject) => {
+    //   showtimes.getMovie( mid, ( err, result ) => {
+    //     if( err ){
+    //       reject( err );
+    //       return;
+    //     }
+    //     saveMovies( [ result ] );
+    //     resolve( result );
+    //   } );
+    // } );
+    return showtimes.getMovie( mid, zip, country )
+      .then( data => {
+        saveMovies( [data] );
+        return data;
       } );
   }
 
-  getMovie ( where, mid, lang ) {
-    var showtimes = new Showtimes( where, {
-      lang: lang || 'fr',
-      date: 0
-    } );
+  getMovies ( zip, country ) {
+    // return new Promise( (resolve, reject) => {
 
-    return new Promise( (resolve, reject) => {
-      showtimes.getMovie( mid, ( err, result ) => {
-        if( err ){
-          reject( err );
-          return;
-        }
-        saveMovies( [ result ] );
-        resolve( result );
-      } );
-    } );
+    //   var showtimes = new Showtimes( where, {
+    //     lang: lang || 'fr',
+    //     date: 0
+    //   } );
+
+    //   showtimes.getMovies( ( err, result ) => {
+    //     if( err ){
+    //       reject( err );
+    //       return;
+    //     }
+
+    //     saveMovies( result );
+    //     resolve( result );
+    //   } );
+    // } );
+    // console.log( where, lang, showtimes )
+    return showtimes.getMovies( zip, country )
+      .then( data => {
+        saveMovies( data );
+        return data
+      } )
   }
 
-  getMovies ( where, lang ) {
-    return new Promise( (resolve, reject) => {
+  getTheater ( tid, zip, country ) {
+    // return new Promise( (resolve, reject) => {
+    //   var showtimes = new Showtimes( where, {
+    //     lang: lang || 'fr',
+    //     date: 0
+    //   } );
 
-      var showtimes = new Showtimes( where, {
-        lang: lang || 'fr',
-        date: 0
-      } );
+    //   showtimes.getTheater( tid, ( err, result ) => {
+    //     if( err ){
+    //       reject( err );
+    //       return;
+    //     }
 
-      showtimes.getMovies( ( err, result ) => {
-        if( err ){
-          reject( err );
-          return;
-        }
+    //     // theaterdDB.add( result )
+    //     //   .then( theater => {
 
-        saveMovies( result );
-        resolve( result );
-      } );
-    } );
+    //     //     Object.assign( result, theater );
+
+    //         saveMovies( result.movies );
+
+    //         resolve( result );
+
+    //       // } )
+    //       // .catch( console.error );
+
+    //   } );
+    // } );
+
+    return showtimes.getTheaters( zip, lang )
+      .then( data => data.find( theater => theater.id === tid ) );
+
   }
 
-  getTheater ( where, tid, lang ) {
-    return new Promise( (resolve, reject) => {
-      var showtimes = new Showtimes( where, {
-        lang: lang || 'fr',
-        date: 0
-      } );
+  getTheaters ( zip, country ) {
 
-      showtimes.getTheater( tid, ( err, result ) => {
-        if( err ){
-          reject( err );
-          return;
-        }
+    // return new Promise( (resolve, reject) => {
 
-        // theaterdDB.add( result )
-        //   .then( theater => {
+    //   var showtimes = new Showtimes( where, {
+    //     lang: lang || 'fr',
+    //     date: 0
+    //   } );
 
-        //     Object.assign( result, theater );
+    //   showtimes.getTheaters( ( err, result ) => {
+    //     if( err ){
+    //       reject( err );
+    //       return;
+    //     }
 
-            saveMovies( result.movies );
-
-            resolve( result );
-
-          // } )
-          // .catch( console.error );
-
-      } );
-    } );
-  }
-
-  getTheaters ( where, lang ) {
-
-    return new Promise( (resolve, reject) => {
-
-      var showtimes = new Showtimes( where, {
-        lang: lang || 'fr',
-        date: 0
-      } );
-
-      showtimes.getTheaters( ( err, result ) => {
-        if( err ){
-          reject( err );
-          return;
-        }
-
-        resolve( result );
-      } );
-    } );
+    //     resolve( result );
+    //   } );
+    // } );
+    return showtimes.getTheaters( zip, country );
+      // .then( data => {
+      //   saveTheaters( data );
+      //   return data;
+      // } );
   }
 
   getTheaterAround ( location, lang ){

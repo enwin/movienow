@@ -28,9 +28,8 @@ function parseAround( data ){
 }
 
 function parseGeo( result ){
-
-  var types = [ 'sublocality', 'locality', 'administrative_area_level_1', 'country' ],
-      name = [ 'closest', 'city', 'area', 'country' ],
+  var types = [ 'sublocality', 'locality', 'administrative_area_level_1', 'country', 'postal_code' ],
+      name = [ 'closest', 'city', 'area', 'country', 'zip' ],
       geo = {},
       match;
 
@@ -168,14 +167,14 @@ module.exports.cache = ( req, res, next ) => {
 };
 
 module.exports.theaters = ( req, res ) => {
-  let lang = req.get( 'accept-language' ).split( '-' )[0];
+  // let lang = req.get( 'accept-language' ).split( '-' )[0];
   if( req.params.id ){
-    api.getTheater( req.params.where.replace( unSlug, ' ' ), req.params.id, lang )
+    api.getTheater( req.params.id, req.params.zip, req.params.country )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
   else{
-    api.getTheaters( req.params.where.replace( unSlug, ' ' ), lang )
+    api.getTheaters( req.params.zip, req.params.country )
     .then( data => res.cacheSend( data ) )
     .catch( e => send500( req, res, e ) );
   }
@@ -183,14 +182,15 @@ module.exports.theaters = ( req, res ) => {
 
 
 module.exports.movies = ( req, res ) => {
-  let lang = req.get( 'accept-language' ).split( '-' )[0];
+  // let lang = req.get( 'accept-language' ).split( '-' )[0];
+
   if( req.params.id ){
-    api.getMovie( req.params.where.replace( unSlug, ' ' ), req.params.id, lang )
+    api.getMovie( req.params.id, req.params.zip, req.params.country )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
   else{
-    api.getMovies( req.params.where.replace( unSlug, ' ' ), lang )
+    api.getMovies( req.params.zip, req.params.country )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
@@ -222,36 +222,46 @@ module.exports.around = ( req, res ) => {
   else{
     geocode = new Promise( ( resolve, reject ) => {
       geocoder.geocode( location, ( err, data ) => {
-        var result = data.results[ 0 ].address_components;
         if( err ){
           reject( err );
           return;
         }
 
-        resolve( parseGeo( result ) );
+        var location = data.results[ 0 ].geometry.location;
+
+        geocoder.reverseGeocode( location.lat, location.lng, ( err, data ) => {
+          if( err ){
+            reject( err );
+            return;
+          }
+
+          var result = data.results[ 0 ].address_components;
+
+          resolve( parseGeo( result ) );
+        } );
       });
     } );
   }
 
   geocode
     .then( geo => {
-
       data.geo = geo;
 
-      return api.getTheaterAround( coords ? coords.join() : geo.closest ? geo.closest.long : geo.city.long, req.get( 'accept-language' ).split( '-' )[0] )
-        .then( data => {
-          // fallback to closest interest point if passing coords doesnt work
-          if( coords &&  ( !data || !data.length ) ){
-            return api.getTheaterAround( geo.closest ? geo.closest.long : geo.city.long, req.get( 'accept-language' ).split( '-' )[0] );
-          }
+      // return api.getTheaterAround( coords ? coords.join() : geo.closest ? geo.closest.long : geo.city.long, req.get( 'accept-language' ).split( '-' )[0] )
+      //   .then( data => {
+      //     // fallback to closest interest point if passing coords doesnt work
+      //     if( coords &&  ( !data || !data.length ) ){
+            return api.getTheaters( geo.zip.short, geo.country.short )
+        //   }
 
-          return data;
-        } )
+        //   return data;
+        // } )
         .then( parseAround );
     } )
     .then( aroundLists => {
-
+    // .then( geo => {
       Object.assign( data, aroundLists );
+      // data.geo = geo;
 
       res.setHeader( 'Cache-Control', 'no-cache, no-store, must-revalidate' );
       res.send( data );

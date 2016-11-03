@@ -8,11 +8,10 @@ if theaters
               != theater.name
               if theater.address
                 br
-                - var address = theater.address.split( ', ' );
-                small #{address[0]}, #{address[1]}
+                small #{theater.address.street}, #{theater.address.zip} #{theater.address.city}
 if movies
   div.screen-panel( role="tabpanel" id="around-1" aria-hidden='true' )
     ul.item-list
       each movie in movies
         li.theater-item
-          a.item-title( href="/movies/#{movie.id}" )!= movie.name
+          a.item-title( href="/movies/#{movie.id}" )!= movie.title

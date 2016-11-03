@@ -159,7 +159,7 @@ class Screen {
     params.headers = params.headers || {};
 
     Object.assign( params.headers, {
-      'accept-language': navigator.language
+      'accept-language': 'fr'//navigator.language
     } );
 
     return window.fetch( url, params ).then( r => r.json() )

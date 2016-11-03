@@ -1,5 +1,5 @@
 header.screen-header
-  h1( title=name ).screen-title!= name
+  h1( title=title ).screen-title!= title
 
   nav.screen-nav.nav-days
     ul.nav-list( role="tablist" )
@@ -22,8 +22,7 @@ div.screen-content
                       != theater.name
                       if theater.address
                         br
-                        - var address = theater.address.split( ', ' );
-                        small #{address[0]}, #{address[1]}
+                        small #{theater.address.street}, #{theater.address.zip} #{theater.address.city}
 
                   if theater.infos
                     ul.movie-infos-list
@@ -66,10 +65,16 @@ div.screen-content
       dl.info-desc.info-movie
         if runtime
           dt Runtime
-          dd.movie-runtime!= runtime
+          dd.movie-runtime #{runtime} min
         if rating
           dt Rating
           dd.movie-rating!= rating
+        if year
+          dt Year
+          dd.movie-year!= year
+        if genre
+          dt Genre
+          dd.movie-genres!= genre.join( ', ' )
         if director
           dt Director
           dd.movie-director!= director

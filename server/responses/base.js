@@ -88,6 +88,6 @@ module.exports.credits = render;
 
 // store user city in the session
 module.exports.user = function( req, res ){
-  req.session.country = req.body.location.country.short.toLowerCase();
+  req.session.country = req.body.location.country.short;
   res.end();
 };
