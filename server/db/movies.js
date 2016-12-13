@@ -45,10 +45,6 @@ var add = ( movie, country ) => {
     let countryTitle = {};
     countryTitle[ country ] = movie.title;
 
-    if( movie.id === 'tt3183660' ){
-      console.log( 'add movie', countryTitle, movie.title );
-    }
-
     get( movie )
       .then( movieFound => {
         // console.log( 'movie found', movieFound );
