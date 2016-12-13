@@ -1,3 +1,5 @@
+'use strict';
+
 const request = require( 'request-promise-native' ),
       cheerio = require( 'cheerio' ),
       moment = require( 'moment' );

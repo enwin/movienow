@@ -1,4 +1,5 @@
 /* global module: true, __dirname: true */
+'use strict';
 
 var path = require('path'),
     _ = require( 'lodash' ),

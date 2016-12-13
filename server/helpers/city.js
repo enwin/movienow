@@ -1,3 +1,5 @@
+'use strict';
+
 var slug = require( 'slug' );
 module.exports.sanitize = function( city ){
   var slugged = slug( city );

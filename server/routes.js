@@ -1,3 +1,5 @@
+'use strict';
+
 var response = require( './responses/base' ),
     showtimes = require( './responses/api' ),
     media = require( './responses/media' );

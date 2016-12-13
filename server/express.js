@@ -1,4 +1,5 @@
 /* global module: true */
+'use strict';
 
 var compress = require( 'compression' ),
     logger = require( 'morgan' ),

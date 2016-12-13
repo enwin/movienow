@@ -1,3 +1,5 @@
+'use strict';
+
 var Slack = require( 'slack-node' ),
     config = require( '../config' ),
     slack = new Slack();
