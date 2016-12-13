@@ -9,6 +9,7 @@ moment.relativeTimeThreshold('s', 59);
 moment.relativeTimeThreshold('m', 59);
 
 import './view/layer';
+import './view/menu';
 
 import router from './module/router';
 

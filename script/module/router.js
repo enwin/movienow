@@ -12,7 +12,6 @@ import Movies from '../view/movies';
 import Around from '../view/around';
 import Movie from '../view/movie';
 import Home from '../view/home';
-import menu from '../view/menu';
 import body from '../view/body';
 
 class Router {
@@ -75,8 +74,6 @@ class Router {
   }
 }
 
-//theater.match( window.location.pathname );
-
 
 class Routes extends Router  {
 
@@ -99,7 +96,6 @@ class Routes extends Router  {
   }
 
   theaters ( params ){
-    //menu.setCurrent( 'theaters', params );
 
     params.id = params.id || '/';
 
@@ -129,7 +125,6 @@ class Routes extends Router  {
   }
 
   movies ( params ){
-    //menu.setCurrent( 'movies', params );
 
     params.id = params.id || '/';
 
@@ -159,7 +154,6 @@ class Routes extends Router  {
   }
 
   home (params){
-    //menu.setCurrent( 'home' );
 
     if( !this.screens.home ){
       this.screens.home = new Home( params );
@@ -178,7 +172,6 @@ class Routes extends Router  {
   }
 
   around (params){
-    //menu.setCurrent( 'around' );
 
     if( !this.screens.around ){
       this.screens.around = new Around( params );
@@ -197,7 +190,6 @@ class Routes extends Router  {
   }
 
   credits (params){
-    //menu.setCurrent( 'credits' );
 
     if( !this.screens.credits ){
       this.screens.credits = new Credits( params );
@@ -216,7 +208,6 @@ class Routes extends Router  {
   }
 
   favorites (params){
-    //menu.setCurrent( 'favorites' );
 
     if( !this.screens.favorites ){
       this.screens.favorites = new Favorites( params );
