@@ -20,7 +20,7 @@ var fetchPoster = function( data ){
 var handleMovieDb = function( data ){
   let poster;
 
-  if( data && data.poster ){
+  if( data.poster ){
     return data;
   }
 
@@ -36,16 +36,25 @@ var handleMovieDb = function( data ){
 
 module.exports.poster = function( req, res ){
   movies.get( { id: req.params.id } )
+    .then( data => {
+      if( !data ){
+        return Promise.reject( `No movie with id "${req.params.id}" in DB` );
+      }
+      return data;
+    } )
     .then( handleMovieDb )
     .then( data => {
-      if( data.poster !== 'none' ){
-        var img = new Buffer( data.poster, 'base64' );
-        res.setHeader( 'Content-Type', 'image/jpeg');
-        res.setHeader( 'Content-Length', img.length );
-        res.end( img );
+      if( data.poster === 'none' ){
+        return Promise.reject( `No poster found for movie "${req.params.id}"` );
       }
-      else{
-        res.redirect( '/media/posters/default.png' );
-      }
+
+      var img = new Buffer( data.poster, 'base64' );
+      res.setHeader( 'Content-Type', 'image/jpeg');
+      res.setHeader( 'Content-Length', img.length );
+      res.end( img );
+    } )
+    .catch( err => {
+      console.error( err );
+      res.redirect( '/media/posters/default.png' );
     } );
 };

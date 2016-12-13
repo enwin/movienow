@@ -219,7 +219,12 @@ class Imdb{
     $( '.lister-item.mode-grid' ).each( ( index, el ) => {
       let $el = $( el ),
           $popout = $el.find( '.lister-item-content' ),
-          img = $el.find( 'img.loadlate' );
+          img = $el.find( 'img.loadlate' ),
+          id = img.attr( 'data-tconst' );
+
+      if( !id ){
+        return;
+      }
 
       let movie = {
         id: img.attr( 'data-tconst' ),
@@ -242,17 +247,22 @@ class Imdb{
           $link = $el.find( '[itemprop="name"] a' ),
           asId = !!$link.attr( 'href' );
 
+      if( !asId ){
+        return;
+      }
+
       let movie = {
-        id: asId ? $link.attr( 'href' ).match( reIID )[0] : null,
-        title: asId ? $link.attr( 'title' ).replace( 'Showtimes for ', '' ) : $el.find( '.info h4' ).text().trim(),
+        id: $link.attr( 'href' ).match( reIID )[0],
+        title: $link.attr( 'title' ).replace( 'Showtimes for ', '' ),
         runtime: +$el.find( '[itemprop="duration"]' ).text().trim().replace( ' min', '' ),
+        imgSrc: $el.find( '[itemprop="image"]' ).attr( 'src' ),
         showtimes: []
       };
 
       movie.showtimes = this._parseShowtimes( Array.from( $el.find( '.showtimes' ) ) );
 
       return movie;
-    } );
+    } ).filter( entry => entry );
 
   }
 

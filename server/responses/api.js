@@ -156,6 +156,10 @@ module.exports.cache = ( req, res, next ) => {
 module.exports.theaters = ( req, res ) => {
   if( req.params.id ){
     api.getTheater( req.params.id, req.params.country, req.params.zip, req.query.day )
+      .then( data => {
+        saveMovies( data.movies, req.params.country );
+        return data;
+      } )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
@@ -180,7 +184,7 @@ module.exports.movies = ( req, res ) => {
     api.getMovies( req.params.country, req.params.zip, req.query.day )
       .then( data => {
         saveMovies( data, req.params.country );
-        res.send( data );
+        res.cacheSend( data );
       } )
       .catch( e => send500( req, res, e ) );
   }
