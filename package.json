@@ -55,6 +55,7 @@
     "showtimes": "github:enwin/showtimes",
     "slack-node": "^0.2.0",
     "slug": "^0.9.1",
-    "stylus": "^0.54.5"
+    "stylus": "^0.54.5",
+    "whatwg-fetch": "^2.0.1"
   }
 }
