@@ -1,43 +1,48 @@
-var defaults = { location: {'city': { 'slug': 'paris' }, 'country': {'short': 'fr'} } };
+var schema = { location: {'city': { 'long': true }, 'country': {'short': true}, 'zip': {'short': true} } };
 
 class User {
   constructor (){
-    this.data = JSON.parse( window.localStorage.getItem( 'user' ) ) || defaults;
+    this.data = {};
+    this.validateUserObject( JSON.parse( window.localStorage.getItem( 'user' ) )  );
   }
 
   get location (){
-    return this.data.location;
+    return this.isReady ? this.data.location : false;
   }
 
   set location ( location ){
     this.data.location = location;
-    this.data.ready = true;
+    this.isReady = true;
     this.save();
-    // this.setSession();
   }
 
   get ready (){
-    return this.data.ready;
+    return this.isReady;
   }
 
   save (){
     window.localStorage.setItem( 'user', JSON.stringify( this.data ) );
   }
 
-  setSession (){
-    var datas = {
-      'location': this.data.location
-    };
+  validateUserObject ( user ){
 
-    return window.fetch( '/user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( datas ),
-      credentials: 'same-origin'
-    } )
-      .then( () => this.save() );
+    if( !user ){
+      this.isReady = false;
+      return;
+    }
+
+    const locationOk = user && Object.keys( schema.location ).every( location => {
+      return user.location[ location ] && Object.keys( schema.location[ location ] ).every( type => {
+        return user.location[ location ][ type ];
+      } );
+    } );
+
+    if( locationOk ){
+      this.location = user.location;
+    }
+
+    this.isReady = locationOk;
+
   }
 }
 

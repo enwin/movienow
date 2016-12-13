@@ -68,6 +68,21 @@ class Screen {
     return el;
   }
 
+  ensureLocation (){
+    if( !user.ready && this.el.id !== 'around' ){
+      return router.screens.around.polite()
+        .then( () => {
+          if( user.ready ){
+            this.data.location = user.location;
+            this.getData();
+          }
+          else{
+            this.renderError();
+          }
+        } );
+    }
+  }
+
   newDay (){
     return moment().format( 'YYYY-MM-DD' ) !== this.data.screenParams.fetchedDay;
   }
@@ -132,17 +147,6 @@ class Screen {
   }
 
   sync ( url, params ){
-    if( !user.ready && this.el.id !== 'around' ){
-      return router.screens.around.polite()
-        .then( () => {
-          if( user.ready ){
-            this.getData();
-          }
-          else{
-            this.renderError();
-          }
-        } );
-    }
 
     loader.show( this.el.id === 'around' && !document.getElementById( 'locationDialog' ).hasAttribute( 'aria-hidden' ) && document.getElementById( 'locationDialog' ) );
 

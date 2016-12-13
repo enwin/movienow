@@ -97,6 +97,11 @@ class Theaters extends Screen {
 
   getData (){
 
+    if( !this.data.location ){
+      this.ensureLocation();
+      return;
+    }
+
     if( this.els.list ){
       this.els.list.innerHTML = '';
     }

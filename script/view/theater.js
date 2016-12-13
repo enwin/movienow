@@ -59,7 +59,13 @@ class Theater extends Screen {
   }
 
   getData (){
-    var zip = this.data.location.zip.slug;
+
+    if( !this.data.location ){
+      this.ensureLocation();
+      return;
+    }
+
+    var zip = this.data.location.zip.short;
 
     if( undefined === this.data.favorite ){
       this.data.favorite = favList.find( this.data.screenParams.id );
@@ -90,7 +96,7 @@ class Theater extends Screen {
       this.data.favorite = {
         id: this.data.screenParams.id,
         name: this.data.name,
-        zip: this.data.location.zip.slug
+        zip: this.data.location.zip.short
       };
     }
 

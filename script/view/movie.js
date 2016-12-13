@@ -57,6 +57,11 @@ class Movie extends Screen {
 
   getData (){
 
+    if( !this.data.location ){
+      this.ensureLocation();
+      return;
+    }
+
     if( this.els && this.els.content ){
       this.els.content.innerHTML = '';
     }

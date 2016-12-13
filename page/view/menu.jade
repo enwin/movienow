@@ -11,15 +11,14 @@ div.menu-item.menu-favorites( class=!asFavorites ? 'empty' : '' )
     include ../../_source/svg/icon_favorited.svg
     span Favorites
 
-if location
-  span.dash-wrapper( aria-hidden="true" )
-    include ../../_source/svg/line.svg
-  div.menu-item.menu-location( class=!asFavorites ? 'empty' : '' )
-    button.button.button-locationChange.layer-close.layer-control( type="button" aria-controls="locationDialog" aria-expanded="false" )
-      if location.city.long
-        span Change location (#[span.menu-location-city!=location.closest ? location.closest.long : location.zip.long])
-      else
-        span Set location
+span.dash-wrapper( aria-hidden="true" )
+  include ../../_source/svg/line.svg
+div.menu-item.menu-location( class=!asFavorites ? 'empty' : '' )
+  button.button.button-locationChange.layer-close.layer-control( type="button" aria-controls="locationDialog" aria-expanded="false" )
+    if location
+      span Change location (#[span.menu-location-city!=location.closest ? location.closest.long : location.zip.short])
+    else
+      span Set location
 
 span.dash-wrapper( aria-hidden="true" )
   include ../../_source/svg/line.svg
