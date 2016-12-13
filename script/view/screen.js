@@ -69,7 +69,7 @@ class Screen {
   }
 
   newDay (){
-    return moment().format( 'DDD' ) !== this.data.screenParams.fetchedDay;
+    return moment().format( 'YYYY-MM-DD' ) !== this.data.screenParams.fetchedDay;
   }
 
   parse ( data ){
@@ -148,7 +148,7 @@ class Screen {
 
     params = params || {};
 
-    var dayOfYear = moment().format( 'DDD' );
+    var dayOfYear = moment().format( 'YYYY-MM-DD' );
 
     url += `?day=${dayOfYear}`;
 
@@ -158,9 +158,9 @@ class Screen {
 
     params.headers = params.headers || {};
 
-    Object.assign( params.headers, {
-      'accept-language': 'fr'//navigator.language
-    } );
+    // Object.assign( params.headers, {
+    //   'accept-language': 'fr'//navigator.language
+    // } );
 
     return window.fetch( url, params ).then( r => r.json() )
       .then( data => {

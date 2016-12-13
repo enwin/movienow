@@ -4,11 +4,12 @@ var mongoose = require( 'mongoose' ),
 // Settings
 var moviesSchema = new Schema( {
   id: { type: String, index: { unique: true, dropDups: true } },
-  title: String,
+  title: Object,
   poster: String,
   imgSrc: String,
   rating: String,
-  runtime: Number,
+  runtime: String,
+  cast: String,
   description: String,
   genre: Array,
   director: String,
@@ -36,15 +37,32 @@ var get = ( movie ) => {
 
 module.exports.get = get;
 
-var add = ( movie ) => {
+var add = ( movie, country ) => {
   return new Promise( ( resolve, reject ) => {
 
+    let countryTitle = {};
+    countryTitle[ country ] = movie.title;
+
+    if( movie.id === 'tt3183660' ){
+      console.log( 'add movie', countryTitle, movie.title );
+    }
+
     get( movie )
-      .then( ( movieFound ) => {
+      .then( movieFound => {
+        // console.log( 'movie found', movieFound );
         if( movieFound ){
-          resolve( movieFound );
-          return;
+          if( movieFound.title[ country ] ){
+            resolve( movieFound );
+            return;
+          }
+          else{
+            return update( movieFound.id, {
+              title: Object.assign( movieFound.title, countryTitle )
+            } );
+          }
         }
+
+        movie.title = countryTitle;
 
         var newMovie = new movieDb( movie );
 
@@ -53,8 +71,12 @@ var add = ( movie ) => {
             reject( err );
             return;
           }
-          resolve( newMovie.toObject() );
 
+          let movie = newMovie.toObject();
+
+          movie.title = movie.title[ country ];
+
+          resolve( movie );
         } );
       } );
   } );

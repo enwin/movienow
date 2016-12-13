@@ -7,13 +7,12 @@ script( src="/app.js" )
 
 script.
   var _paq = _paq || [];
-  _paq.push(["setDomains", ["*.movienow.enwin.io"]]);
+  _paq.push(["setDomains", ["movienow.enwin.io"]]);
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function() {
     var u = "#{config.trackerUrl}"
     _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setAPIUrl', u]);
     _paq.push(['setSiteId', 1]);
     var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
     g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'js/index.php'; s.parentNode.insertBefore(g,s);

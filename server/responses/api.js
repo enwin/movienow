@@ -1,31 +1,13 @@
 'use strict';
 
-var api = require( './showtimes' ),
+var api = require( '../helpers/imdb' ),
+    movieDB = require( '../db/movies' ),
     geocoder = require( 'geocoder' ),
-    _flatten = require( 'lodash/flatten' ),
-    _uniqBy = require( 'lodash/uniqBy' ),
-    _sortBy = require( 'lodash/sortBy' ),
     slug = require( 'slug' ),
     slack = require( '../helpers/slack' ),
-    unSlug = /\s/gi,
     citySanitize = require( '../helpers/city' ).sanitize,
     config = require( '../config' ),
     apiStore = {};
-
-function parseAround( data ){
-  var movies = [];
-
-  data.forEach( theater => {
-    movies.push( theater.movies.slice() );
-    delete theater.movies;
-  } );
-
-  return {
-    theaters: data,
-    movies: _sortBy( _uniqBy( _flatten( movies ), 'id' ), 'name' )
-  };
-
-}
 
 function parseGeo( result ){
   var types = [ 'sublocality', 'locality', 'administrative_area_level_1', 'country', 'postal_code' ],
@@ -51,6 +33,11 @@ function parseGeo( result ){
 
 
   return geo;
+}
+
+function saveMovies( movies, country ){
+  Promise.all( movies.map( movie => movieDB.add( movie, country ) ) );
+  return movies;
 }
 
 function send500( req, res, e ){
@@ -167,14 +154,13 @@ module.exports.cache = ( req, res, next ) => {
 };
 
 module.exports.theaters = ( req, res ) => {
-  // let lang = req.get( 'accept-language' ).split( '-' )[0];
   if( req.params.id ){
-    api.getTheater( req.params.id, req.params.zip, req.params.country )
+    api.getTheater( req.params.id, req.params.country, req.params.zip, req.query.day )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
   else{
-    api.getTheaters( req.params.zip, req.params.country )
+    api.getTheaters( [ req.params.country, req.params.zip ], req.query.day )
     .then( data => res.cacheSend( data ) )
     .catch( e => send500( req, res, e ) );
   }
@@ -182,16 +168,20 @@ module.exports.theaters = ( req, res ) => {
 
 
 module.exports.movies = ( req, res ) => {
-  // let lang = req.get( 'accept-language' ).split( '-' )[0];
-
   if( req.params.id ){
-    api.getMovie( req.params.id, req.params.zip, req.params.country )
-      .then( data => res.cacheSend( data ) )
+    api.getMovie( req.params.id, req.params.country, req.params.zip, req.query.day )
+      .then( data => {
+        saveMovies( [ data ], req.params.country );
+        res.cacheSend( data );
+      } )
       .catch( e => send500( req, res, e ) );
   }
   else{
-    api.getMovies( req.params.zip, req.params.country )
-      .then( data => res.cacheSend( data ) )
+    api.getMovies( req.params.country, req.params.zip, req.query.day )
+      .then( data => {
+        saveMovies( data, req.params.country );
+        res.send( data );
+      } )
       .catch( e => send500( req, res, e ) );
   }
 };
@@ -200,7 +190,7 @@ module.exports.around = ( req, res ) => {
   var coords = req.headers[ 'x-movienow-coords' ] ? JSON.parse( req.headers[ 'x-movienow-coords' ] ) : null,
       location = req.headers[ 'x-movienow-location' ],
       geocode,
-      data = {};
+      aroundData = {};
 
   if( location ){
     location = citySanitize( location );
@@ -245,26 +235,14 @@ module.exports.around = ( req, res ) => {
 
   geocode
     .then( geo => {
-      data.geo = geo;
-
-      // return api.getTheaterAround( coords ? coords.join() : geo.closest ? geo.closest.long : geo.city.long, req.get( 'accept-language' ).split( '-' )[0] )
-      //   .then( data => {
-      //     // fallback to closest interest point if passing coords doesnt work
-      //     if( coords &&  ( !data || !data.length ) ){
-            return api.getTheaters( geo.zip.short, geo.country.short )
-        //   }
-
-        //   return data;
-        // } )
-        .then( parseAround );
+      aroundData.geo = geo;
+      return api.aroundMe( coords ? coords : [ geo.country.short, geo.zip.short ], geo.country.short, req.query.day );
     } )
     .then( aroundLists => {
-    // .then( geo => {
-      Object.assign( data, aroundLists );
-      // data.geo = geo;
+      Object.assign( aroundData, aroundLists );
 
       res.setHeader( 'Cache-Control', 'no-cache, no-store, must-revalidate' );
-      res.send( data );
+      res.send( aroundData );
     } )
     .catch( e => send500( req, res, e ) );
 

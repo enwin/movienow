@@ -24,7 +24,7 @@ const reIID = /tt\w*/,
 class Imdb {
 
   _call ( options ){
-    console.log( options.uri, `${langs[ options.lang ]};q=0.8` )
+    console.log( options.uri, `${langs[ options.lang ]};q=0.8` );
     return request( {
       uri: options.uri,
       qs: options.qs,

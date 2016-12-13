@@ -23,5 +23,5 @@ module.exports = function( app ){
 
   app.get( '/media/poster/:id', media.poster );
 
-  app.post( '/user', response.user );
+  // app.post( '/user', response.user );
 };

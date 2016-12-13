@@ -13,7 +13,7 @@ class User {
     this.data.location = location;
     this.data.ready = true;
     this.save();
-    this.setSession();
+    // this.setSession();
   }
 
   get ready (){

@@ -4,7 +4,7 @@ var movies = require( '../db/movies' ),
     imdbId = require( '../helpers/imdb' );
 
 var fetchPoster = function( data ){
-  return imdbId.poster( data.imgSrc )
+  return imdbId.getPoster( data.imgSrc )
     .then( poster => {
       return {
         poster: poster

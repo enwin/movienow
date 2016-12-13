@@ -77,7 +77,7 @@ div.screen-content
           dd.movie-genres!= genre.join( ', ' )
         if director
           dt Director
-          dd.movie-director!= director
+          dd.movie-director!= director.join(', ')
         if cast
           dt Cast
           dd.movie-cast!= cast.join(', ')

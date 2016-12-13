@@ -43,6 +43,8 @@ class Movies extends Screen {
       refresh = true;
     }
 
+    // console.log( 'refresh', refresh, this.data.location, user.location, this.newDay() );
+
     if( refresh ){
       this.getData();
     }
