@@ -3,7 +3,7 @@ var schema = { location: {'city': { 'long': true }, 'country': {'short': true}, 
 class User {
   constructor (){
     this.data = {};
-    this.validateUserObject( JSON.parse( window.localStorage.getItem( 'user' ) )  );
+    this.validateUserObject( JSON.parse( window.localStorage.getItem( 'user' ) ) );
   }
 
   get location (){
@@ -31,7 +31,7 @@ class User {
       return;
     }
 
-    const locationOk = user && Object.keys( schema.location ).every( location => {
+    const locationOk = user.location && Object.keys( schema.location ).every( location => {
       return user.location[ location ] && Object.keys( schema.location[ location ] ).every( type => {
         return user.location[ location ][ type ];
       } );
