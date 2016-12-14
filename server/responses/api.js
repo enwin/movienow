@@ -123,22 +123,20 @@ function send( res, cache ){
 
 module.exports.cache = ( req, res, next ) => {
 
-  let url = req.url.replace( '?', '/' ),
-      lang = req.get( 'accept-language' ).split( '-' )[0],
-      path = `${lang}${url}`;
+  const url = req.originalUrl.replace( '?', '/' );
 
-  if( apiStore[ path ] ){
+  if( apiStore[ url ] ){
     if( req.headers[ 'if-modified-since' ] ){
       res.status( 304 ).end();
     }
     else{
-      send( res, apiStore[ path ] );
+      send( res, apiStore[ url ] );
     }
     return;
   }
 
   res.cacheSend = data => {
-    apiStore[ path ] = {
+    apiStore[ url ] = {
       headers: {
         'Cache-Control': `public, max-age=${10 * 60 * 60 * 24 * 363}`,
         'Last-Modified': new Date().toUTCString(),
@@ -147,7 +145,7 @@ module.exports.cache = ( req, res, next ) => {
       data: data
     };
 
-    send( res, apiStore[ path ] );
+    send( res, apiStore[ url ] );
   };
 
   next();

@@ -17,7 +17,7 @@ module.exports = function( app ){
   app.get( '/around', response.around );
   app.get( '/credits', response.credits );
 
-  app.use( '/api/', showtimes.cache );
+  app.use( '/api/:type/:country/*', showtimes.cache );
 
   app.get( '/api/theaters/:country/:zip/:id?', showtimes.theaters );
   app.get( '/api/movies/:country/:zip/:id?', showtimes.movies );
