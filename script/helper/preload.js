@@ -5,7 +5,7 @@
  */
 function load( url ){
 
-  return url.map( function( url ){
+  return url.map( url => {
     return new Promise( (resolve, reject) => {
 
       var img = new Image();
