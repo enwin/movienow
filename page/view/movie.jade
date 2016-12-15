@@ -1,3 +1,5 @@
+include ../mixin/message.jade
+
 header.screen-header
   h1( title=title ).screen-title!= title
 
@@ -10,51 +12,54 @@ header.screen-header
 div.screen-content
   if theaters
     div.screen-panel( role="tabpanel" id="movie-theaters" aria-hidden='false' )
-      ul.theater-movies-list
-        each theater in theaters
-          unless !theater.id
-            li.theater-movies-item
-              include ../../_source/svg/line.svg
-              article.movie
-                div.movie-infos
-                  h1.movie-title
-                    a( href="/theaters/#{theater.id}" )
-                      != theater.name
-                      if theater.address
-                        br
-                        small #{theater.address.street}, #{theater.address.zip} #{theater.address.city}
+      if theaters.length
+        ul.theater-movies-list
+          each theater in theaters
+            unless !theater.id
+              li.theater-movies-item
+                include ../../_source/svg/line.svg
+                article.movie
+                  div.movie-infos
+                    h1.movie-title
+                      a( href="/theaters/#{theater.id}" )
+                        != theater.name
+                        if theater.address
+                          br
+                          small #{theater.address.street}, #{theater.address.zip} #{theater.address.city}
 
-                  if theater.infos
-                    ul.movie-infos-list
-                      each info, key in theater.infos
-                        if key === 'nextShowTime'
-                          li.movie-infos-item( class="movie-#{key}" ) (next screening #{info.formated})
-                        else
-                          li.movie-infos-item( class="movie-#{key}" )!= info
-
-                  if theater.showtimes[0].info !== 'all'
-                    ul
-                      each showType in theater.showtimes
-                        li.movie-times
-                          if showType.info !== 'all'
-                            span.movie-times-info!= showType.info
-                          ul.movie-times-list
-                            each time in showType.times
-                              li.movie-times-item
-                                if time.disabled
-                                  s
-                                    time( datetime="#{time.value}" )!= time.formated
-                                else
-                                  time( datetime="#{time.value}" )!= time.formated
-                  else
-                    ul.movie-times-list.movie-times
-                      each time in theater.showtimes[0].times
-                        li.movie-times-item
-                          if time.disabled
-                            s
-                              time( datetime="#{time.value}" )!= time.formated
+                    if theater.infos
+                      ul.movie-infos-list
+                        each info, key in theater.infos
+                          if key === 'nextShowTime'
+                            li.movie-infos-item( class="movie-#{key}" ) (next screening #{info.formated})
                           else
-                            time( datetime="#{time.value}" )!= time.formated
+                            li.movie-infos-item( class="movie-#{key}" )!= info
+
+                    if theater.showtimes[0].info !== 'all'
+                      ul
+                        each showType in theater.showtimes
+                          li.movie-times
+                            if showType.info !== 'all'
+                              span.movie-times-info!= showType.info
+                            ul.movie-times-list
+                              each time in showType.times
+                                li.movie-times-item
+                                  if time.disabled
+                                    s
+                                      time( datetime="#{time.value}" )!= time.formated
+                                  else
+                                    time( datetime="#{time.value}" )!= time.formated
+                    else
+                      ul.movie-times-list.movie-times
+                        each time in theater.showtimes[0].times
+                          li.movie-times-item
+                            if time.disabled
+                              s
+                                time( datetime="#{time.value}" )!= time.formated
+                            else
+                              time( datetime="#{time.value}" )!= time.formated
+      else
+        +message( "Did you know?", "There's no screening for this movie near you" )
 
     div.screen-panel( role="tabpanel" id="movie-info" aria-hidden='false' )
 

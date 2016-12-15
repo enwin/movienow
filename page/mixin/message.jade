@@ -1,0 +1,28 @@
+mixin message( title, text, icon, type )
+  div.message-block( aria-live="assertive" )
+
+    if icon
+      div.message-icon
+        case icon
+          when 'geolocation'
+            include ../../_source/svg/icon_geolocation.svg
+          when 'favorited'
+            include ../../_source/svg/icon_favorited.svg
+          when 'search'
+            include ../../_source/svg/icon_search.svg
+
+        if 'error' === type
+          include ../../_source/svg/icon_bar.svg
+        else if 'error-reversed' === type
+          include ../../_source/svg/icon_bar-reversed.svg
+
+    if title
+      h1.message-title!= title
+    if text
+      p.message-text!= text
+
+    if link
+      if link.href
+        a.button.button-reverse( href=link.href class='button-#{link.type}' )!= link.text
+      else
+        button.button.button-reverse( class='button-#{link.type}' )!= link.text

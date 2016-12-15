@@ -7,7 +7,6 @@ import layer from './layer';
 import Screen from './screen';
 import view from '../../page/view/around.jade';
 import domList from '../../page/view/around-list.jade';
-import domMessage from '../../page/view/message.jade';
 import bind from '../helper/bind';
 import loader from '../module/loader';
 import Tablist from '../helper/accedeweb-tablist';
@@ -65,7 +64,7 @@ class Around extends Screen {
       message: e.message
     };
 
-    this.els.list.innerHTML = domMessage( {
+    this.els.list.innerHTML = this.errorDom( {
       title: 'Aw Snap!',
       text: e.code === 1 ? 'Movienow! is not allowed to access<br>your location.' : e.message,
       icon: 'geolocation',

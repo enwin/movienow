@@ -1,3 +1,5 @@
+include ../mixin/message.jade
+
 if favorites.length
   ul.item-list
     each theater in favorites
@@ -8,7 +10,6 @@ if favorites.length
           span Remove #{theater.name} from favorites
 else
   if !allFavorites.length
-    -var title = "My Oh My!", text = "You don't have any favorite theater yet", icon = 'favorited';
+    +message( "My Oh My!", "You don't have any favorite theater yet", "favorited" )
   else
-    -var title = "Nope", text = "There's no theater matching your search", icon = 'search', type= 'error-reversed';
-  include ./message.jade
+    +message( "Nope", "There's no theater matching your search", "search", "error-reversed" )

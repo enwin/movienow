@@ -104,6 +104,7 @@ class Home extends Screen {
   initialize (){
     this.bind();
     this.render();
+    // console.log( posters, _shuffle( posters ) );
     this.loadPoster();
   }
 
