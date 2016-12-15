@@ -76,7 +76,7 @@ class Around extends Screen {
   getLocation (){
     // display loader
     // loader will be hidden by the sync resolution
-    loader.show();
+    loader.show( !document.getElementById( 'locationDialog' ).hasAttribute( 'aria-hidden' ) && document.getElementById( 'locationDialog' ) );
 
     return new Promise( ( resolve, reject ) => {
       navigator.geolocation.getCurrentPosition( resolve, reject, {
