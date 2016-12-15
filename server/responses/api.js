@@ -31,6 +31,13 @@ function parseGeo( result ){
     }
   } );
 
+  if( !geo.zip ){
+    return Promise.reject({
+      code: 404,
+      message: 'Could not find a match to your location',
+      discard: 'Hasta la vista, baby'
+    } );
+  }
 
   return geo;
 }
@@ -219,6 +226,15 @@ module.exports.around = ( req, res ) => {
           return;
         }
 
+        if( !data.results.length ){
+          reject( {
+            code: 404,
+            message: 'Could not find a match to your location',
+            discard: 'Hasta la vista, baby'
+          } );
+          return;
+        }
+
         var location = data.results[ 0 ].geometry.location;
 
         geocoder.reverseGeocode( location.lat, location.lng, ( err, data ) => {
@@ -246,6 +262,14 @@ module.exports.around = ( req, res ) => {
       res.setHeader( 'Cache-Control', 'no-cache, no-store, must-revalidate' );
       res.send( aroundData );
     } )
-    .catch( e => send500( req, res, e ) );
+    .catch( e => {
+      if( e.code ){
+        return res.status( e.code ).send( {
+          error: e
+        } );
+      }
+
+      return send500( req, res, e );
+    } );
 
 };

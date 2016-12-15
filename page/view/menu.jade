@@ -16,7 +16,8 @@ span.dash-wrapper( aria-hidden="true" )
 div.menu-item.menu-location( class=!asFavorites ? 'empty' : '' )
   button.button.button-locationChange.layer-close.layer-control( type="button" aria-controls="locationDialog" aria-expanded="false" )
     if location
-      span Change location (#[span.menu-location-city!=location.closest ? location.closest.long : location.zip.short])
+      - var place = location.closest || location.city || location.zip
+      span Change location (#[span.menu-location-city!=place.long])
     else
       span Set location
 
