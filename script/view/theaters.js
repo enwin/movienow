@@ -31,7 +31,9 @@ class Theaters extends Screen {
       // update the current screenParam filter to either the value of filter or empty if undefined
       this.data.screenParams.filter = params.filter ? params.filter : '';
       // update the input
-      this.els.filter.value = this.data.screenParams.filter;
+      if( this.els.filter.value !== this.data.screenParams.filter ){
+        this.els.filter.value = this.data.screenParams.filter;
+      }
       // filter
       this.handleFilter();
     }
