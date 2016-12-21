@@ -32,8 +32,16 @@ class Movies extends Screen {
     }
 
     if( params.search && 'true' === params.search ){
-      router.navigate( {}, '', '/movies', true );
-      this.els.filter.focus();
+      if( user.ready ){
+        router.navigate( {}, '', '/movies', true );
+        this.els.filter.focus();
+      }
+      else{
+        this.onReady = function(){
+          router.navigate( {}, '', '/movies', true );
+          this.els.filter.focus();
+        };
+      }
     }
 
     if( this.data.location !== user.location ){
@@ -128,6 +136,11 @@ class Movies extends Screen {
   ready (){
     this.handleFilter();
     this.renderList();
+
+    if( this.onReady ){
+      this.onReady();
+      delete this.onReady;
+    }
   }
 
   render (){

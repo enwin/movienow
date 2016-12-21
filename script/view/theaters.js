@@ -39,8 +39,16 @@ class Theaters extends Screen {
     }
 
     if( params.search && 'true' === params.search ){
-      router.navigate( {}, '', '/theaters', true );
-      this.els.filter.focus();
+      if( user.ready ){
+        router.navigate( {}, '', '/theaters', true );
+        this.els.filter.focus();
+      }
+      else{
+        this.onReady = function(){
+          router.navigate( {}, '', '/theaters', true );
+          this.els.filter.focus();
+        };
+      }
     }
 
     if( this.data.location !== user.location ){
@@ -128,6 +136,11 @@ class Theaters extends Screen {
   ready (){
     this.handleFilter();
     this.renderList();
+
+    if( this.onReady ){
+      this.onReady();
+      delete this.onReady;
+    }
   }
 
   render (){
