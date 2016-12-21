@@ -13,9 +13,28 @@ class Layer{
   }
 
   handleAnimation ( e ){
-    if( e.target.classList.contains( '.layer' ) ){
-      e.target.style.display = '';
 
+    let layer = e.target;
+
+    if( layer.classList.contains( 'layer' ) ){
+      layer.style.display = '';
+    }
+
+    if( e.propertyName === 'transform' && e.target.classList.contains( 'layer-wrapper' ) ){
+      layer = e.target.parentNode;
+
+      if( layer.isOpen ){
+        layer.focus();
+      }
+
+      return;
+    }
+
+    if( e.propertyName === 'background-color'&& !layer.isOpen && layer.onClose ){
+      layer.onClose();
+      delete layer.isOpen;
+      delete layer.onClose;
+      return;
     }
   }
 
@@ -65,24 +84,25 @@ class Layer{
 
   toggle ( layer ){
 
-    var open = layer.hasAttribute( 'aria-hidden' );
+    var closed = layer.getAttribute( 'aria-hidden' ) === 'true';
+
+    // future state of the layer is the current state of the closed boolean
+    layer.isOpen = closed;
 
     layer.style.display = 'block';
 
-    if( !open ){
+    if( !closed ){
+      layer.removeAttribute( 'tabindex' );
       delete this.layer;
     }
     else{
+      layer.setAttribute( 'tabindex', -1 );
       this.layer = layer;
     }
 
     window.setTimeout( () => {
       window.requestAnimationFrame( () => {
-        layer[ open ? 'removeAttribute' : 'setAttribute' ]( 'aria-hidden', !open );
-        if( layer.onClose && !open ){
-          layer.onClose();
-          delete layer.onClose;
-        }
+        layer.setAttribute( 'aria-hidden', !closed );
       } );
     }, 16 );
 
