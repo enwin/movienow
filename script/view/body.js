@@ -18,7 +18,7 @@ class body {
 
   handleSiteHeader ( routeName, params ){
     this.els.header.classList.toggle( 'header-small', routeName !== 'home' );
-    this.els.header.classList.toggle( 'header-back', routeName !== 'home' && !!params.id );
+    this.els.header.classList.toggle( 'header-back', ( routeName !== 'home' && !!params.id ) || routeName === 'credits' );
   }
 }
 
