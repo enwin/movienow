@@ -349,7 +349,7 @@ class Imdb{
 
   getTheater ( id, countryCode, zip, date ){
     return this._callPage( {
-      uri: `http://www.imdb.com/showtimes/cinema/${id}/${countryCode}/${zip}/${date}`,
+      uri: `http://www.imdb.com/showtimes/cinema/${countryCode}/${id}/${countryCode}/${zip}/${date}`,
       country: countryCode
     } )
     .then( this._parseTheater.bind( this ) )
