@@ -1,8 +1,7 @@
 'use strict';
 
 const request = require( 'request-promise-native' ),
-      cheerio = require( 'cheerio' ),
-      moment = require( 'moment' );
+      cheerio = require( 'cheerio' );
 
 const reTheaterId = /cinema\/(\d+)/,
       reDirectors = /\s*\n/g,
@@ -60,8 +59,7 @@ class Imdb{
       let $time = cheerio( time ),
           showtime,
           amPm,
-          meridian,
-          currentTime;
+          meridian;
 
       showtime = $time.text().split( '|' ).map( time => {
         time = time.trim();
@@ -75,11 +73,8 @@ class Imdb{
           amPm = meridian;
         }
 
-        currentTime = moment( time, 'HH:mm A' );
-
         return {
-          original: time,
-          value: currentTime.format( 'YYYY-MM-DDTHH:mm' )
+          original: time
         };
       } );
 
@@ -296,7 +291,7 @@ class Imdb{
       }
 
       return {
-        id: entry.url.match( reTheaterId )[1],
+        id: 'ci'+entry.url.match( reTheaterId )[1],
         name: entry.name,
         address: entry.address,
       };
@@ -348,8 +343,9 @@ class Imdb{
   }
 
   getTheater ( id, countryCode, zip, date ){
+    const uri = `http://www.imdb.com/showtimes/cinema/${countryCode}/${id}/${countryCode}/${zip}/${date}`;
     return this._callPage( {
-      uri: `http://www.imdb.com/showtimes/cinema/${countryCode}/${id}/${countryCode}/${zip}/${date}`,
+      uri: uri,
       country: countryCode
     } )
     .then( this._parseTheater.bind( this ) )
@@ -357,13 +353,9 @@ class Imdb{
   }
 
   getTheaters ( location, date, distance=60 ){
+    const uri = `http://m.imdb.com/showtimes/cinema_list_json?location=${location.join()}&date=0:${date}&max_distance=${distance}`;
     return this._callJSON( {
-      uri: `http://m.imdb.com/showtimes/cinema_list_json`,
-      qs: {
-        'location': location.join(),
-        'date': `0:${date}`,
-        'max_distance': distance
-      }
+      uri: uri
     } )
     .then( this._parseTheaters.bind( this ) )
     .catch( console.error );

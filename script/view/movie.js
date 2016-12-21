@@ -5,6 +5,7 @@ import moment from 'moment';
 import view from '../../page/view/movie.jade';
 import _sort from 'lodash/sortBy';
 import bind from '../helper/bind';
+import localeTime from '../helper/localeDate';
 
 import Tablist from '../helper/accedeweb-tablist';
 
@@ -77,12 +78,14 @@ class Movie extends Screen {
   }
 
   orderTheaters (){
-    var now = moment(),
-        showtime,
+    var showtime,
         nextShowTime,
         nextShowTimeIndex,
         disabled,
         timeFormat = 'HH:mm';
+
+    const now = moment(),
+          localeFormat = { hour: 'numeric', minute: 'numeric' };
 
     this.data.theaters.forEach( theater => {
 
@@ -93,7 +96,7 @@ class Movie extends Screen {
       theater.showtimes.forEach( ( types, showIndex ) => {
         types.times.forEach( time => {
 
-          showtime = moment( time.value, 'YYYY-MM-DDTHH:mm' );
+          showtime = moment( time.original, 'HH:mm A' );
 
           disabled = now.isAfter( showtime );
 
@@ -109,7 +112,8 @@ class Movie extends Screen {
           }
 
           time.disabled = disabled;
-          time.formated = showtime.format( timeFormat );
+          time.value = showtime.format( 'YYYY-MM-DDTHH:mm' );
+          time.formated = localeTime ? showtime.toDate().toLocaleTimeString( navigator.language, localeFormat) : showtime.format( timeFormat );
         } );
       } );
     } );
