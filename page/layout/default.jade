@@ -29,6 +29,11 @@ html( class="no-js intro" lang=lang )
         document.body.removeChild( document.getElementById( 'splash' ) );
         document.documentElement.classList.remove( 'play' );
         document.documentElement.classList.remove( 'ready' );
+
+        // callback when splashscreen is out
+        if( 'function' === typeof( document.documentElement.ready ) ){
+          document.documentElement.ready();
+        }
       };
 
       window.addEventListener( 'load', function(){

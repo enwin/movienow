@@ -67,6 +67,15 @@ class Layer{
    * @param  {string} layer id of the layer to display
    */
   show ( layer, onClose ){
+
+    // wait for the splashscreen to hide before showing a layer
+    if( document.getElementById( 'splash' ) ){
+      document.documentElement.ready = function(){
+        this.show( layer, onClose );
+      }.bind( this );
+      return;
+    }
+
     // close the currentLayer
     this.close();
 
