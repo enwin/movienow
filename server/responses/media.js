@@ -1,9 +1,7 @@
-'use strict';
+const movies = require( '../db/movies' ),
+      imdbId = require( '../helpers/imdb' );
 
-var movies = require( '../db/movies' ),
-    imdbId = require( '../helpers/imdb' );
-
-var fetchPoster = function( data ){
+const fetchPoster = function( data ){
   return imdbId.getPoster( data.imgSrc )
     .then( poster => {
       return {
@@ -17,7 +15,7 @@ var fetchPoster = function( data ){
     } );
 };
 
-var handleMovieDb = function( data ){
+const handleMovieDb = function( data ){
   let poster;
 
   if( data.poster ){
@@ -48,7 +46,7 @@ module.exports.poster = function( req, res ){
         return Promise.reject( `No poster found for movie "${req.params.id}"` );
       }
 
-      var img = new Buffer( data.poster, 'base64' );
+      const img = new Buffer( data.poster, 'base64' );
       res.setHeader( 'Content-Type', 'image/jpeg');
       res.setHeader( 'Content-Length', img.length );
       res.end( img );

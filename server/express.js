@@ -1,6 +1,3 @@
-/* global module: true */
-'use strict';
-
 const compress = require( 'compression' ),
     logger = require( 'morgan' ),
     bodyParser = require( 'body-parser' ),
@@ -52,11 +49,14 @@ module.exports = function( app, config ){
 
     bs.watch( [ 'page/**/*.pug', 'script/**/*.js', '!script/sw.js' ] ).on( 'change', bs.reload );
 
-    bs.watch( 'style/**/*.styl', function ( event, file ) {
-      if (event === "change") {
-        bs.reload( "*.css" );
+    bs.watch( 'style/**/*.styl', event => {
+      if( event === 'change' ){
+        bs.reload( '*.css' );
       }
     } );
+  }
+  else{
+    app.set( 'trust proxy', '127.0.0.1' );
   }
 
   // should be placed before express.static
@@ -95,7 +95,7 @@ module.exports = function( app, config ){
     compile: function( str, path ){
        return stylus( str )
          .set( 'filename', path )
-         .set( 'compress', config.dev ? false : true )
+         .set( 'compress', !config.dev )
          .set('sourcemap', config.dev ? {
             'inline': true
           } : false )
@@ -105,13 +105,7 @@ module.exports = function( app, config ){
     }
   } ) );
 
-  // browserify
-
-  // if( config.dev ){
-  //   browserify.settings( { 'transform': [ [ 'babelify', { 'presets': [ 'es2015' ] }], 'pugify' ] } );
-  //   app.use( '/app.js', browserify( 'script/app.js' ) );
-  // }
-
+  // dynamic build of js in dev
   if( config.dev ){
     const rollupPlugins = [
       pug( {

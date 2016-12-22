@@ -1,16 +1,13 @@
-/* global module: true, __dirname: true */
-'use strict';
-
-var path = require('path'),
-    _ = require( 'lodash' ),
-    rootPath = path.normalize( __dirname + '/..'),
+const path = require('path'),
+    rootPath = path.normalize( global.__dirname + '/..'),
     pkg = require( '../package.json' ),
-    privateConfig = require( '../privateConfig.json' ),
-    config;
+    privateConfig = require( '../privateConfig.json' );
 
-var defaults = {
+global.process.env.NODE_ENV = global.process.env.NODE_ENV || 'production';
+
+const defaults = {
   'db': 'mongodb://127.0.0.1/movienow',
-  'dev': 'development' === process.env.NODE_ENV,
+  'dev': 'development' === global.process.env.NODE_ENV,
   'files': [ rootPath, 'www' ].join('/'),
   'pages': [ rootPath, 'page' ].join('/'),
   'port': 8088,
@@ -20,6 +17,6 @@ var defaults = {
   'version': pkg.version
 };
 
-config = _.assign( privateConfig, defaults );
+const config = Object.assign( privateConfig, defaults );
 
 module.exports = config;

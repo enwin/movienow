@@ -1,5 +1,4 @@
-/* global module: true, global: true */
-var mongoose = require( 'mongoose' ),
+const mongoose = require( 'mongoose' ),
     config = require( './config' );
 
 mongoose.Promise = global.Promise;

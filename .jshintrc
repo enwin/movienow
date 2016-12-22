@@ -2,7 +2,8 @@
   "globals": {
     "require": true,
     "module": true,
-    "Modernizr": true
+    "Modernizr": true,
+    "global": true
   },
   "boss": true,
   "browser": true,

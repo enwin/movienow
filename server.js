@@ -1,18 +1,11 @@
-/* global process: true, console: true */
-  var config = require( './server/config' ),
-      express = require( 'express' );
+const config = require( './server/config' ),
+    express = require( 'express' );
 
 require( './server/helpers/slack' );
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'production';
-
-if( 'development' === process.env.NODE_ENV ){
-  config.dev = true;
-}
-
 config.port = config.dev ? 4000 : config.port;
 
-var app = express();
+const app = express();
 
 app.locals.config = config;
 

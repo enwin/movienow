@@ -1,13 +1,9 @@
-'use strict';
-
-var mongoose = require( 'mongoose' ),
-    Schema = mongoose.Schema,
-    geocoder = require( 'geocoder' ),
-    config = require( '../config' ),
-    request = require( 'request-promise' );
+const mongoose = require( 'mongoose' ),
+      Schema = mongoose.Schema,
+      geocoder = require( 'geocoder' );
 
 // Settings
-var theatersSchema = new Schema( {
+const theatersSchema = new Schema( {
   id: { type: String, index: { unique: true, dropDups: true } },
   name: String,
   address: {
@@ -25,9 +21,9 @@ var theatersSchema = new Schema( {
 
 mongoose.model( 'theaters', theatersSchema );
 
-var theaterDb = mongoose.model( 'theaters' );
+const theaterDb = mongoose.model( 'theaters' );
 
-var get = ( theater ) => {
+const get = ( theater ) => {
   return new Promise( ( resolve, reject ) => {
 
     theaterDb.findOne( { id: theater.id }, ( err, theater ) => {
@@ -43,8 +39,8 @@ var get = ( theater ) => {
 
 module.exports.get = get;
 
-var add = ( theater ) => {
-  var savedObject;
+const add = ( theater ) => {
+  let savedObject;
 
   return get( theater )
     .then( theaterFound => {
@@ -73,14 +69,14 @@ var add = ( theater ) => {
 
 module.exports.add = add;
 
-var save = ( theater ) => {
-  var toSave = Object.assign( {}, theater ),
+const save = ( theater ) => {
+  let toSave = Object.assign( {}, theater ),
       savedObject;
 
   delete toSave.movies;
 
   return new Promise( ( resolve, reject ) => {
-    var newtheater = new theaterDb( toSave );
+    let newtheater = new theaterDb( toSave );
 
     newtheater.save( ( err ) => {
       if( err ){
@@ -99,7 +95,7 @@ var save = ( theater ) => {
   } );
 };
 
-var theaterMap = ( theater ) => {
+const theaterMap = ( theater ) => {
 
   return new Promise( ( resolve, reject ) => {
     geocoder.geocode( theater.address, ( err, data ) => {
@@ -117,28 +113,11 @@ var theaterMap = ( theater ) => {
     } );
   } );
 
-  // return geocode.then( coord => {
-  //   // return a base64 of the image
-  //   return request( {
-  //     uri: `https://api.mapbox.com/styles/v1/enwin/cilc1wlfh0023bekqea6ijgm1/static/${coord.lng},${coord.lat},14.5,0,0/720x1280@2x?access_token=${config.mapToken}&attribution=false&logo=false`,
-  //     headers: {
-  //       'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
-  //     },
-  //     encoding: 'binary',
-  //     transform: ( body ) => {
-  //       return  {
-  //         coord: coord,
-  //         map: `data:image/png;base64,${ new Buffer( body, 'binary' ).toString( 'base64' )}`
-  //       };
-  //     }
-  //   } );
-  // } );
-
 };
 
 module.exports.theaterMap = theaterMap;
 
-var update = ( theaterId, updates ) => {
+const update = ( theaterId, updates ) => {
   return new Promise( ( resolve, reject ) => {
     theaterDb.update( { id: theaterId }, updates, ( err, theater ) => {
       if( err ){

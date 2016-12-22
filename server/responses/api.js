@@ -1,19 +1,18 @@
-'use strict';
-
-var api = require( '../helpers/imdb' ),
-    movieDB = require( '../db/movies' ),
-    geocoder = require( 'geocoder' ),
-    slug = require( 'slug' ),
-    slack = require( '../helpers/slack' ),
-    citySanitize = require( '../helpers/city' ).sanitize,
-    config = require( '../config' ),
-    apiStore = {};
+const api = require( '../helpers/imdb' ),
+      movieDB = require( '../db/movies' ),
+      geocoder = require( 'geocoder' ),
+      slug = require( 'slug' ),
+      slack = require( '../helpers/slack' ),
+      citySanitize = require( '../helpers/city' ).sanitize,
+      config = require( '../config' ),
+      apiStore = {};
 
 function parseGeo( result ){
-  var types = [ 'sublocality', 'locality', 'administrative_area_level_1', 'country', 'postal_code' ],
+  const types = [ 'sublocality', 'locality', 'administrative_area_level_1', 'country', 'postal_code' ],
       name = [ 'closest', 'city', 'area', 'country', 'zip' ],
-      geo = {},
-      match;
+      geo = {};
+
+  let match;
 
   types.forEach( ( type, index ) => {
     match = result.find( component => component.types.indexOf( type ) > -1 );
@@ -60,7 +59,7 @@ function send500( req, res, e ){
     return;
   }
 
-  var fields = [ {
+  const fields = [ {
       title: 'url',
       value: req.url
     }, {
@@ -97,7 +96,7 @@ function send500( req, res, e ){
   }
 
   if( 'object' === typeof( e ) ){
-    for( var key in e ){
+    for( let key in e ){
       fields.push( {
         title: key,
         value: e[ key ]
@@ -121,7 +120,7 @@ function send500( req, res, e ){
 
 function send( res, cache ){
 
-  for( var key in cache.headers ){
+  for( let key in cache.headers ){
     res.setHeader( key, cache.headers[ key ] );
   }
 
@@ -216,10 +215,11 @@ module.exports.movies = ( req, res ) => {
 };
 
 module.exports.around = ( req, res ) => {
-  var coords = req.headers[ 'x-movienow-coords' ] ? JSON.parse( req.headers[ 'x-movienow-coords' ] ) : null,
+  const coords = req.headers[ 'x-movienow-coords' ] ? JSON.parse( req.headers[ 'x-movienow-coords' ] ) : null,
       location = req.headers[ 'x-movienow-location' ],
-      geocode,
       aroundData = {};
+
+  let geocode;
 
   if( location ){
     location = citySanitize( location );
@@ -228,7 +228,7 @@ module.exports.around = ( req, res ) => {
   if( coords ){
     geocode = new Promise( ( resolve, reject ) => {
       geocoder.reverseGeocode( coords[ 0 ], coords[ 1 ], ( err, data ) => {
-        var result = data.results[ 0 ].address_components;
+        let result = data.results[ 0 ].address_components;
         if( err ){
           reject( err );
           return;
@@ -255,7 +255,7 @@ module.exports.around = ( req, res ) => {
           return;
         }
 
-        var location = data.results[ 0 ].geometry.location;
+        const location = data.results[ 0 ].geometry.location;
 
         geocoder.reverseGeocode( location.lat, location.lng, ( err, data ) => {
           if( err ){
@@ -263,7 +263,7 @@ module.exports.around = ( req, res ) => {
             return;
           }
 
-          var result = data.results[ 0 ].address_components;
+          let result = data.results[ 0 ].address_components;
 
           resolve( parseGeo( result ) );
         } );

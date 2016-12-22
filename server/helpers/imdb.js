@@ -1,12 +1,9 @@
-'use strict';
-
 const request = require( 'request-promise-native' ),
       cheerio = require( 'cheerio' );
 
 const reTheaterId = /cinema\/(\d+)/,
       reDirectors = /\s*\n/g,
       reExtraInfo = /\(([\w\s]+)?\s?(\d{4})\)/;
-
 
 const reIID = /tt\w*/,
       reTitleYear = /(.+)\s\((\d+)\)/i,

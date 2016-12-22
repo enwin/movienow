@@ -1,15 +1,13 @@
-'use strict';
-
-var Slack = require( 'slack-node' ),
-    config = require( '../config' ),
-    slack = new Slack();
+const Slack = require( 'slack-node' ),
+      config = require( '../config' ),
+      slack = new Slack();
 
 slack.setWebhook( config.slackHook );
 
 //proxy console.error to send slack message
 ( function( error ){
   console.error = function(){
-    var params = {
+    const params = {
       username: 'console.error',
       attachments: []
     };

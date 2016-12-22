@@ -1,10 +1,8 @@
-'use strict';
-
-var mongoose = require( 'mongoose' ),
-    Schema = mongoose.Schema;
+const mongoose = require( 'mongoose' ),
+      Schema = mongoose.Schema;
 
 // Settings
-var moviesSchema = new Schema( {
+const moviesSchema = new Schema( {
   id: { type: String, index: { unique: true, dropDups: true } },
   title: Object,
   poster: String,
@@ -21,9 +19,9 @@ var moviesSchema = new Schema( {
 
 mongoose.model( 'Movies', moviesSchema );
 
-var movieDb = mongoose.model( 'Movies' );
+const movieDb = mongoose.model( 'Movies' );
 
-var get = ( movie ) => {
+const get = ( movie ) => {
   return new Promise( ( resolve, reject ) => {
 
     movieDb.findOne( { id: movie.id }, ( err, movie ) => {
@@ -39,7 +37,7 @@ var get = ( movie ) => {
 
 module.exports.get = get;
 
-var add = ( movie, country ) => {
+const add = ( movie, country ) => {
   return new Promise( ( resolve, reject ) => {
 
     let countryTitle = {};
@@ -82,7 +80,7 @@ var add = ( movie, country ) => {
 
 module.exports.add = add;
 
-var update = ( movieId, updates ) => {
+const update = ( movieId, updates ) => {
   return new Promise( ( resolve, reject ) => {
     movieDb.update( { id: movieId }, updates, ( err, movie ) => {
       if( err ){

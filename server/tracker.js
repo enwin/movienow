@@ -1,6 +1,4 @@
-'use strict';
-
-let config = require( './config' ),
+const config = require( './config' ),
     PiwikTracker = require('piwik-tracker'),
     piwik = new PiwikTracker( 1, `${config.trackerUrl}piwik.php` );
 

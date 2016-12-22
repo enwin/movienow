@@ -1,17 +1,16 @@
-'use strict';
+const config = require( '../config' ),
+      fs = require( 'fs' ),
+      path = require( 'path' ),
+      yaml = require('js-yaml'),
+      _ = require( 'lodash' );
 
-var config = require( '../config' ),
-    fs = require( 'fs' ),
-    path = require( 'path' ),
-    yaml = require('js-yaml'),
-    _ = require( 'lodash' );
-
-var contents = fs.readFileSync( config.root + '/server/locales/site.yaml', 'utf8' ),
+const contents = fs.readFileSync( config.root + '/server/locales/site.yaml', 'utf8' ),
     jadeConf = yaml.load( contents );
 
 function getLang( req ){
-  var lang = jadeConf.defaultLang,
-      locale;
+  const lang = jadeConf.defaultLang;
+
+  let locale;
 
   if( jadeConf.baseUrl ){
     locale = _.findKey( jadeConf.baseUrl, function( locale ){
@@ -40,25 +39,22 @@ function setLang( req ){
     return;
   }
 
-  var conf,
-      langConf = _.assign( {}, jadeConf ),
-      files = fs.readdirSync( config.root + '/server/locales/' + req.session.lang ),
+  const langConf = Object.assign( {}, jadeConf ),
+        files = fs.readdirSync( config.root + '/server/locales/' + req.session.lang );
+
+  let conf,
       isYAML;
 
-    _.each( files, function( file ) {
+    files.forEach( file => {
 
-    isYAML = path.extname( file ) === '.yaml' || path.extname( file ) === '.yml';
+      isYAML = path.extname( file ) === '.yaml' || path.extname( file ) === '.yml';
 
-    if ( isYAML ) {
-      conf = yaml.load( fs.readFileSync( config.root + '/server/locales/' + req.session.lang + '/' + file, 'utf8' ) );
-      _.merge( langConf, conf );
-    }
+      if ( isYAML ) {
+        conf = yaml.load( fs.readFileSync( config.root + '/server/locales/' + req.session.lang + '/' + file, 'utf8' ) );
+        Object.assign( langConf, conf );
+      }
 
     });
-
-    // _.each( langConf.url, function( path, name ){
-    // langConf.url[ name ] = [ '/', langConf.lang, '/', path ].join('');
-    // } );
 
     if( !req.app.locals.langs ){
       req.app.locals.langs = {};

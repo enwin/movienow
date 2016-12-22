@@ -1,5 +1,3 @@
-'use-strict'
-
 import Screen from './screen';
 import view from '../../page/view/home.pug';
 import bind from '../helper/bind';
@@ -8,14 +6,6 @@ import preload from '../helper/preload';
 
 import _shuffle from 'lodash/shuffle';
 
-// var posters = [
-//   // '/media/dyn/home/kubo.jpg',
-//   // '/media/dyn/home/suicidesquad1.jpg',
-//   // '/media/dyn/home/suicidesquad2.jpg',
-//   // '/media/dyn/home/startrekbeyond.jpg',
-//   // '/media/dyn/home/ghostbusters.jpg',
-//   // '/media/dyn/home/absolutelyfabulous.jpg'
-// }
 const posters = [
   {
     id: 'tt3748528',
@@ -49,13 +39,12 @@ const posters = [
     id: 'tt3731562',
     url: '/media/dyn/home/kong.jpg'
   }
-]
+];
 
 class Home extends Screen {
 
   bind (){
     bind( this.el, 'submit', 'form', this.handleSearch.bind( this ) );
-    //bind( this.el, 'click', '.button-around', this.handleLocation.bind( this ) );
   }
 
   displayed (){
@@ -104,7 +93,6 @@ class Home extends Screen {
   initialize (){
     this.bind();
     this.render();
-    // console.log( posters, _shuffle( posters ) );
     this.loadPoster();
   }
 
@@ -145,7 +133,6 @@ class Home extends Screen {
 
     const movie = posters.find( poster => poster.url === url );
 
-    //this.els.poster.style.backgroundImage = `url( ${url} )`;
     this.els.poster.innerHTML = `<img src="${url}" alt="" /><a href="/movies/${movie.id}"></a>`;
 
     if( this.els.poster.classList.contains( 'show' ) ){
