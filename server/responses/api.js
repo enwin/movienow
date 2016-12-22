@@ -165,6 +165,14 @@ module.exports.theaters = ( req, res ) => {
         saveMovies( data.movies, req.params.country );
         return data;
       } )
+      .then( data => {
+        data.movies = data.movies.map( movie => {
+          movie.title = movie.title[ req.params.country ] || movie.title;
+          return movie;
+        } );
+
+        return data;
+      } )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
@@ -181,16 +189,28 @@ module.exports.movies = ( req, res ) => {
     api.getMovie( req.params.id, req.params.country, req.params.zip, req.query.day )
       .then( data => {
         saveMovies( [ data ], req.params.country );
-        res.cacheSend( data );
+        return data;
       } )
+      .then( data => {
+        data.title = data.title[ req.params.country ] || data.title;
+        return data;
+      } )
+      .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
   else{
     api.getMovies( req.params.country, req.params.zip, req.query.day )
       .then( data => {
         saveMovies( data, req.params.country );
-        res.cacheSend( data );
+        return data;
       } )
+      .then( data => {
+        return data.map( movie => {
+          movie.title = movie.title[ req.params.country ] || movie.title;
+          return movie;
+        } );
+      } )
+      .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
   }
 };
