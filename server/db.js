@@ -1,8 +1,8 @@
-/* global module: true */
-'use strict';
-
+/* global module: true, global: true */
 var mongoose = require( 'mongoose' ),
     config = require( './config' );
+
+mongoose.Promise = global.Promise;
 
 require( './db/movies' );
 
