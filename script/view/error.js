@@ -1,5 +1,5 @@
 import bind from '../helper/bind';
-import dom from '../../page/view/error.jade';
+import dom from '../../page/view/error.pug';
 
 class error {
   constructor (){

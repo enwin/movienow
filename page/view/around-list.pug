@@ -4,14 +4,14 @@ if theaters
       each theater in theaters
         unless !theater.id
           li.theater-item
-            a.item-title( href="/theaters/#{theater.id}" )
+            a.item-title( href=`/theaters/${theater.id}` )
               != theater.name
               if theater.address
                 br
-                small #{theater.address}
+                small!= theater.address
 if movies
   div.screen-panel( role="tabpanel" id="around-1" aria-hidden='true' )
     ul.item-list
       each movie in movies
         li.theater-item
-          a.item-title( href="/movies/#{movie.id}" )!= movie.title
+          a.item-title( href=`/movies/${movie.id}` )!= movie.title

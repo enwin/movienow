@@ -4,7 +4,7 @@ import favList from '../data/favorites';
 
 import Screen from './screen';
 import moment from 'moment';
-import view from '../../page/view/theater.jade';
+import view from '../../page/view/theater.pug';
 import _sort from 'lodash/sortBy';
 import bind from '../helper/bind';
 import Tablist from '../helper/accedeweb-tablist';

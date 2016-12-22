@@ -13,7 +13,7 @@ header.screen-header
   nav.screen-nav.nav-days
     ul.nav-list( role="tablist" )
       each type, index in [ 'Movies', 'Info' ]
-        li.nav-list-item( role="tab" aria-controls="theater-#{index}" )!= type
+        li.nav-list-item( role="tab" aria-controls=`theater-${index}` )!= type
 
 div.screen-content
   if movies
@@ -24,21 +24,21 @@ div.screen-content
             include ../../_source/svg/line.svg
 
             article.movie
-              a.movie-artwork( href="/movies/#{movie.id}?tab=movie-info" )
+              a.movie-artwork( href=`/movies/${movie.id}?tab=movie-info` )
                 figure
                   span.movie-artwork-wrapper
-                    img( src="/media/poster/#{movie.id}" )
+                    img( src=`/media/poster/${movie.id}` )
               div.movie-infos
                 h1.movie-title
-                  a( href="/movies/#{movie.id}?tab=movie-info" )!= movie.title
+                  a( href=`/movies/${movie.id}?tab=movie-info` )!= movie.title
 
                 if movie.infos
                   ul.movie-infos-list
                     each info, key in movie.infos
                       if key === 'nextShowTime'
-                        li.movie-infos-item( class="movie-#{key}" ) (next screening #{info.formated})
+                        li.movie-infos-item( class=`movie-${key}` ) (next screening #{info.formated})
                       else
-                        li.movie-infos-item( class="movie-#{key}" )!= info
+                        li.movie-infos-item( class=`movie-${key}` )!= info
 
                 if movie.showtimes[0].info !== 'all'
                   ul
@@ -50,18 +50,18 @@ div.screen-content
                             li.movie-times-item
                               if time.disabled
                                 s
-                                  time( datetime="#{time.value}" )!= time.formated
+                                  time( datetime=`${time.value}` )!= time.formated
                               else
-                                time( datetime="#{time.value}" )!= time.formated
+                                time( datetime=`${time.value}` )!= time.formated
                 else
                   ul.movie-times-list.movie-times
                     each time in movie.showtimes[0].times
                       li.movie-times-item
                         if time.disabled
                           s
-                            time( datetime="#{time.value}" )!= time.formated
+                            time( datetime=`${time.value}` )!= time.formated
                         else
-                          time( datetime="#{time.value}" )!= time.formated
+                          time( datetime=`${time.value}` )!= time.formated
 
 
     div.screen-panel.screen-map( role="tabpanel" id="theater-1" aria-hidden='false' )

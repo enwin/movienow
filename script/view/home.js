@@ -1,7 +1,7 @@
 'use-strict'
 
 import Screen from './screen';
-import view from '../../page/view/home.jade';
+import view from '../../page/view/home.pug';
 import bind from '../helper/bind';
 import router from '../module/router';
 import preload from '../helper/preload';

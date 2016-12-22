@@ -14,7 +14,7 @@ header.screen-header
   nav.screen-nav.nav-days
     ul.nav-list( role="tablist" )
       each type, index in [ 'Theaters', 'Movies' ]
-        li.nav-list-item( role="tab" aria-controls="around-#{index}" )!= type
+        li.nav-list-item( role="tab" aria-controls=`around-${index}` )!= type
 
 div.screen-content
-  include around-list.jade
+  include around-list

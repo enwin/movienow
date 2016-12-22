@@ -5,8 +5,8 @@ import user from '../data/user';
 import layer from './layer';
 
 import Screen from './screen';
-import view from '../../page/view/around.jade';
-import domList from '../../page/view/around-list.jade';
+import view from '../../page/view/around.pug';
+import domList from '../../page/view/around-list.pug';
 import bind from '../helper/bind';
 import loader from '../module/loader';
 import Tablist from '../helper/accedeweb-tablist';

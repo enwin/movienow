@@ -4,8 +4,8 @@ import favList from '../data/favorites';
 
 import bind from '../helper/bind';
 import Screen from './screen';
-import view from '../../page/view/favorites.jade';
-import domList from '../../page/view/favorites-list.jade';
+import view from '../../page/view/favorites.pug';
+import domList from '../../page/view/favorites-list.pug';
 import router from '../module/router';
 
 class Favorites extends Screen {

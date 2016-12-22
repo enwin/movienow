@@ -4,8 +4,8 @@ header.screen-header
   form#theaterFilter.screen-nav.screen-form
     span.input-floating
       include ../../_source/svg/icon_search.svg
-      input#theaterBlob( type="text" pattern=".*" required value="#{screenParams.filter || ''}" autocomplete="off" )
+      input#theaterBlob( type="text" pattern=".*" required value=`${screenParams.filter || ''}` autocomplete="off" )
       label( for="theaterBlob" ) Search theaters
 
 div.screen-content
-  include theaters-list.jade
+  include theaters-list

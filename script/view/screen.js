@@ -3,7 +3,7 @@ import _extend from 'lodash/extend';
 import moment from 'moment';
 import errorDialog from './error';
 import bind from '../helper/bind';
-import domMessage from '../../page/view/message.jade';
+import domMessage from '../../page/view/message.pug';
 import user from '../data/user';
 import router from '../module/router';
 

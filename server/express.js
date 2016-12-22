@@ -1,7 +1,7 @@
 /* global module: true */
 'use strict';
 
-var compress = require( 'compression' ),
+const compress = require( 'compression' ),
     logger = require( 'morgan' ),
     bodyParser = require( 'body-parser' ),
     files = require( 'serve-static' ),
@@ -11,7 +11,11 @@ var compress = require( 'compression' ),
     stylus = require( 'stylus' ),
     chouchenn = require( 'chouchenn' ),
     autoprefixer = require( 'autoprefixer-stylus' ),
-    browserify = require( 'browserify-middleware' ),
+    rollup = require( 'express-middleware-rollup' ),
+    babel = require( 'rollup-plugin-babel' ),
+    nodeResolve = require( 'rollup-plugin-node-resolve' ),
+    commonjs = require( 'rollup-plugin-commonjs' ),
+    pug = require( 'rollup-plugin-pug' ),
     path = require( 'path' );
 
 module.exports = function( app, config ){
@@ -46,7 +50,7 @@ module.exports = function( app, config ){
 
     app.use( require( 'connect-browser-sync' )( bs ) );
 
-    bs.watch( [ 'page/**/*.jade', 'script/**/*.js', '!script/sw.js' ] ).on( 'change', bs.reload );
+    bs.watch( [ 'page/**/*.pug', 'script/**/*.js', '!script/sw.js' ] ).on( 'change', bs.reload );
 
     bs.watch( 'style/**/*.styl', function ( event, file ) {
       if (event === "change") {
@@ -103,9 +107,40 @@ module.exports = function( app, config ){
 
   // browserify
 
+  // if( config.dev ){
+  //   browserify.settings( { 'transform': [ [ 'babelify', { 'presets': [ 'es2015' ] }], 'pugify' ] } );
+  //   app.use( '/app.js', browserify( 'script/app.js' ) );
+  // }
+
   if( config.dev ){
-    browserify.settings( { 'transform': [ [ 'babelify', { 'presets': [ 'es2015' ] }], 'jadeify' ] } );
-    app.use( '/app.js', browserify( 'script/app.js' ) );
+    const rollupPlugins = [
+      pug( {
+        extensions: [ '.pug', '.svg' ]
+      } ),
+      babel({
+        exclude: 'node_modules/**'
+      }),
+      nodeResolve({
+        jsnext: true,
+        browser: true
+      }),
+      commonjs({
+        sourceMap: config.dev
+      })
+    ];
+
+    app.use( rollup( {
+      src: './script/',
+      dest: './www/',
+      root: './',
+      rollupOpts: {
+        sourceMap: true,
+        plugins: rollupPlugins
+      },
+      bundleExtension: '.js',
+      debug: true,
+      format: 'iife'
+    } ) );
   }
 
   // setup root folder
@@ -115,7 +150,7 @@ module.exports = function( app, config ){
   } ) );
 
   app.set( 'views', config.pages );
-  app.set( 'view engine', 'jade' );
+  app.set( 'view engine', 'pug' );
 
   app.locals.pretty = true;
 

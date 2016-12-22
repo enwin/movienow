@@ -4,8 +4,8 @@ header.screen-header
   form#theaterFilter.screen-nav.screen-form
     span.input-floating
       include ../../_source/svg/icon_search.svg
-      input#favoriteBlob( type="search" pattern=".*" required value="#{screenParams.filter || ''}" )
+      input#favoriteBlob( type="search" pattern=".*" required value=`${screenParams.filter || ''}` )
       label( for="favoriteBlob" ) Search favorites
 
 div.screen-content
-  include favorites-list.jade
+  include favorites-list

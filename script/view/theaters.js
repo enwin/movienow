@@ -2,8 +2,8 @@
 
 import bind from '../helper/bind';
 import Screen from './screen';
-import view from '../../page/view/theaters.jade';
-import domList from '../../page/view/theaters-list.jade';
+import view from '../../page/view/theaters.pug';
+import domList from '../../page/view/theaters-list.pug';
 import router from '../module/router';
 
 import _sortBy from 'lodash/sortBy';

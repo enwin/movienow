@@ -1,7 +1,7 @@
 import user from '../data/user';
 import favList from '../data/favorites';
 
-import dom from '../../page/view/menu.jade';
+import dom from '../../page/view/menu.pug';
 import bind from '../helper/bind';
 
 var datas = {

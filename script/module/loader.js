@@ -1,4 +1,4 @@
-import view from '../../page/module/loader.jade';
+import view from '../../page/module/loader.pug';
 
 class Loader{
   constructor (){
