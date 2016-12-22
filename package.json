@@ -5,12 +5,13 @@
   "main": "server.js",
   "scripts": {
     "serve": "nodemon",
-    "js": "browserify ./script/app.js -o ./www/app.js -t [ babelify --presets [ es2015 ] ]",
-    "sw": "browserify ./script/sw.js -o ./www/sw.js",
+    "js": "browserify ./script/app.js -t [ babelify --presets [ es2015 ] ] -t jadeify -g uglifyify | uglifyjs -c -m > ./www/app.js",
+    "sw": "node setSWFile.js",
     "watch:sw": "onchange 'script/sw.js' -- npm run sw",
     "watch:js": "onchange 'script/app.js' -- npm run js",
     "svg": "svgo -f ./_source/svg --pretty --config=svgo.yml",
-    "start": "npm run serve"
+    "start": "npm run serve",
+    "build": "npm run js && npm run sw"
   },
   "author": "enwin <tifftafftoff@gmail.com>",
   "license": "ISC",
@@ -56,6 +57,7 @@
     "slack-node": "^0.2.0",
     "slug": "^0.9.1",
     "stylus": "^0.54.5",
+    "uglifyify": "^3.0.4",
     "whatwg-fetch": "^2.0.1"
   }
 }

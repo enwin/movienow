@@ -1,7 +1,4 @@
-/* global self: true, caches: true */
-
-import pkg from '../package.json';
-
+/* global self: true, caches: true, version: true */
 function api( e ){
   var url = new URL( e.request.url );
 
@@ -108,7 +105,7 @@ const routes = {
 
 // we'll version our cache (and learn how to delete caches in
 // some other post)
-const cacheName = `site-${pkg.version}`,
+const cacheName = `site-${version}`,
       siteFiles = [
         '/',
         '/style.css',

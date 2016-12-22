@@ -46,7 +46,7 @@ module.exports = function( app, config ){
 
     app.use( require( 'connect-browser-sync' )( bs ) );
 
-    bs.watch( [ 'page/**/*.jade', 'script/**/*.js' ] ).on( 'change', bs.reload );
+    bs.watch( [ 'page/**/*.jade', 'script/**/*.js', '!script/sw.js' ] ).on( 'change', bs.reload );
 
     bs.watch( 'style/**/*.styl', function ( event, file ) {
       if (event === "change") {
@@ -70,7 +70,7 @@ module.exports = function( app, config ){
   } ) );
 
   app.use( expires( {
-    pattern: /png|media/,
+    pattern: /png|media|sw\.js/,
     duration: 1000 * 60 * 60 * 24 * 183
   } ) );
 
@@ -102,10 +102,11 @@ module.exports = function( app, config ){
   } ) );
 
   // browserify
-  browserify.settings( { 'transform': [ [ 'babelify', { 'presets': [ 'es2015' ] }], 'jadeify' ] } );
 
-  app.use( '/app.js', browserify( 'script/app.js' ) );
-  app.use( '/sw.js', browserify( 'script/sw.js' ) );
+  if( config.dev ){
+    browserify.settings( { 'transform': [ [ 'babelify', { 'presets': [ 'es2015' ] }], 'jadeify' ] } );
+    app.use( '/app.js', browserify( 'script/app.js' ) );
+  }
 
   // setup root folder
   app.use( files( config.files, {
