@@ -216,8 +216,9 @@ module.exports.movies = ( req, res ) => {
 
 module.exports.around = ( req, res ) => {
   const coords = req.headers[ 'x-movienow-coords' ] ? JSON.parse( req.headers[ 'x-movienow-coords' ] ) : null,
-      location = req.headers[ 'x-movienow-location' ],
       aroundData = {};
+
+  let location = req.headers[ 'x-movienow-location' ];
 
   let geocode;
 
