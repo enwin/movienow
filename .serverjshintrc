@@ -1,0 +1,20 @@
+{
+  "globals": {
+    "require": true,
+    "module": true,
+    "global": true,
+    "console": true
+  },
+  "boss": true,
+  "browser": true,
+  "curly": true,
+  "eqeqeq": true,
+  "eqnull": true,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "unused": true,
+  "esnext": true
+}
