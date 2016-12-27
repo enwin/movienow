@@ -74,7 +74,7 @@ module.exports = function( app, config ){
   } ) );
 
   app.use( expires( {
-    pattern: /png|media|sw\.js/,
+    pattern: /png|media/,
     duration: 1000 * 60 * 60 * 24 * 183
   } ) );
 
