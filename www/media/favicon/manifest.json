@@ -1,8 +1,11 @@
 {
   "name": "Movie now!",
+  "description": "Find a movie showtime, right here, right now.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
+  "background_color": "#343434",
+  "theme_color": "#282828",
   "icons": [
     {
       "src": "/media/favicon/android-chrome-36x36.png",
