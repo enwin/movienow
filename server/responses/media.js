@@ -46,7 +46,7 @@ module.exports.poster = function( req, res ){
         return Promise.reject( `No poster found for movie "${req.params.id}"` );
       }
 
-      const img = new Buffer( data.poster, 'base64' );
+      const img = new global.Buffer( data.poster, 'base64' );
       res.setHeader( 'Content-Type', 'image/jpeg');
       res.setHeader( 'Content-Length', img.length );
       res.end( img );

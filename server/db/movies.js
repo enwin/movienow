@@ -1,3 +1,4 @@
+/* jshint latedef: false */
 const mongoose = require( 'mongoose' ),
       Schema = mongoose.Schema;
 
@@ -19,12 +20,12 @@ const moviesSchema = new Schema( {
 
 mongoose.model( 'Movies', moviesSchema );
 
-const movieDb = mongoose.model( 'Movies' );
+const MovieDb = mongoose.model( 'Movies' );
 
-const get = ( movie ) => {
+function get( movie ){
   return new Promise( ( resolve, reject ) => {
 
-    movieDb.findOne( { id: movie.id }, ( err, movie ) => {
+    MovieDb.findOne( { id: movie.id }, ( err, movie ) => {
       if( err ){
         reject( err );
         return;
@@ -33,11 +34,11 @@ const get = ( movie ) => {
       resolve( movie );
     } );
   } );
-};
+}
 
 module.exports.get = get;
 
-const add = ( movie, country ) => {
+function add( movie, country ){
   return new Promise( ( resolve, reject ) => {
 
     let countryTitle = {};
@@ -60,7 +61,7 @@ const add = ( movie, country ) => {
 
         movie.title = countryTitle;
 
-        var newMovie = new movieDb( movie );
+        var newMovie = new MovieDb( movie );
 
         newMovie.save( ( err ) => {
           if( err ){
@@ -76,13 +77,13 @@ const add = ( movie, country ) => {
         } );
       } );
   } );
-};
+}
 
 module.exports.add = add;
 
-const update = ( movieId, updates ) => {
+function update( movieId, updates ){
   return new Promise( ( resolve, reject ) => {
-    movieDb.update( { id: movieId }, updates, ( err, movie ) => {
+    MovieDb.update( { id: movieId }, updates, ( err, movie ) => {
       if( err ){
         reject( err );
         return;
@@ -92,6 +93,6 @@ const update = ( movieId, updates ) => {
 
     } );
   } );
-};
+}
 
 module.exports.update = update;

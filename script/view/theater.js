@@ -1,5 +1,3 @@
-'use-strict'
-
 import favList from '../data/favorites';
 
 import Screen from './screen';

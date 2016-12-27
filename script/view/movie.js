@@ -1,5 +1,3 @@
-'use-strict'
-
 import Screen from './screen';
 import moment from 'moment';
 import view from '../../page/view/movie.pug';

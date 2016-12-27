@@ -1,5 +1,3 @@
-'use-strict'
-
 import user from '../data/user';
 
 import layer from './layer';

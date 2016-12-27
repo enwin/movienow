@@ -1,5 +1,3 @@
-'use-strict'
-
 import favList from '../data/favorites';
 
 import bind from '../helper/bind';

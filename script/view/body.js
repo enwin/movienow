@@ -1,6 +1,6 @@
 import bind from '../helper/bind';
 
-class body {
+class Body {
   constructor (){
     this.els = {
       header: document.querySelector( '.site-header' )
@@ -12,7 +12,7 @@ class body {
     bind( this.els.header, 'click', '.button-back', this.goBack.bind( this ) );
   }
 
-  goBack ( e ){
+  goBack (){
     window.history.back();
   }
 
@@ -22,4 +22,4 @@ class body {
   }
 }
 
-export default new body();
+export default new Body();

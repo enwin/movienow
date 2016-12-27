@@ -1,7 +1,7 @@
 import bind from '../helper/bind';
 import dom from '../../page/view/error.pug';
 
-class error {
+class ErrorDialog {
   constructor (){
     this.el = document.createElement( 'section' );
     this.el.id = "errorDialog";
@@ -63,4 +63,4 @@ class error {
   }
 }
 
-export default new error();
+export default new ErrorDialog();

@@ -1,5 +1,3 @@
-'use-strict'
-
 import Screen from './screen';
 //import view from '../../page/view/home.pug';
 

@@ -3,8 +3,8 @@ const config = require( './config' ),
       showtimes = require( './responses/api' ),
       media = require( './responses/media' ),
       Joi = require('joi'),
-      Celebrate = require('celebrate'),
-      EscapeHtml = require('escape-html');
+      celebrate = require('celebrate'),
+      escapeHtml = require('escape-html');
 
 const validateId = {
   params: Joi.object().keys({
@@ -46,7 +46,7 @@ function handleJoiError(){
 
         if (err.details) {
           for (var i = 0; i < err.details.length; i++) {
-            error.validation.keys.push( EscapeHtml(err.details[i].path));
+            error.validation.keys.push( escapeHtml(err.details[i].path));
           }
         }
       }
@@ -69,16 +69,16 @@ module.exports = function( app ){
   // home
   app.get( '/', response.home );
   app.get( '/favorites', response.favorites );
-  app.get( '/theaters/:id?', Celebrate( validateId ), response.theaters );
-  app.get( '/movies/:id?', Celebrate( validateId ), response.movies );
+  app.get( '/theaters/:id?', celebrate( validateId ), response.theaters );
+  app.get( '/movies/:id?', celebrate( validateId ), response.movies );
   app.get( '/around', response.around );
   app.get( '/credits', response.credits );
 
   app.use( '/api/:type/:country/*', showtimes.cache );
 
-  app.get( '/api/theaters/:country/:zip/:id?', Celebrate( validateAPI ), showtimes.theaters );
-  app.get( '/api/movies/:country/:zip/:id?', Celebrate( validateAPI ), showtimes.movies );
-  app.get( '/api/aroundme', Celebrate( validateAround ), showtimes.around );
+  app.get( '/api/theaters/:country/:zip/:id?', celebrate( validateAPI ), showtimes.theaters );
+  app.get( '/api/movies/:country/:zip/:id?', celebrate( validateAPI ), showtimes.movies );
+  app.get( '/api/aroundme', celebrate( validateAround ), showtimes.around );
 
   app.get( '/media/poster/:id', media.poster );
 

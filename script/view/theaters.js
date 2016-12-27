@@ -1,5 +1,3 @@
-'use-strict'
-
 import bind from '../helper/bind';
 import Screen from './screen';
 import view from '../../page/view/theaters.pug';

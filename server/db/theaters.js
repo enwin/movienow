@@ -1,3 +1,4 @@
+/* jshint latedef: false */
 const mongoose = require( 'mongoose' ),
       Schema = mongoose.Schema,
       geocoder = require( 'geocoder' );
@@ -21,12 +22,12 @@ const theatersSchema = new Schema( {
 
 mongoose.model( 'theaters', theatersSchema );
 
-const theaterDb = mongoose.model( 'theaters' );
+const TheaterDb = mongoose.model( 'theaters' );
 
 const get = ( theater ) => {
   return new Promise( ( resolve, reject ) => {
 
-    theaterDb.findOne( { id: theater.id }, ( err, theater ) => {
+    TheaterDb.findOne( { id: theater.id }, ( err, theater ) => {
       if( err ){
         reject( err );
         return;
@@ -76,7 +77,7 @@ const save = ( theater ) => {
   delete toSave.movies;
 
   return new Promise( ( resolve, reject ) => {
-    let newtheater = new theaterDb( toSave );
+    let newtheater = new TheaterDb( toSave );
 
     newtheater.save( ( err ) => {
       if( err ){
@@ -97,11 +98,10 @@ const save = ( theater ) => {
 
 const theaterMap = ( theater ) => {
 
-  return new Promise( ( resolve, reject ) => {
+  return new Promise( resolve => {
     geocoder.geocode( theater.address, ( err, data ) => {
 
       if( err || !data.results.length ){
-        //reject( err || data );
         resolve( {
           coord: {}
         } );
@@ -119,7 +119,7 @@ module.exports.theaterMap = theaterMap;
 
 const update = ( theaterId, updates ) => {
   return new Promise( ( resolve, reject ) => {
-    theaterDb.update( { id: theaterId }, updates, ( err, theater ) => {
+    TheaterDb.update( { id: theaterId }, updates, ( err, theater ) => {
       if( err ){
         reject( err );
         return;

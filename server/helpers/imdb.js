@@ -334,7 +334,7 @@ class Imdb{
       },
       encoding: 'binary',
       transform: ( body ) => {
-        return new Buffer( body, 'binary' ).toString( 'base64' );
+        return new global.Buffer( body, 'binary' ).toString( 'base64' );
       }
     } );
   }
