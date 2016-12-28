@@ -147,7 +147,8 @@ class Around extends Screen {
   }
 
   initialize (){
-    this.setTitle( 'Around me' );
+    this._screenTitle = 'Around me';
+
     this.bind();
 
     this.render();

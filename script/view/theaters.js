@@ -74,6 +74,10 @@ class Theaters extends Screen {
     if( filterValue.length ){
       // sort theater by name only when filtering
       this.data.theaters = _sortBy( this.data.allTheaters.filter( (theater) => theater.name.toLowerCase().indexOf( filterValue ) > -1 ), theater => theater.name.toLowerCase() );
+
+      if( window._paq ){
+        this.trackTimeout = window.setTimeout( this.trackSearch.bind( this ), 500 );
+      }
     }
     else{
       this.data.theaters = this.data.allTheaters;
@@ -90,15 +94,22 @@ class Theaters extends Screen {
       url.push( `filter=${filter.toLowerCase()}` );
     }
 
+    window.clearTimeout( this.trackTimeout );
+
     router.navigate( {}, '', url.join('?'), true );
+  }
+
+  hidden (){
+    if( this.trackTimeout ){
+      this.trackSearch();
+    }
   }
 
   initialize (){
     this.data.location = user.location;
+    this._screenTitle = 'Theaters';
 
     this.bind();
-    // this.getData();
-    this.setTitle( 'Theaters' );
     this.render();
   }
 
@@ -178,6 +189,15 @@ class Theaters extends Screen {
     }
 
     this.els.list.innerHTML = html;
+  }
+
+  trackSearch (){
+    delete this.trackTimeout;
+
+    let trackParams = [ this.els.filter.value, this._screenTitle, this.data.theaters.length ];
+
+    window._paq.push( [ 'trackSiteSearch' ].concat( trackParams ) );
+
   }
 }
 

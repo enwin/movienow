@@ -110,12 +110,15 @@ class Screen {
 
   setTitle ( title ){
     this._screenTitle = title;
+
     document.title = title.length ? [ title, 'Movie now!' ].join(' | ') : 'Movie now!';
+    // store the current page title (not the visual title) to avoid setting the same one again and again
+    document.pageTitle = title;
 
     if( window._paq ){
-      window._paq.push(['setCustomUrl', window.location.href ]);
-      window._paq.push(['setDocumentTitle', document.title]);
-      window._paq.push(['trackPageView']);
+      window._paq.push( [ 'setCustomUrl', window.location.pathname || window.location.href ] );
+      window._paq.push( [ 'setDocumentTitle', document.title ] );
+      window._paq.push( [ 'trackPageView' ] );
     }
   }
 
@@ -133,9 +136,8 @@ class Screen {
       this.el.focus();
     }
 
-
     // if the screen has a title stored, set it
-    if( this._screenTitle ){
+    if( this._screenTitle && this._screenTitle !== document.pageTitle ){
       this.setTitle( this._screenTitle );
     }
 

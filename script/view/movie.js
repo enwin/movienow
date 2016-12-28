@@ -122,7 +122,7 @@ class Movie extends Screen {
   }
 
   ready (){
-    this.setTitle( this.data.name );
+    this.setTitle( this.data.title );
     this.render();
   }
 

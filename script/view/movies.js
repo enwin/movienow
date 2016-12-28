@@ -75,6 +75,10 @@ class Movies extends Screen {
 
     if( filterValue.length ){
       this.data.movies = this.data.allMovies.filter( (movie) => movie.title.toLowerCase().indexOf( filterValue ) > -1 );
+
+      if( window._paq ){
+        this.trackTimeout = window.setTimeout( this.trackSearch.bind( this ), 500 );
+      }
     }
     else{
       this.data.movies = this.data.allMovies;
@@ -91,14 +95,22 @@ class Movies extends Screen {
       url.push( `filter=${filter.toLowerCase()}` );
     }
 
+    window.clearTimeout( this.trackTimeout );
+
     router.navigate( {}, '', url.join('?'), true );
+  }
+
+  hidden (){
+    if( this.trackTimeout ){
+      this.trackSearch();
+    }
   }
 
   initialize (){
     this.data.location = user.location;
+    this._screenTitle = 'Movies';
 
     this.bind();
-    this.setTitle( 'Movies' );
     this.render();
   }
 
@@ -176,6 +188,15 @@ class Movies extends Screen {
       } } );
     }
     this.els.list.innerHTML = html;
+  }
+
+  trackSearch (){
+    delete this.trackTimeout;
+
+    let trackParams = [ this.els.filter.value, this._screenTitle, this.data.movies.length ];
+
+    window._paq.push( [ 'trackSiteSearch' ].concat( trackParams ) );
+
   }
 }
 
