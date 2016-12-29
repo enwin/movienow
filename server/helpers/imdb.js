@@ -346,7 +346,9 @@ class Imdb{
       country: countryCode
     } )
     .then( this._parseTheater.bind( this ) )
-    .catch( console.error );
+    .catch( err => {
+      console.error( 'getTheater', err );
+    } );
   }
 
   getTheaters ( location, date, distance=60 ){
@@ -355,7 +357,9 @@ class Imdb{
       uri: uri
     } )
     .then( this._parseTheaters.bind( this ) )
-    .catch( console.error );
+    .catch( err => {
+      console.error( 'getTheaters', err );
+    } );
   }
 
   getMovie ( id, countryCode, zip, date ){
@@ -364,7 +368,9 @@ class Imdb{
       country: countryCode
     } )
     .then( this._parseMovie.bind( this ) )
-    .catch( console.error );
+    .catch( err => {
+      console.error( 'getMovie', err );
+    } );
   }
 
   getMovies ( countryCode, zip, date ){
@@ -372,8 +378,10 @@ class Imdb{
       uri: `http://www.imdb.com/showtimes/location/${countryCode}/${zip}/${date}?ref_=sh_dt`,
       country: countryCode
     } )
-      .then( this._parseMovieList.bind( this ) )
-      .catch( console.error );
+    .then( this._parseMovieList.bind( this ) )
+    .catch( err => {
+      console.error( 'getMovies', err );
+    } );
   }
 
   aroundMe ( location, countryCode, date, distance=20 ){
@@ -387,30 +395,32 @@ class Imdb{
         country: countryCode
       } )
     ] )
-      .then( data => {
-        const theaters = data[0];
+    .then( data => {
+      const theaters = data[0];
 
-        let currentMovieCat;
+      let currentMovieCat;
 
-        const movies = data[1].result.map( movie => {
-          if( movie.header ){
-            currentMovieCat = movie.header;
-            return false;
-          }
-
-          return {
-            id: movie.tconst,
-            title: movie.title,
-            category: currentMovieCat
-          };
-        } ).filter( entry => entry );
+      const movies = data[1].result.map( movie => {
+        if( movie.header ){
+          currentMovieCat = movie.header;
+          return false;
+        }
 
         return {
-          theaters: theaters,
-          movies: movies
+          id: movie.tconst,
+          title: movie.title,
+          category: currentMovieCat
         };
-      } )
-      .catch( console.error );
+      } ).filter( entry => entry );
+
+      return {
+        theaters: theaters,
+        movies: movies
+      };
+    } )
+    .catch( err => {
+      console.error( 'aroundMe', err );
+    } );
   }
 }
 

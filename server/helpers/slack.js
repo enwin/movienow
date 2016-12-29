@@ -20,7 +20,7 @@ slack.setWebhook( config.slackHook );
       }
       else{
         params.attachments.push( {
-          text: JSON.stringify( arg, null, 2 ),
+          text: 'string' === typeof( arg ) ? arg : JSON.stringify( arg, null, 2 ),
           color: 'danger'
         } );
       }

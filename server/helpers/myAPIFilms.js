@@ -30,7 +30,7 @@ module.exports.movie = function( imdbId, language = 'en' ){
   return request( params )
     // return empty if call fails
     .catch( err => {
-      console.error( err );
+      console.error( 'myapifilms', err );
       return {};
     } );
 };

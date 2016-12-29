@@ -14,7 +14,7 @@ module.exports = function( callback ){
 
   mongoose.connect( config.db, options, function( err ){
     if( err ){
-      console.error( err );
+      console.error( 'Mongo connect', err );
       return;
     }
     if( callback ){
@@ -23,8 +23,8 @@ module.exports = function( callback ){
   } );
 
   // Error handler
-  mongoose.connection.on('error', function(err){
-    console.error(err);
+  mongoose.connection.on( 'error', function( err ){
+    console.error( 'Mongo', err );
   });
 
 };

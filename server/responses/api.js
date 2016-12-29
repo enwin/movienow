@@ -48,7 +48,9 @@ function parseGeo( result ){
 
 function saveMovies( movies, country ){
   return Promise.all( movies.map( movie => movieDB.store( movie, country ) ) )
-    .catch( console.error );
+    .catch( err => {
+      console.error( 'saveMovies', err );
+    } );
 }
 
 function send500( req, res, e ){

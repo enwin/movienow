@@ -51,7 +51,7 @@ module.exports.poster = function( req, res ){
       res.end( img );
     } )
     .catch( err => {
-      console.error( err );
+      console.error( 'Poster', err );
       res.redirect( '/media/posters/default.png' );
     } );
 };

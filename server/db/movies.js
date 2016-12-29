@@ -42,7 +42,9 @@ function get( getParams ){
 
   return MovieDb.findOne( getParams )
     .then( formatResponse )
-    .catch( console.error );
+    .catch( err => {
+      console.error( 'Movie DB get', err );
+    } );
 }
 
 module.exports.get = get;
@@ -65,7 +67,9 @@ function store( movie, country ){
       return movieDoc.save();
     } )
     .then( formatResponse )
-    .catch( console.error );
+    .catch( err => {
+      console.error( 'Movie DB store', err );
+    } );
 }
 
 module.exports.store = store;
@@ -78,7 +82,9 @@ function update( query, data ){
       return movieDoc.save();
     } )
     .then( formatResponse )
-    .catch( console.error );
+    .catch( err => {
+      console.error( 'Movie DB update', err );
+    } );
 }
 
 module.exports.update = update;
