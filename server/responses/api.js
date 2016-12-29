@@ -187,10 +187,9 @@ module.exports.theaters = ( req, res ) => {
 module.exports.movies = ( req, res ) => {
   if( req.params.id ){
 
-    // const movieId = req.params.id.replace( 'tt', req.params.country );
-
+    const movieId = req.params.id.replace( 'tt', req.params.country );
     // get movie from db
-    movieDB.get( {imdbId: req.params.id } )
+    movieDB.get( {id: movieId } )
       .then( dbMovie => {
         // get showtimes and movie if not in db
         return api.getMovie( req.params.id, req.params.country, req.params.zip, req.query.day )
