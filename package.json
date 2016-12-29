@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm install --production && npm run js && npm run sw",
     "js": "rollup -c rollup-conf.js > ./www/app.js",
-    "jshint:browser": "jshint --reporter=node_modules/jshint-stylish script/**/*",
+    "jshint:browser": "jshint --reporter=node_modules/jshint-stylish --exclude-path script/helper/*.js script/**/*.js",
     "jshint:server": "jshint --config .serverjshintrc --reporter=node_modules/jshint-stylish server/**/*.js",
     "lint": "npm run jshint:server && npm run jshint:browser",
     "preversion": "npm run lint",
