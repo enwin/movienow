@@ -1,4 +1,5 @@
 //navigator.serviceWorker.register('/sw.js');
+import './helper/classlist';
 import 'babel-polyfill';
 import 'whatwg-fetch';
 import moment from 'moment';
