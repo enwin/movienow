@@ -24,13 +24,13 @@ div.screen-content
             include ../../_source/svg/line.svg
 
             article.movie
-              a.movie-artwork( href=`/movies/${movie.id}?tab=movie-info` )
+              a.movie-artwork( href=`/movies/${movie.imdbId}?tab=movie-info` )
                 figure
                   span.movie-artwork-wrapper
-                    img( src=`/media/poster/${movie.id}` )
+                    img( src=`/media/poster/${movie.imdbId}` )
               div.movie-infos
                 h1.movie-title
-                  a( href=`/movies/${movie.id}?tab=movie-info` )!= movie.title
+                  a( href=`/movies/${movie.imdbId}?tab=movie-info` )!= movie.title
 
                 if movie.infos
                   ul.movie-infos-list

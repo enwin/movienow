@@ -14,4 +14,4 @@ if movies
     ul.item-list
       each movie in movies
         li.theater-item
-          a.item-title( href=`/movies/${movie.id}` )!= movie.title
+          a.item-title( href=`/movies/${movie.imdbId}` )!= movie.title

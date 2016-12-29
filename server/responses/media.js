@@ -23,17 +23,16 @@ const handleMovieDb = function( data ){
   }
 
   poster = fetchPoster( data );
-
   return poster
     .then( info => {
-      return movies.update( data.id, info )
+      return movies.update( {id: data.id}, info )
         .then( () => info );
     } );
 
 };
 
 module.exports.poster = function( req, res ){
-  movies.get( { id: req.params.id } )
+  movies.get( { imdbId: req.params.id } )
     .then( data => {
       if( !data ){
         return Promise.reject( `No movie with id "${req.params.id}" in DB` );

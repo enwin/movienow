@@ -1,11 +1,16 @@
 const api = require( '../helpers/imdb' ),
       movieDB = require( '../db/movies' ),
+      myAPIFilms = require( '../helpers/myAPIFilms' ),
       geocoder = require( 'geocoder' ),
       slug = require( 'slug' ),
       slack = require( '../helpers/slack' ),
       citySanitize = require( '../helpers/city' ).sanitize,
       config = require( '../config' ),
       apiStore = {};
+
+function getMoreData( movieId ){
+  return myAPIFilms.movie( movieId );
+}
 
 function parseGeo( result ){
   const types = [ 'sublocality', 'locality', 'administrative_area_level_1', 'country', 'postal_code' ],
@@ -42,8 +47,8 @@ function parseGeo( result ){
 }
 
 function saveMovies( movies, country ){
-  Promise.all( movies.map( movie => movieDB.add( movie, country ) ) );
-  return movies;
+  return Promise.all( movies.map( movie => movieDB.store( movie, country ) ) )
+    .catch( console.error );
 }
 
 function send500( req, res, e ){
@@ -161,16 +166,10 @@ module.exports.theaters = ( req, res ) => {
   if( req.params.id ){
     api.getTheater( req.params.id, req.params.country, req.params.zip, req.query.day )
       .then( data => {
-        saveMovies( data.movies, req.params.country );
-        return data;
-      } )
-      .then( data => {
-        data.movies = data.movies.map( movie => {
-          movie.title = movie.title[ req.params.country ] || movie.title;
-          return movie;
-        } );
-
-        return data;
+          // return data;
+        return saveMovies( data.movies, req.params.country )
+          .then( () => data )
+          .catch( console.error );
       } )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
@@ -185,29 +184,65 @@ module.exports.theaters = ( req, res ) => {
 
 module.exports.movies = ( req, res ) => {
   if( req.params.id ){
-    api.getMovie( req.params.id, req.params.country, req.params.zip, req.query.day )
-      .then( data => {
-        saveMovies( [ data ], req.params.country );
-        return data;
+
+    // const movieId = req.params.id.replace( 'tt', req.params.country );
+
+    // get movie from db
+    movieDB.get( {imdbId: req.params.id } )
+      .then( dbMovie => {
+        // get showtimes and movie if not in db
+        return api.getMovie( req.params.id, req.params.country, req.params.zip, req.query.day )
+          .then( imdbMovie => {
+
+            // replace dbMovie with imdbMovie if not in db
+            if( !dbMovie ){
+              dbMovie = imdbMovie;
+              dbMovie.imdbId = dbMovie.id;
+            }
+            else{
+              // update title and showtimes
+              Object.assign( dbMovie, {
+                director: imdbMovie.director,
+                genre: imdbMovie.genre,
+                theaters: imdbMovie.theaters
+              } );
+            }
+
+            return dbMovie;
+          } )
+          .catch( console.error );
       } )
-      .then( data => {
-        data.title = data.title[ req.params.country ] || data.title;
-        return data;
+      .then( movie => {
+        if( !movie.trailer ){
+          return getMoreData( req.params.id, req.params.country )
+            .then( moreData => {
+              if( moreData && moreData.data ){
+                let trailer = moreData.data.videos.find( video => video.type === 'Trailer' );
+
+                if( trailer ){
+                  movie.trailer = trailer.key;
+                }
+              }
+
+              return movie;
+            } )
+            .catch( console.error );
+        }
+
+        return movie;
       } )
-      .then( data => res.cacheSend( data ) )
+      .then( movie => {
+        return saveMovies( [ movie ], req.params.country )
+          .then( () => movie );
+      } )
+      .then( movie => res.cacheSend( movie ) )
       .catch( e => send500( req, res, e ) );
   }
   else{
     api.getMovies( req.params.country, req.params.zip, req.query.day )
       .then( data => {
-        saveMovies( data, req.params.country );
-        return data;
-      } )
-      .then( data => {
-        return data.map( movie => {
-          movie.title = movie.title[ req.params.country ] || movie.title;
-          return movie;
-        } );
+        return saveMovies( data, req.params.country )
+          .then( () => data );
       } )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );

@@ -65,7 +65,7 @@ div.screen-content
 
       figure.movie-artwork
         span.movie-artwork-wrapper
-          img( src=`/media/poster/${id}` )
+          img( src=`/media/poster/${imdbId}` )
 
       dl.info-desc.info-movie
         if runtime
@@ -94,5 +94,5 @@ div.screen-content
           dd
             figure.movie-trailer
               div
-                iframe( width="320" height="180" src=`https://www.youtube.com/embed/${trailer.split( '?v=' )[1]}?rel=0&amp;showinfo=0` frameborder="0" allowfullscreen )
+                iframe( width="320" height="180" src=`https://www.youtube-nocookie.com/embed/${trailer}?rel=0&amp;showinfo=0` frameborder="0" allowfullscreen )
 
