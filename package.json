@@ -1,6 +1,6 @@
 {
   "name": "movienow",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "description": "display next movie showtime around you",
   "main": "server.js",
   "scripts": {
