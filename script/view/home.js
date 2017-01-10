@@ -38,6 +38,10 @@ const posters = [
   {
     id: 'tt3731562',
     url: '/media/dyn/home/kong.jpg'
+  },
+  {
+    id: 'tt3783958',
+    url: '/media/dyn/home/lalaland.jpg'
   }
 ];
 
