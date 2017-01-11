@@ -46,7 +46,6 @@
     "express": "^4.14.0",
     "express-middleware-rollup": "^1.1.0",
     "express-session": "^1.14.2",
-    "fastclick": "^1.0.6",
     "geocoder": "^0.2.2",
     "joi": "^10.0.6",
     "js-yaml": "^3.6.1",
