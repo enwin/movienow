@@ -12,6 +12,8 @@ moment.relativeTimeThreshold('m', 59);
 import './view/layer';
 import './view/menu';
 
+import './module/cache';
+
 import router from './module/router';
 
 bind( document.body, 'click', 'a[href^="/"]', ( e ) => {

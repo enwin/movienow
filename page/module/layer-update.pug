@@ -1,0 +1,12 @@
+section#updateDialog.layer.layer-update( role="dialog" aria-labelledby="dialogUpdateTitle" aria-describedby="dialogUpdateDesc" aria-hidden="true" )
+  div.layer-wrapper
+    h1#dialogUpdateTitle.layer-title An update has been applied
+
+    p#dialogUpdateDesc.layer-description Movienow! has been updated.<br/>To access the new version restart the app or click the “Go to the new version” button below.
+
+    button.button.button-restart.button-cta( type="button" )
+      span Go to the new version
+
+    button.button.button-close.layer-control( type="button" aria-controls="updateDialog" aria-expanded="false" )
+      include ../../_source/svg/icon_close.svg
+      span Close

@@ -10,6 +10,7 @@ class Body {
 
   bind (){
     bind( this.els.header, 'click', '.button-back', this.goBack.bind( this ) );
+    bind( document.body, 'click', '.button-restart', this.restart.bind( this ) );
   }
 
   goBack (){
@@ -19,6 +20,10 @@ class Body {
   handleSiteHeader ( routeName, params ){
     this.els.header.classList.toggle( 'header-small', routeName !== 'home' );
     this.els.header.classList.toggle( 'header-back', ( routeName !== 'home' && !!params.id ) || routeName === 'credits' );
+  }
+
+  restart (){
+    window.location.href = '/';
   }
 }
 

@@ -56,6 +56,10 @@ class Menu {
 
   }
 
+  setUpdate (){
+    this.data.update = true;
+  }
+
   toggle (){
     var open = this.el.getAttribute( 'aria-hidden' ) === 'true';
 

@@ -27,6 +27,14 @@ footer
   div.menu-item
     a( href="/credits" ) Credits
 
+if update
+  span.dash-wrapper( aria-hidden="true" )
+    include ../../_source/svg/line.svg
+  aside
+    div.menu-item
+      button.button.button-update.layer-close.layer-control( type="button" aria-controls="updateDialog" aria-expanded="false" )
+        span New version!
+
 button.button.button-close.layer-control( type="button" aria-controls="menu" aria-expanded="false" )
   include ../../_source/svg/icon_close.svg
   span Close menu
