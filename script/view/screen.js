@@ -116,7 +116,14 @@ class Screen {
     document.pageTitle = title;
 
     if( window._paq ){
-      window._paq.push( [ 'setCustomUrl', window.location.pathname || window.location.href ] );
+
+      let country = '';
+
+      if( this.data.location ){
+        country = this.data.location.country.short;
+      }
+
+      window._paq.push( [ 'setCustomUrl', window.location.pathname ? `${country}${window.location.pathname}` : window.location.href ] );
       window._paq.push( [ 'setDocumentTitle', document.title ] );
       window._paq.push( [ 'trackPageView' ] );
     }
