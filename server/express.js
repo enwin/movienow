@@ -101,7 +101,7 @@ module.exports = function( app, config ){
           } : false )
          .use( chouchenn() )
          .import( 'chouchenn' )
-         .use( autoprefixer( { browsers: [ 'last 2 versions' ] } ) );
+         .use( autoprefixer( { browsers: [ 'last 2 versions', 'iOS > 7' ] } ) );
     }
   } ) );
 
