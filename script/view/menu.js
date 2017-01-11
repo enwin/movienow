@@ -34,8 +34,6 @@ class Menu {
     this.bind();
 
     this.getFavs();
-
-    this.render();
   }
 
   bind (){
@@ -59,7 +57,7 @@ class Menu {
   }
 
   toggle (){
-    var open = this.el.hasAttribute( 'aria-hidden' );
+    var open = this.el.getAttribute( 'aria-hidden' ) === 'true';
 
     if( open ){
       this.getFavs();

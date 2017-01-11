@@ -116,7 +116,7 @@ class Layer{
     }, 16 );
 
     Array.prototype.forEach.call( document.querySelectorAll( '[aria-controls='+layer.id+']' ), button => {
-      button.setAttribute( 'aria-expanded', open );
+      button.setAttribute( 'aria-expanded', layer.isOpen );
     } );
   }
 
