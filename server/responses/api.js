@@ -8,8 +8,30 @@ const api = require( '../helpers/imdb' ),
       config = require( '../config' ),
       apiStore = {};
 
+// constants for location around
+const π = Math.PI,
+      earthRadius = 6378137,
+      locationOffsets = [
+        [ -5000, 0 ],
+        [ 0, 5000 ],
+        [ 5000, 0 ],
+        [ 0, -5000 ]
+      ];
+
 function getMoreData( movieId ){
   return myAPIFilms.movie( movieId );
+}
+
+function getLocationAround( location ){
+  return locationOffsets.map( offset => {
+    let dLat = offset[ 0 ] / earthRadius,
+        dLng = offset[ 1 ] / ( earthRadius * Math.cos( π * location.lat / 180 ) );
+
+    return {
+      lat: location.lat + ( dLat * 180/π ),
+      lng: location.lng + ( dLng * 180/π )
+    };
+  } ).concat( location );
 }
 
 function parseGeo( result ){
@@ -177,12 +199,42 @@ module.exports.theaters = ( req, res ) => {
       .catch( e => send500( req, res, e ) );
   }
   else{
-    api.getTheaters( [ req.params.country, req.params.zip ], req.query.day )
-    .then( data => res.cacheSend( data ) )
-    .catch( e => send500( req, res, e ) );
+    var getLocation = new Promise( ( resolve, reject ) => {
+      // get lat and lng based on the zip and country
+      geocoder.geocode( `${req.params.zip}, ${req.params.country}`, ( err, data ) => {
+        if( err ){
+          reject( err );
+          return;
+        }
+
+        // get north, east, south, west lat and lng 5km from the found location
+        resolve( getLocationAround( data.results[ 0 ].geometry.location ) );
+      } );
+    } );
+
+
+    getLocation
+      .then( geometry => {
+        // get theaters on all 5 location points
+        return Promise.all( geometry.map( location => {
+          return api.getTheaters( [ location.lat, location.lng ], req.query.day );
+        } ) );
+      } )
+      .then( theaters => {
+
+        // concat theaters
+        theaters = theaters.reduce( ( a, b ) => a.concat( b ) );
+
+        // dedupe theaters
+        return theaters.filter( ( theater, index ) => {
+          return index === theaters.findIndex( look => look.id === theater.id );
+        } );
+
+      } )
+      .then( data => res.cacheSend( data ) )
+      .catch( e => send500( req, res, e ) );
   }
 };
-
 
 module.exports.movies = ( req, res ) => {
   if( req.params.id ){
