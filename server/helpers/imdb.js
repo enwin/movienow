@@ -407,7 +407,7 @@ class Imdb{
         }
 
         return {
-          id: movie.tconst,
+          imdbId: movie.tconst,
           title: movie.title,
           category: currentMovieCat
         };
