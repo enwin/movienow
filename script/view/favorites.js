@@ -11,6 +11,7 @@ class Favorites extends Screen {
   bind (){
     bind( this.el, 'input', 'input[type=search]', this.handleTyping.bind( this ) );
     bind( this.el, 'click', '.button-favorite', this.removeFavorite.bind( this ) );
+    bind( this.el, 'click', 'a[data-id]', this.routeData.bind( this ) );
   }
 
   displayed ( params ){
@@ -101,6 +102,12 @@ class Favorites extends Screen {
 
   renderList (){
     this.els.list.innerHTML = domList( this.data );
+  }
+
+  routeData ( e ){
+    var selectedId = e.currentTarget.dataset.id;
+
+    router.setData( this.data.favorites.find( favorite => favorite.id === selectedId ) );
   }
 }
 

@@ -15,15 +15,15 @@ var visibility = [ { name: 'hidden', event:'visibilitychange' }, { name: 'mozHid
 } );
 
 class Screen {
-  constructor ( args ){
+  constructor ( args, data ){
     this.el = this._el( this.dom() );
 
     args = args || {};
     args.visible = false;
 
-    this.data = {
-      screenParams: args
-    };
+    this.data = data || {};
+
+    this.data.screenParams = args;
 
     // fix for browsersync using window.name
     if( !this.data.name ){

@@ -16,6 +16,7 @@ class Around extends Screen {
   bind (){
 
     bind( this.el, 'click', '.button-location', this.handleLocation.bind( this ) );
+    bind( this.el, 'click', 'a[data-id]', this.routeData.bind( this ) );
     bind( document.body, 'click', '.layer .button-location', this.handleLocationLayer.bind( this ) );
     bind( document.body, 'submit', '.layer-location form', this.handleLocationLayer.bind( this ) );
   }
@@ -193,6 +194,14 @@ class Around extends Screen {
       this.setTabs();
     }
   }
+
+  routeData ( e ){
+    var selectedId = e.currentTarget.dataset.id,
+        type = e.currentTarget.dataset.type;
+
+    router.setData( this.data[ type ].find( entry => entry[ 'movies' === type ? 'imdbId' : 'id' ] === selectedId ) );
+  }
+
 
   setTabs (){
     this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ), {

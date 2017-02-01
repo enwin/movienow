@@ -13,6 +13,7 @@ class Movies extends Screen {
 
   bind (){
     bind( this.el, 'input', '.screen-header input', this.handleTyping.bind( this ) );
+    bind( this.el, 'click', 'a[data-id]', this.routeData.bind( this ) );
   }
 
   displayed ( params ){
@@ -190,6 +191,12 @@ class Movies extends Screen {
     this.els.list.innerHTML = html;
   }
 
+  routeData ( e ){
+    var selectedId = e.currentTarget.dataset.id;
+
+    router.setData( this.data.movies.find( movie => movie.imdbId === selectedId ) );
+  }
+
   trackSearch (){
     delete this.trackTimeout;
 
@@ -200,6 +207,6 @@ class Movies extends Screen {
   }
 }
 
-export default ( args ) => {
-  return new Movies( args );
+export default ( args, data ) => {
+  return new Movies( args, data );
 };

@@ -44,7 +44,8 @@ class Router {
         if( this.routeMatched ){
           this.routeMatched( route[2], match );
         }
-        route[ 1 ].call( this, match );
+        route[ 1 ].call( this, match, this.screenData );
+        this.screenData = null;
         return true;
       }
     } );
@@ -72,6 +73,10 @@ class Router {
   start (){
     this._handleRoute();
   }
+
+  setData ( data ){
+    this.screenData = data;
+  }
 }
 
 
@@ -95,17 +100,16 @@ class Routes extends Router  {
     loader.hide();
   }
 
-  theaters ( params ){
-
+  theaters ( params, data ){
     params.id = params.id || '/';
 
     // store the new screen in the screen object
     if( !this.screens.theaters[ params.id ] ){
       if( params.id === '/' ){
-        this.screens.theaters[ params.id ] = new Theaters( params );
+        this.screens.theaters[ params.id ] = new Theaters( params, data );
       }
       else{
-        this.screens.theaters[ params.id ] = new Theater( params );
+        this.screens.theaters[ params.id ] = new Theater( params, data );
       }
     }
 
@@ -124,17 +128,17 @@ class Routes extends Router  {
 
   }
 
-  movies ( params ){
+  movies ( params, data ){
 
     params.id = params.id || '/';
 
     // store the new screen in the screen object
     if( !this.screens.movies[ params.id ] ){
       if( params.id === '/' ){
-        this.screens.movies[ params.id ] = new Movies( params );
+        this.screens.movies[ params.id ] = new Movies( params, data );
       }
       else{
-        this.screens.movies[ params.id ] = new Movie( params );
+        this.screens.movies[ params.id ] = new Movie( params, data );
       }
     }
 

@@ -30,7 +30,7 @@ div.screen-content
                     img( src=`/media/poster/${movie.imdbId}` )
               div.movie-infos
                 h1.movie-title
-                  a( href=`/movies/${movie.imdbId}?tab=movie-info` )!= movie.title
+                  a( href=`/movies/${movie.imdbId}?tab=movie-info` data-id=movie.imdbId )!= movie.title
 
                 if movie.infos
                   ul.movie-infos-list

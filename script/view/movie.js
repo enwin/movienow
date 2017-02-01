@@ -4,6 +4,7 @@ import view from '../../page/view/movie.pug';
 import _sort from 'lodash/sortBy';
 import bind from '../helper/bind';
 import localeTime from '../helper/localeDate';
+import router from '../module/router';
 
 import Tablist from '../helper/accedeweb-tablist';
 
@@ -13,6 +14,7 @@ class Movie extends Screen {
 
   bind (){
     bind( this.el, 'load', 'img', this.handlePoster.bind( this ), true );
+    bind( this.el, 'click', 'a[data-id]', this.routeData.bind( this ) );
   }
 
   displayed (){
@@ -152,11 +154,17 @@ class Movie extends Screen {
     } );
   }
 
+  routeData ( e ){
+    var selectedId = e.currentTarget.dataset.id;
+
+    router.setData( this.data.theaters.find( entry => entry.id === selectedId ) );
+  }
+
   scrollTop (){
     document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
 }
 
-export default ( args ) => {
-  return new Movie( args );
+export default ( args, data ) => {
+  return new Movie( args, data );
 };

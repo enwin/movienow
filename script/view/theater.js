@@ -7,6 +7,7 @@ import _sort from 'lodash/sortBy';
 import bind from '../helper/bind';
 import Tablist from '../helper/accedeweb-tablist';
 import localeTime from '../helper/localeDate';
+import router from '../module/router';
 
 import user from '../data/user';
 
@@ -15,6 +16,7 @@ class Theater extends Screen {
   bind (){
 
     bind( this.el, 'click', '.button-favorite', e => this.handleFavorite( e ) );
+    bind( this.el, 'click', 'a[data-id]', this.routeData.bind( this ) );
 
     bind( this.el, 'load', 'img', this.handlePoster.bind( this ), true );
   }
@@ -201,13 +203,17 @@ class Theater extends Screen {
     } );
   }
 
+  routeData ( e ){
+    var selectedId = e.currentTarget.dataset.id;
+
+    router.setData( this.data.movies.find( entry => entry.imdbId === selectedId ) );
+  }
+
   scrollTop (){
     document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
 }
 
-
-
-export default ( args ) => {
-  return new Theater( args );
+export default ( args, data ) => {
+  return new Theater( args, data );
 };

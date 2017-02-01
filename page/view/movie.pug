@@ -21,7 +21,7 @@ div.screen-content
                 article.movie
                   div.movie-infos
                     h1.movie-title
-                      a( href=`/theaters/${theater.id}` )
+                      a( href=`/theaters/${theater.id}` data-id=theater.id )
                         != theater.name
                         if theater.address
                           br

@@ -4,7 +4,7 @@ if theaters
       each theater in theaters
         unless !theater.id
           li.theater-item
-            a.item-title( href=`/theaters/${theater.id}` )
+            a.item-title( href=`/theaters/${theater.id}` data-id=theater.id data-type="theaters" )
               != theater.name
               if theater.address
                 br
@@ -14,4 +14,4 @@ if movies
     ul.item-list
       each movie in movies
         li.theater-item
-          a.item-title( href=`/movies/${movie.imdbId}` )!= movie.title
+          a.item-title( href=`/movies/${movie.imdbId}` data-id=movie.imdbId data-type="movies" )!= movie.title

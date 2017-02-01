@@ -13,6 +13,7 @@ class Theaters extends Screen {
 
   bind (){
     bind( this.el, 'input', '.screen-header input', this.handleTyping.bind( this ) );
+    bind( this.el, 'click', 'a[data-id]', this.routeData.bind( this ) );
   }
 
   dom() {
@@ -191,6 +192,12 @@ class Theaters extends Screen {
     this.els.list.innerHTML = html;
   }
 
+  routeData ( e ){
+    var selectedId = e.currentTarget.dataset.id;
+
+    router.setData( this.data.theaters.find( theater => theater.id === selectedId ) );
+  }
+
   trackSearch (){
     delete this.trackTimeout;
 
@@ -203,6 +210,6 @@ class Theaters extends Screen {
 
 
 
-export default ( args ) => {
-  return new Theaters( args );
+export default ( args, data ) => {
+  return new Theaters( args, data );
 };
