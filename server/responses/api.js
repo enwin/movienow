@@ -190,6 +190,11 @@ module.exports.theaters = ( req, res ) => {
   if( req.params.id ){
     api.getTheater( req.params.id, req.params.country, req.params.zip, req.query.day )
       .then( data => {
+
+        if( !data.id ){
+          return Promise.reject( `No theater found with id ${req.params.id}` );
+        }
+
           // return data;
         return saveMovies( data.movies, req.params.country )
           .then( () => data )
