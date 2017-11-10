@@ -1,10 +1,9 @@
-const config = require( './config' ),
-      response = require( './responses/base' ),
-      showtimes = require( './responses/api' ),
-      media = require( './responses/media' ),
-      Joi = require('joi'),
-      celebrate = require('celebrate'),
-      escapeHtml = require('escape-html');
+const config = require( './config' );
+const response = require( './responses/base' );
+const showtimes = require( './responses/api' );
+const media = require( './responses/media' );
+const { celebrate, Joi } = require( 'celebrate' );
+const escapeHtml = require('escape-html');
 
 const validateId = {
   params: Joi.object().keys({

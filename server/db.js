@@ -1,30 +1,15 @@
-const mongoose = require( 'mongoose' ),
-    config = require( './config' );
+const mongoose = require( 'mongoose' );
 
 mongoose.Promise = global.Promise;
 
 require( './db/movies' );
 
-module.exports = function( callback ){
+module.exports = function( config ){
 
   // Bootstrap db connection
   // Connect to mongodb
+  const options = { useMongoClient: true, keepAlive: 1 };
 
-  var options = { server: { socketOptions: { keepAlive: 1 } } };
-
-  mongoose.connect( config.db, options, function( err ){
-    if( err ){
-      console.error( 'Mongo connect', err );
-      return;
-    }
-    if( callback ){
-      callback();
-    }
-  } );
-
-  // Error handler
-  mongoose.connection.on( 'error', function( err ){
-    console.error( 'Mongo', err );
-  });
+  return mongoose.connect( config.db, options );
 
 };
