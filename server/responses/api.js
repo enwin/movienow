@@ -8,6 +8,10 @@ const api = require( '../helpers/imdb' ),
       config = require( '../config' ),
       apiStore = {};
 
+const geocodeOptions = {
+  key: config.googleToken
+};
+
 // constants for location around
 const π = Math.PI,
       earthRadius = 6378137,
@@ -20,18 +24,6 @@ const π = Math.PI,
 
 function getMoreData( movieId ){
   return myAPIFilms.movie( movieId );
-}
-
-function getLocationAround( location ){
-  return locationOffsets.map( offset => {
-    let dLat = offset[ 0 ] / earthRadius,
-        dLng = offset[ 1 ] / ( earthRadius * Math.cos( π * location.lat / 180 ) );
-
-    return {
-      lat: location.lat + ( dLat * 180/π ),
-      lng: location.lng + ( dLng * 180/π )
-    };
-  } ).concat( location );
 }
 
 function parseGeo( result ){
@@ -66,6 +58,31 @@ function parseGeo( result ){
   }
 
   return geo;
+}
+
+function getLocationAround( location ){
+  const locations = locationOffsets.map( offset => {
+    let dLat = offset[ 0 ] / earthRadius,
+        dLng = offset[ 1 ] / ( earthRadius * Math.cos( π * location.lat / 180 ) );
+
+    return {
+      lat: location.lat + ( dLat * 180/π ),
+      lng: location.lng + ( dLng * 180/π )
+    };
+  } ).concat( location );
+
+  return Promise.all( locations.map( location => {
+    return new Promise( ( resolve, reject ) => {
+      geocoder.reverseGeocode( location.lat, location.lng, ( err, data ) => {
+        if( err || !data.results.length ){
+          reject( err || { message: data.error_message, status: data.status } );
+          return;
+        }
+
+        resolve( parseGeo( data.results[ 0 ].address_components ) );
+      }, geocodeOptions );
+    } );
+  } ) );
 }
 
 function saveMovies( movies, country ){
@@ -207,14 +224,14 @@ module.exports.theaters = ( req, res ) => {
     var getLocation = new Promise( ( resolve, reject ) => {
       // get lat and lng based on the zip and country
       geocoder.geocode( `${req.params.zip}, ${req.params.country}`, ( err, data ) => {
-        if( err ){
-          reject( err );
+        if( err || data.error_message ){
+          reject( err || { message: data.error_message, status: data.status } );
           return;
         }
 
         // get north, east, south, west lat and lng 5km from the found location
         resolve( getLocationAround( data.results[ 0 ].geometry.location ) );
-      } );
+      }, geocodeOptions );
     } );
 
 
@@ -222,7 +239,7 @@ module.exports.theaters = ( req, res ) => {
       .then( geometry => {
         // get theaters on all 5 location points
         return Promise.all( geometry.map( location => {
-          return api.getTheaters( [ location.lat, location.lng ], req.query.day );
+          return api.getTheaters( location.country.short, location.zip.short, req.query.day );
         } ) );
       } )
       .then( theaters => {
@@ -340,7 +357,7 @@ module.exports.around = ( req, res ) => {
         let result = data.results[ 0 ].address_components;
 
         resolve( parseGeo( result ) );
-      } );
+      }, geocodeOptions );
     } );
   }
   else{
@@ -371,8 +388,8 @@ module.exports.around = ( req, res ) => {
           let result = data.results[ 0 ].address_components;
 
           resolve( parseGeo( result ) );
-        } );
-      });
+        }, geocodeOptions );
+      }, geocodeOptions);
     } );
   }
 

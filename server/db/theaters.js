@@ -1,7 +1,12 @@
 /* jshint latedef: false */
 const mongoose = require( 'mongoose' ),
       Schema = mongoose.Schema,
-      geocoder = require( 'geocoder' );
+      geocoder = require( 'geocoder' ),
+      config = require( '../config' );
+
+const geocodeOptions = {
+  key: config.googleToken
+};
 
 // Settings
 const theatersSchema = new Schema( {
@@ -110,7 +115,7 @@ const theaterMap = ( theater ) => {
       resolve( {
         coord: data.results[0].geometry.location
       } );
-    } );
+    }, geocodeOptions );
   } );
 
 };
