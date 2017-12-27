@@ -17,7 +17,9 @@ const plugins = [
 ];
 
 export default {
-  entry: './script/app.js',
+  input: './script/app.js',
   plugins: plugins,
-  format: 'iife'
+  output: {
+    format: 'iife'
+  }
 };
