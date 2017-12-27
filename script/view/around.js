@@ -199,7 +199,7 @@ class Around extends Screen {
     var selectedId = e.currentTarget.dataset.id,
         type = e.currentTarget.dataset.type;
 
-    router.setData( this.data[ type ].find( entry => entry[ 'movies' === type ? 'imdbId' : 'id' ] === selectedId ) );
+    router.setData( this.data[ type ].find( entry => entry[ 'id' ] === selectedId ) );
   }
 
 

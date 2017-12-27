@@ -330,11 +330,14 @@ module.exports.around = ( req, res ) => {
   if( coords ){
     geocode = new Promise( ( resolve, reject ) => {
       geocoder.reverseGeocode( coords[ 0 ], coords[ 1 ], ( err, data ) => {
-        let result = data.results[ 0 ].address_components;
-        if( err ){
-          reject( err );
+
+        if( err || !data.results.length ){
+          reject( err || { message: data.error_message, status: data.status } );
           return;
         }
+
+
+        let result = data.results[ 0 ].address_components;
 
         resolve( parseGeo( result ) );
       } );
@@ -376,7 +379,7 @@ module.exports.around = ( req, res ) => {
   geocode
     .then( geo => {
       aroundData.geo = geo;
-      return api.aroundMe( coords ? coords : [ geo.country.short, geo.zip.short ], geo.country.short, req.query.day );
+      return api.aroundMe( geo.zip.short, geo.country.short, req.query.day );
     } )
     .then( aroundLists => {
       Object.assign( aroundData, aroundLists );

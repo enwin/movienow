@@ -1,7 +1,7 @@
 const request = require( 'request-promise-native' ),
       cheerio = require( 'cheerio' );
 
-const reTheaterId = /cinema\/(\d+)/,
+const reTheaterId = /theaters\/(ci\d+)\?/,
       reDirectors = /\s*\n/g,
       reExtraInfo = /\(([\w\s]+)?\s?(\d{4})\)/;
 
@@ -281,19 +281,26 @@ class Imdb{
     } );
   }
 
-  _parseTheaters ( response ){
-    return response.result.map( entry => {
-      if( entry.header ){
-        return;
-      }
+  _parseTheaters ( $ ){
+    const theaters = [];
+    $( '.showtimes-results a' ).each( ( index, el ) => {
+      const $el = $( el ),
+            $name = $el.find( '.showtimes-theater-detail-block__header' ),
+            $info = $el.find( '.showtimes-theater-detail-block__location' );
 
-      return {
-        id: 'ci'+entry.url.match( reTheaterId )[1],
-        name: entry.name,
-        address: entry.address,
-      };
-    } )
-    .filter( entry => entry );
+      const [ address, phone ] = $info.text().trim().split('\n').map( entry => {
+        return entry.trim();
+      });
+
+      theaters.push({
+        id: $el.attr( 'href' ).match( reTheaterId )[1],
+        name: $name.text().trim(),
+        address,
+        phone
+      });
+    });
+
+    return theaters;
   }
 
   _parseTheater ( $ ){
@@ -351,10 +358,9 @@ class Imdb{
     } );
   }
 
-  getTheaters ( location, date, distance=60 ){
-    const uri = `http://m.imdb.com/showtimes/cinema_list_json?location=${location.join()}&date=0:${date}&max_distance=${distance}`;
-    return this._callJSON( {
-      uri: uri
+  getTheaters ( countryCode, zip, date ){
+    return this._callPage( {
+      uri: `http://m.imdb.com/showtimes/theaters?date=${date}&zip=${zip}&country=${countryCode}`
     } )
     .then( this._parseTheaters.bind( this ) )
     .catch( err => {
@@ -384,38 +390,17 @@ class Imdb{
     } );
   }
 
-  aroundMe ( location, countryCode, date, distance=20 ){
+  aroundMe ( zip, countryCode, date, distance=20 ){
 
     return Promise.all( [
       // get theaters around
-      this.getTheaters( location, date, distance ),
-      // get movies around
-      this._callJSON( {
-        uri:  `http://m.imdb.com/showtimes/movie_json?location=${location.join()}&date=0:${date}&max_distance=${distance}`,
-        country: countryCode
-      } )
+      this.getTheaters( countryCode, zip, date ),
+      this.getMovies( countryCode, zip, date )
     ] )
-    .then( data => {
-      const theaters = data[0];
-
-      let currentMovieCat;
-
-      const movies = data[1].result.map( movie => {
-        if( movie.header ){
-          currentMovieCat = movie.header;
-          return false;
-        }
-
-        return {
-          imdbId: movie.tconst,
-          title: movie.title,
-          category: currentMovieCat
-        };
-      } ).filter( entry => entry );
-
+    .then( ([ theaters, movies]) => {
       return {
-        theaters: theaters,
-        movies: movies
+        theaters,
+        movies
       };
     } )
     .catch( err => {
