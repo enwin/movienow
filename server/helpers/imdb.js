@@ -390,7 +390,7 @@ class Imdb{
     } );
   }
 
-  aroundMe ( zip, countryCode, date, distance=20 ){
+  aroundMe ( zip, countryCode, date ){
 
     return Promise.all( [
       // get theaters around
