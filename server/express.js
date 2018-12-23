@@ -1,5 +1,4 @@
 const compress = require( 'compression' ),
-    logger = require( 'morgan' ),
     bodyParser = require( 'body-parser' ),
     files = require( 'serve-static' ),
     session = require( 'express-session' ),
@@ -34,6 +33,8 @@ module.exports = function( app, config ){
   } ) );
 
   if( config.dev ){
+    const logger = require( 'morgan' );
+
     app.use( logger( 'dev' ) );
 
     var browserSync = require( 'browser-sync' ),
