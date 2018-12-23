@@ -51,7 +51,10 @@ slack.setWebhook( config.slackHook );
     } );
 
     if( !config.dev ){
-      slack.webhook( params, () => {} );
+      if( params.text.indexOf( 'MongoError: Mod on _id' ) < 0 ){
+        slack.webhook( params, () => {} );
+      }
+
     }
 
     return error.apply( this, arguments );

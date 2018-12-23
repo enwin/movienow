@@ -49,9 +49,9 @@ const add = ( theater ) => {
         savedObject = theaterFound.toObject();
 
         delete savedObject._id;
-        delete savedObject._v;
+        delete savedObject.__v;
 
-        return theaterFound.toObject();
+        return savedObject;
       }
 
       return save( theater );
@@ -78,7 +78,7 @@ const save = ( theater ) => {
       savedObject = newtheater.toObject();
 
       delete savedObject._id;
-      delete savedObject._v;
+      delete savedObject.__v;
 
       resolve( savedObject );
 

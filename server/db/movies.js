@@ -54,14 +54,16 @@ function store( movie, country ){
     movie.imdbId = movie.id;
     movie.id = movie.id.replace( 'tt', country );
   }
-  //
+
   return MovieDb.findOne( { id: movie.id } )
     .then( movieDoc => {
       if( !movieDoc ){
         movieDoc = new MovieDb( movie );
       }
       else{
-        Object.assign( movieDoc, movie );
+        delete movie._id;
+        delete movie.__v;
+        movieDoc.set( movie );
       }
 
       return movieDoc.save();
@@ -77,7 +79,9 @@ module.exports.store = store;
 function update( query, data ){
   return MovieDb.findOne( query )
     .then( movieDoc => {
-      Object.assign( movieDoc, data );
+      delete data._id;
+      delete data.__v;
+      movieDoc.set( data );
 
       return movieDoc.save();
     } )
