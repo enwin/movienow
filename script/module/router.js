@@ -4,14 +4,14 @@ import loader from '../module/loader';
 import '../data/favorites';
 
 // view
-import Favorites from '../view/favorites';
-import Theaters from '../view/theaters';
-import Theater from '../view/theater';
-import Credits from '../view/credits';
-import Movies from '../view/movies';
-import Around from '../view/around';
-import Movie from '../view/movie';
-import Home from '../view/home';
+import favorites from '../view/favorites';
+import theaters from '../view/theaters';
+import theater from '../view/theater';
+import credits from '../view/credits';
+import movies from '../view/movies';
+import around from '../view/around';
+import movie from '../view/movie';
+import home from '../view/home';
 import body from '../view/body';
 
 class Router {
@@ -93,7 +93,7 @@ class Routes extends Router  {
       favorites: null
     };
 
-    this.screens.around = Around();
+    this.screens.around = around();
   }
 
   routeMatched ( routeName, params ){
@@ -107,10 +107,10 @@ class Routes extends Router  {
     // store the new screen in the screen object
     if( !this.screens.theaters[ params.id ] ){
       if( params.id === '/' ){
-        this.screens.theaters[ params.id ] = Theaters( params, data );
+        this.screens.theaters[ params.id ] = theaters( params, data );
       }
       else{
-        this.screens.theaters[ params.id ] = Theater( params, data );
+        this.screens.theaters[ params.id ] = theater( params, data );
       }
     }
 
@@ -136,10 +136,10 @@ class Routes extends Router  {
     // store the new screen in the screen object
     if( !this.screens.movies[ params.id ] ){
       if( params.id === '/' ){
-        this.screens.movies[ params.id ] = Movies( params, data );
+        this.screens.movies[ params.id ] = movies( params, data );
       }
       else{
-        this.screens.movies[ params.id ] = Movie( params, data );
+        this.screens.movies[ params.id ] = movie( params, data );
       }
     }
 
@@ -161,7 +161,7 @@ class Routes extends Router  {
   home (params){
 
     if( !this.screens.home ){
-      this.screens.home = Home( params );
+      this.screens.home = home( params );
     }
     if( this.screens.current !== this.screens.home ){
       // remove the current screen
@@ -179,7 +179,7 @@ class Routes extends Router  {
   around (params){
 
     if( !this.screens.around ){
-      this.screens.around = Around( params );
+      this.screens.around = around( params );
     }
     if( this.screens.current !== this.screens.around ){
       // remove the current screen
@@ -197,7 +197,7 @@ class Routes extends Router  {
   credits (params){
 
     if( !this.screens.credits ){
-      this.screens.credits = Credits( params );
+      this.screens.credits = credits( params );
     }
     if( this.screens.current !== this.screens.credits ){
       // remove the current screen
@@ -215,7 +215,7 @@ class Routes extends Router  {
   favorites (params){
 
     if( !this.screens.favorites ){
-      this.screens.favorites = Favorites( params );
+      this.screens.favorites = favorites( params );
     }
     if( this.screens.current !== this.screens.favorites ){
       // remove the current screen
