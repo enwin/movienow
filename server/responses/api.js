@@ -1,28 +1,18 @@
 const api = require( '../helpers/imdb' ),
       movieDB = require( '../db/movies' ),
       myAPIFilms = require( '../helpers/myAPIFilms' ),
-      NodeGeocoder = require('node-geocoder'),
+      nodeGeocoder = require('node-geocoder'),
       slug = require( 'slug' ),
       slack = require( '../helpers/slack' ),
       citySanitize = require( '../helpers/city' ).sanitize,
       config = require( '../config' ),
       apiStore = {};
 
-const geocoder = NodeGeocoder({
+const geocoder = nodeGeocoder({
   provider: 'openstreetmap',
   language: 'en',
   email: config.email
-})
-
-// constants for location around
-const π = Math.PI,
-      earthRadius = 6378137,
-      locationOffsets = [
-        [ -5000, 0 ],
-        [ 0, 5000 ],
-        [ 5000, 0 ],
-        [ 0, -5000 ]
-      ];
+});
 
 function getMoreData( movieId ){
   return myAPIFilms.movie( movieId );
@@ -46,7 +36,7 @@ function parseGeo( result ){
       long: data.zipcode,
       short: data.zipcode
     }
-  }
+  };
 
   if( !geo.zip ){
     return Promise.reject({
@@ -57,25 +47,6 @@ function parseGeo( result ){
   }
 
   return geo;
-}
-
-function getLocationAround( location ){
-  const locations = locationOffsets.map( offset => {
-    let dLat = offset[ 0 ] / earthRadius,
-        dLon = offset[ 1 ] / ( earthRadius * Math.cos( π * location.lat / 180 ) );
-
-    return {
-      lat: location.lat + ( dLat * 180/π ),
-      lon: location.lon + ( dLon * 180/π )
-    };
-  } ).concat( location );
-
-
-  return Promise.all( locations.map( location => {
-    return geocoder.reverse( location )
-      .then( parseGeo )
-      .catch( e => console.error(e.message))
-  } ) );
 }
 
 function saveMovies( movies, country ){
@@ -218,39 +189,6 @@ module.exports.theaters = ( req, res ) => {
     return api.getTheaters( country, zip, req.query.day )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
-    // var getLocation = new Promise( ( resolve, reject ) => {
-    // get lat and lng based on the zip and country
-    // const getLocation = geocoder.geocode( {zip, country} )
-    //   .then(data => {
-    //     console.log( data );
-    //     // get north, east, south, west lat and lng 5km from the found location
-    //     return getLocationAround( {
-    //       lat: data.latitude,
-    //       lon: data.longitude
-    //     } )
-    //   });
-
-
-    // getLocation
-    //   .then( geometry => {
-    //     // get theaters on all 5 location points
-    //     return Promise.all( geometry.map( location => {
-    //       return api.getTheaters( location.country.short, location.zip.short, req.query.day );
-    //     } ) );
-    //   } )
-    //   .then( theaters => {
-
-    //     // concat theaters
-    //     theaters = theaters.reduce( ( a, b ) => a.concat( b ) );
-
-    //     // dedupe theaters
-    //     return theaters.filter( ( theater, index ) => {
-    //       return index === theaters.findIndex( look => look.id === theater.id );
-    //     } );
-
-    //   } )
-      // .then( data => res.cacheSend( data ) )
-      // .catch( e => send500( req, res, e ) );
   }
 };
 
@@ -353,36 +291,8 @@ module.exports.around = ( req, res ) => {
       .then( parseGeo );
   }
   else{
-    geocode = new Promise( ( resolve, reject ) => {
-      geocoder.geocode( location, ( err, data ) => {
-        if( err ){
-          reject( err );
-          return;
-        }
-
-        if( !data.results.length ){
-          reject( {
-            code: 404,
-            message: 'Could not find a match to your location',
-            discard: 'Hasta la vista, baby'
-          } );
-          return;
-        }
-
-        const location = data.results[ 0 ].geometry.location;
-
-        geocoder.reverseGeocode( location.lat, location.lng, ( err, data ) => {
-          if( err ){
-            reject( err );
-            return;
-          }
-
-          let result = data.results[ 0 ].address_components;
-
-          resolve( parseGeo( result ) );
-        }, geocodeOptions );
-      }, geocodeOptions);
-    } );
+    geocode = geocoder.geocode( location )
+      .then(parseGeo);
   }
 
   geocode

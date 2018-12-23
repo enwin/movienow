@@ -1,12 +1,6 @@
 /* jshint latedef: false */
 const mongoose = require( 'mongoose' ),
-      Schema = mongoose.Schema,
-      geocoder = require( 'geocoder' ),
-      config = require( '../config' );
-
-const geocodeOptions = {
-  key: config.googleToken
-};
+      Schema = mongoose.Schema;
 
 // Settings
 const theatersSchema = new Schema( {
@@ -60,16 +54,7 @@ const add = ( theater ) => {
         return theaterFound.toObject();
       }
 
-      // otherwise clean, upgrade and save
-      if( !theater.coord ){
-        return theaterMap( theater )
-          .then( location => {
-            return save( Object.assign( theater, location ) );
-          } );
-      }
-      else{
-        return save( theater );
-      }
+      return save( theater );
     } );
 };
 
@@ -100,27 +85,6 @@ const save = ( theater ) => {
     } );
   } );
 };
-
-const theaterMap = ( theater ) => {
-
-  return new Promise( resolve => {
-    geocoder.geocode( theater.address, ( err, data ) => {
-
-      if( err || !data.results.length ){
-        resolve( {
-          coord: {}
-        } );
-        return;
-      }
-      resolve( {
-        coord: data.results[0].geometry.location
-      } );
-    }, geocodeOptions );
-  } );
-
-};
-
-module.exports.theaterMap = theaterMap;
 
 const update = ( theaterId, updates ) => {
   return new Promise( ( resolve, reject ) => {
