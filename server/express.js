@@ -124,7 +124,7 @@ module.exports = function( app, config ){
     ];
 
     app.use( rollup( {
-      src: './script/',
+      src: './script/app.js',
       dest: './www/',
       root: './',
       rollupOpts: {

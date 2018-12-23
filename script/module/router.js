@@ -1,4 +1,4 @@
-import Route from 'route-parser';
+import Path from 'path-parser';
 import loader from '../module/loader';
 // data
 import '../data/favorites';
@@ -38,13 +38,14 @@ class Router {
 
     this.currentPathname = window.location.pathname;
 
-    matched = this._routes.some( route => {
-      match = route[0].match( window.location.pathname+window.location.search );
+    matched = this._routes.some(([ path, callback, name ]) => {
+      match = path.partialTest( window.location.pathname+window.location.search );
+
       if( match ){
         if( this.routeMatched ){
-          this.routeMatched( route[2], match );
+          this.routeMatched( name, match );
         }
-        route[ 1 ].call( this, match, this.screenData );
+        callback.call( this, match, this.screenData );
         this.screenData = null;
         return true;
       }
@@ -61,7 +62,7 @@ class Router {
         continue;
       }
 
-      this._routes.push( [ new Route( route ), callback, routes[ route ] ] );
+      this._routes.push( [ new Path( route ), callback, routes[ route ] ] );
     }
   }
 
@@ -92,7 +93,7 @@ class Routes extends Router  {
       favorites: null
     };
 
-    this.screens.around = new Around();
+    this.screens.around = Around();
   }
 
   routeMatched ( routeName, params ){
@@ -106,10 +107,10 @@ class Routes extends Router  {
     // store the new screen in the screen object
     if( !this.screens.theaters[ params.id ] ){
       if( params.id === '/' ){
-        this.screens.theaters[ params.id ] = new Theaters( params, data );
+        this.screens.theaters[ params.id ] = Theaters( params, data );
       }
       else{
-        this.screens.theaters[ params.id ] = new Theater( params, data );
+        this.screens.theaters[ params.id ] = Theater( params, data );
       }
     }
 
@@ -135,10 +136,10 @@ class Routes extends Router  {
     // store the new screen in the screen object
     if( !this.screens.movies[ params.id ] ){
       if( params.id === '/' ){
-        this.screens.movies[ params.id ] = new Movies( params, data );
+        this.screens.movies[ params.id ] = Movies( params, data );
       }
       else{
-        this.screens.movies[ params.id ] = new Movie( params, data );
+        this.screens.movies[ params.id ] = Movie( params, data );
       }
     }
 
@@ -160,7 +161,7 @@ class Routes extends Router  {
   home (params){
 
     if( !this.screens.home ){
-      this.screens.home = new Home( params );
+      this.screens.home = Home( params );
     }
     if( this.screens.current !== this.screens.home ){
       // remove the current screen
@@ -178,7 +179,7 @@ class Routes extends Router  {
   around (params){
 
     if( !this.screens.around ){
-      this.screens.around = new Around( params );
+      this.screens.around = Around( params );
     }
     if( this.screens.current !== this.screens.around ){
       // remove the current screen
@@ -196,7 +197,7 @@ class Routes extends Router  {
   credits (params){
 
     if( !this.screens.credits ){
-      this.screens.credits = new Credits( params );
+      this.screens.credits = Credits( params );
     }
     if( this.screens.current !== this.screens.credits ){
       // remove the current screen
@@ -214,7 +215,7 @@ class Routes extends Router  {
   favorites (params){
 
     if( !this.screens.favorites ){
-      this.screens.favorites = new Favorites( params );
+      this.screens.favorites = Favorites( params );
     }
     if( this.screens.current !== this.screens.favorites ){
       // remove the current screen
@@ -232,9 +233,11 @@ class Routes extends Router  {
 
 export default new Routes( {
   routes: {
-    '/theaters(/:id)(?filter=:filter)(?search=:search)': 'theaters',
-    '/movies(/:id)(?filter=:filter)(?search=:search)(?tab=:tabId)': 'movies',
-    '/favorites(?filter=:filter)': 'favorites',
+    '/theaters/:id?filter&search': 'theaters',
+    '/movies/:id?filter&search&tab': 'movies',
+    '/theaters': 'theaters',
+    '/movies': 'movies',
+    '/favorites?filter': 'favorites',
     '/around': 'around',
     '/credits': 'credits',
     '/': 'home'

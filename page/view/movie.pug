@@ -7,7 +7,7 @@ header.screen-header
     ul.nav-list( role="tablist" )
       each type in [ 'Theaters', 'Info' ]
         - var panelId = 'movie-'+type.toLowerCase();
-        li.nav-list-item( role="tab" aria-controls=panelId data-tab-open=( panelId === screenParams.tabId ? 'true' : null ) )!= type
+        li.nav-list-item( role="tab" aria-controls=panelId data-open=( panelId === screenParams.tab ? 'true' : null ) )!= type
 
 div.screen-content
   if theaters

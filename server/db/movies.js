@@ -11,7 +11,7 @@ const moviesSchema = new Schema( {
   imgSrc: String,
   rating: String,
   runtime: String,
-  cast: String,
+  cast: Array,
   description: String,
   genre: Array,
   director: Array,

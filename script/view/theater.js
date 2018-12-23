@@ -5,9 +5,10 @@ import moment from 'moment';
 import view from '../../page/view/theater.pug';
 import _sort from 'lodash/sortBy';
 import bind from '../helper/bind';
-import Tablist from '../helper/accedeweb-tablist';
 import localeTime from '../helper/localeDate';
 import router from '../module/router';
+
+import Tablist from '@accede-web/tablist';
 
 import user from '../data/user';
 
@@ -184,9 +185,11 @@ class Theater extends Screen {
     };
 
     if( this.data.movies ){
-      this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ), {
-        openTab: this.scrollTop
-      } );
+      this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ));
+
+      this.tabs.on( 'show', this.scrollTop );
+
+      this.tabs.mount();
     }
   }
 

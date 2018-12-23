@@ -2,7 +2,6 @@ const request = require( 'request-promise-native' ),
       cheerio = require( 'cheerio' );
 
 const reTheaterId = /theaters\/(ci\d+)\?/,
-      reDirectors = /\s*\n/g,
       reExtraInfo = /\(([\w\s]+)?\s?(\d{4})\)/;
 
 const reIID = /tt\w*/,
@@ -166,38 +165,53 @@ class Imdb{
   }
 
   _parseMovie ( $ ){
-    const $el = $( '.article.sub-overview' ),
-          $link = $el.find( '[itemprop="name"] a' );
+    const $el = $( '.article.sub-overview' );
+    const $link = $el.find( 'a[title]' );
 
-    // let info = $el.find( '.cert-runtime-genre' ).text().trim();
+    const rating = $el.find( '.cert-runtime-genre img' ).attr( 'title' ) || $el.find( '.cert-runtime-genre [itemprop="contentRating"]' ).text().trim();
 
-    let rating = $el.find( '.cert-runtime-genre img' ).attr( 'title' ) || $el.find( '.cert-runtime-genre [itemprop="contentRating"]' ).text().trim(),
-        runtime = $el.find( '.cert-runtime-genre [itemprop="duration"]' ).text().trim(),
-        genre = Array.from( $el.find( '.cert-runtime-genre [itemprop="genre"]' ) ).map( el => {
-          let $el = $( el );
-          return $el.text().trim();
-        } ),
-        cast = Array.from( $el.find( '[itemprop="actors"]' ) ).map( el => {
-          let $el = $( el );
-          return $el.text().trim();
-        } );
-
-
+    let runtime = $el.find( 'time' ).text().trim();
     runtime = +runtime.replace( ' min', '' );
 
-    let [ , name, year ] = reTitleYear.exec( $link.attr( 'title' ) );
+    const genre = Array.from( $el.find( '.cert-runtime-genre span:not(.ghost)' )).map( el => {
+      const $el = $( el );
+      return $el.text().trim();
+    });
+
+    let cast;
+    let director;
+
+    Array.from( $el.find( '.outline ~ .txt-block' )).forEach( el => {
+      const $block  = $( el );
+      const type = $block.find( '.inline' ).text().trim().toLowerCase().slice(0, 3);
+
+      const content = Array.from( $block.find( 'span:not(.ghost), a:not(.ghost)' )).map( el => {
+        const $el = $( el );
+        return $el.text().trim();
+      });
+
+      if( type === 'dir' ){
+        director = content;
+      }
+      else if( type === 'sta' ){
+        cast = content;
+      }
+    });
+
+
+    const [ , name, year ] = reTitleYear.exec( $link.attr( 'title' ) );
 
     const movie = {
       id: $link.attr( 'href' ).match( reIID )[0],
       imgSrc: $el.find( '.poster' ).attr( 'src' ),
       title: name,
-      rating: rating,
-      runtime: runtime,
-      cast: cast,
-      description: $el.find( '[itemprop="description"]' ).text().trim(),
-      genre: genre,
-      director: $el.find( '[itemprop="director"]' ).text().trim().split( reDirectors ),
-      year: year
+      rating,
+      runtime,
+      cast,
+      description: $el.find( '.outline' ).text().trim(),
+      genre,
+      director,
+      year
     };
 
     movie.theaters = this._parseTheatersFromMoviePage( Array.from( $( '.list_item' ) ) );

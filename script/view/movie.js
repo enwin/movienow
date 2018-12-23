@@ -6,7 +6,7 @@ import bind from '../helper/bind';
 import localeTime from '../helper/localeDate';
 import router from '../module/router';
 
-import Tablist from '../helper/accedeweb-tablist';
+import Tablist from '@accede-web/tablist';
 
 import user from '../data/user';
 
@@ -135,9 +135,11 @@ class Movie extends Screen {
     };
 
     if( this.data.theaters ){
-      this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ), {
-        openTab: this.scrollTop
-      } );
+      this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ));
+
+      this.tabs.on( 'show', this.scrollTop );
+
+      this.tabs.mount();
     }
   }
 

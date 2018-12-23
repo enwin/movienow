@@ -6,7 +6,6 @@
       "env": {
         "COMMON_VARIABLE": "true"
       }
-
-    },
+    }
   ]
 }

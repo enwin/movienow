@@ -1,16 +1,18 @@
 const api = require( '../helpers/imdb' ),
       movieDB = require( '../db/movies' ),
       myAPIFilms = require( '../helpers/myAPIFilms' ),
-      geocoder = require( 'geocoder' ),
+      NodeGeocoder = require('node-geocoder'),
       slug = require( 'slug' ),
       slack = require( '../helpers/slack' ),
       citySanitize = require( '../helpers/city' ).sanitize,
       config = require( '../config' ),
       apiStore = {};
 
-const geocodeOptions = {
-  key: config.googleToken
-};
+const geocoder = NodeGeocoder({
+  provider: 'openstreetmap',
+  language: 'en',
+  email: config.email
+})
 
 // constants for location around
 const π = Math.PI,
@@ -27,27 +29,24 @@ function getMoreData( movieId ){
 }
 
 function parseGeo( result ){
-  const types = [ 'sublocality', 'locality', 'administrative_area_level_1', 'country', 'postal_code' ],
-      name = [ 'closest', 'city', 'area', 'country', 'zip' ],
-      geo = {};
+  const [data] = result;
 
-  let match;
-
-  types.forEach( ( type, index ) => {
-    match = result.find( component => component.types.indexOf( type ) > -1 );
-
-    if( 1 === index && !match ){
-      match = result.find( component => component.types.indexOf( 'sublocality' ) > -1 );
+  const geo = {
+    city: {
+      long: data.city,
+      short: data.city,
+      slug: slug( data.city.toLowerCase() )
+    },
+    country: {
+      long: data.country,
+      short: data.countryCode,
+      slug: slug( data.country.toLowerCase() )
+    },
+    zip: {
+      long: data.zipcode,
+      short: data.zipcode
     }
-
-    if( match ){
-      geo[ name[ index ] ] = {
-        short: match.short_name,
-        long: match.long_name,
-        slug: slug( match.long_name.toLowerCase() )
-      };
-    }
-  } );
+  }
 
   if( !geo.zip ){
     return Promise.reject({
@@ -63,25 +62,19 @@ function parseGeo( result ){
 function getLocationAround( location ){
   const locations = locationOffsets.map( offset => {
     let dLat = offset[ 0 ] / earthRadius,
-        dLng = offset[ 1 ] / ( earthRadius * Math.cos( π * location.lat / 180 ) );
+        dLon = offset[ 1 ] / ( earthRadius * Math.cos( π * location.lat / 180 ) );
 
     return {
       lat: location.lat + ( dLat * 180/π ),
-      lng: location.lng + ( dLng * 180/π )
+      lon: location.lon + ( dLon * 180/π )
     };
   } ).concat( location );
 
-  return Promise.all( locations.map( location => {
-    return new Promise( ( resolve, reject ) => {
-      geocoder.reverseGeocode( location.lat, location.lng, ( err, data ) => {
-        if( err || !data.results.length ){
-          reject( err || { message: data.error_message, status: data.status } );
-          return;
-        }
 
-        resolve( parseGeo( data.results[ 0 ].address_components ) );
-      }, geocodeOptions );
-    } );
+  return Promise.all( locations.map( location => {
+    return geocoder.reverse( location )
+      .then( parseGeo )
+      .catch( e => console.error(e.message))
   } ) );
 }
 
@@ -221,40 +214,43 @@ module.exports.theaters = ( req, res ) => {
       .catch( e => send500( req, res, e ) );
   }
   else{
-    var getLocation = new Promise( ( resolve, reject ) => {
-      // get lat and lng based on the zip and country
-      geocoder.geocode( `${req.params.zip}, ${req.params.country}`, ( err, data ) => {
-        if( err || data.error_message ){
-          reject( err || { message: data.error_message, status: data.status } );
-          return;
-        }
-
-        // get north, east, south, west lat and lng 5km from the found location
-        resolve( getLocationAround( data.results[ 0 ].geometry.location ) );
-      }, geocodeOptions );
-    } );
-
-
-    getLocation
-      .then( geometry => {
-        // get theaters on all 5 location points
-        return Promise.all( geometry.map( location => {
-          return api.getTheaters( location.country.short, location.zip.short, req.query.day );
-        } ) );
-      } )
-      .then( theaters => {
-
-        // concat theaters
-        theaters = theaters.reduce( ( a, b ) => a.concat( b ) );
-
-        // dedupe theaters
-        return theaters.filter( ( theater, index ) => {
-          return index === theaters.findIndex( look => look.id === theater.id );
-        } );
-
-      } )
+    const { zip, country } = req.params;
+    return api.getTheaters( country, zip, req.query.day )
       .then( data => res.cacheSend( data ) )
       .catch( e => send500( req, res, e ) );
+    // var getLocation = new Promise( ( resolve, reject ) => {
+    // get lat and lng based on the zip and country
+    // const getLocation = geocoder.geocode( {zip, country} )
+    //   .then(data => {
+    //     console.log( data );
+    //     // get north, east, south, west lat and lng 5km from the found location
+    //     return getLocationAround( {
+    //       lat: data.latitude,
+    //       lon: data.longitude
+    //     } )
+    //   });
+
+
+    // getLocation
+    //   .then( geometry => {
+    //     // get theaters on all 5 location points
+    //     return Promise.all( geometry.map( location => {
+    //       return api.getTheaters( location.country.short, location.zip.short, req.query.day );
+    //     } ) );
+    //   } )
+    //   .then( theaters => {
+
+    //     // concat theaters
+    //     theaters = theaters.reduce( ( a, b ) => a.concat( b ) );
+
+    //     // dedupe theaters
+    //     return theaters.filter( ( theater, index ) => {
+    //       return index === theaters.findIndex( look => look.id === theater.id );
+    //     } );
+
+    //   } )
+      // .then( data => res.cacheSend( data ) )
+      // .catch( e => send500( req, res, e ) );
   }
 };
 
@@ -269,31 +265,37 @@ module.exports.movies = ( req, res ) => {
     // get movie from db
     movieDB.get( {id: movieId } )
       .then( dbMovie => {
-        // get showtimes and movie if not in db
-        return api.getMovie( req.params.id, req.params.country, req.params.zip, req.query.day )
-          .then( imdbMovie => {
+        if( !dbMovie.cast.length || !dbMovie.director.length ){
+          // get showtimes and movie if not in db
+          return api.getMovie( req.params.id, req.params.country, req.params.zip, req.query.day )
+            .then( imdbMovie => {
 
-            if( !imdbMovie && !dbMovie ){
-              return Promise.reject( `No movie found with id ${req.params.id}` );
-            }
+              if( !imdbMovie && !dbMovie ){
+                return Promise.reject( `No movie found with id ${req.params.id}` );
+              }
 
-            // replace dbMovie with imdbMovie if not in db
-            if( !dbMovie ){
-              dbMovie = imdbMovie;
-              dbMovie.imdbId = dbMovie.id;
-            }
-            else{
-              // update title and showtimes
-              Object.assign( dbMovie, {
-                director: imdbMovie.director,
-                genre: imdbMovie.genre,
-                theaters: imdbMovie.theaters
-              } );
-            }
+              // replace dbMovie with imdbMovie if not in db
+              if( !dbMovie ){
+                dbMovie = imdbMovie;
+                dbMovie.imdbId = dbMovie.id;
+              }
+              else{
+                // update title and showtimes
+                Object.assign( dbMovie, {
+                  director: imdbMovie.director,
+                  genre: imdbMovie.genre,
+                  theaters: imdbMovie.theaters,
+                  cast: imdbMovie.cast
+                } );
+              }
 
-            return dbMovie;
-          } )
-          .catch( console.error );
+              return dbMovie;
+            } )
+            .catch( console.error );
+        }
+        else {
+          return dbMovie;
+        }
       } )
       .then( movie => {
         if( !movie.trailer ){
@@ -345,20 +347,10 @@ module.exports.around = ( req, res ) => {
   }
 
   if( coords ){
-    geocode = new Promise( ( resolve, reject ) => {
-      geocoder.reverseGeocode( coords[ 0 ], coords[ 1 ], ( err, data ) => {
+    const [lat, lon] = coords;
 
-        if( err || !data.results.length ){
-          reject( err || { message: data.error_message, status: data.status } );
-          return;
-        }
-
-
-        let result = data.results[ 0 ].address_components;
-
-        resolve( parseGeo( result ) );
-      }, geocodeOptions );
-    } );
+    geocode = geocoder.reverse( {lat, lon} )
+      .then( parseGeo );
   }
   else{
     geocode = new Promise( ( resolve, reject ) => {

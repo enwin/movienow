@@ -7,7 +7,7 @@ import view from '../../page/view/around.pug';
 import domList from '../../page/view/around-list.pug';
 import bind from '../helper/bind';
 import loader from '../module/loader';
-import Tablist from '../helper/accedeweb-tablist';
+import Tablist from '@accede-web/tablist';
 
 import router from '../module/router';
 
@@ -204,9 +204,11 @@ class Around extends Screen {
 
 
   setTabs (){
-    this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ), {
-      openTab: this.scrollTop
-    } );
+    this.tabs = new Tablist( this.el.querySelector( '[role=tablist]' ));
+
+    this.tabs.on( 'show', this.scrollTop );
+
+    this.tabs.mount();
   }
 
   scrollTop (){
