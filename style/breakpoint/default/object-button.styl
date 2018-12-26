@@ -11,8 +11,23 @@
    svg
       fill: currentColor
 
-   span
+   span:not(.notification)
       hide()
+
+   .notification
+      span
+         hide()
+
+      &:after
+         content: ''
+         position: absolute
+         height: rem( 6 )
+         width: @height
+         background-color: $light
+         border-radius: 50%
+         box-shadow: 0 0 8px $color-primary-dark
+         top: rem(18)
+         right: rem( 18 )
 
 .button
    text-align: center

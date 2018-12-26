@@ -1,4 +1,5 @@
 import menu from '../view/menu';
+import body from '../view/body';
 
 function Cache(){
 
@@ -6,6 +7,7 @@ function Cache(){
     // console.log( worker.state, worker );
     if( 'redundant' === worker.state ){
       menu.setUpdate();
+      body.setUpdate();
     }
   }
 

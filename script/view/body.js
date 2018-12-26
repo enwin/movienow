@@ -3,7 +3,8 @@ import bind from '../helper/bind';
 class Body {
   constructor (){
     this.els = {
-      header: document.querySelector( '.site-header' )
+      header: document.querySelector( '.site-header' ),
+      notification: document.querySelector( '.site-header .notification' ),
     };
     this.bind();
   }
@@ -24,6 +25,10 @@ class Body {
 
   restart (){
     window.location.href = '/';
+  }
+
+  setUpdate (){
+    this.els.notification.removeAttribute( 'hidden' );
   }
 }
 
